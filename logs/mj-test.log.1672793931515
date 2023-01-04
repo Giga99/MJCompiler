@@ -1,0 +1,16 @@
+INFO  01:19:26,489 - Compiling source file: D:\Programming\PP1\LeksickaAnalizaVezba\workspace\MJCompiler\test\program.mj
+INFO  01:19:26,492 - #1 program
+INFO  01:19:26,492 - #4 MJProgram
+INFO  01:19:26,493 - #4 int
+INFO  01:19:26,493 - #4 x
+INFO  01:19:26,493 - #8 ,
+INFO  01:19:26,493 - #4 y
+INFO  01:19:26,493 - #9 ;
+INFO  01:19:26,493 - #12 {
+INFO  01:19:26,493 - #15 void
+INFO  01:19:26,493 - #4 main
+INFO  01:19:26,493 - #10 (
+INFO  01:19:26,493 - #11 )
+INFO  01:19:26,493 - #12 {
+INFO  01:19:26,494 - #13 }
+INFO  01:19:26,494 - #13 }
