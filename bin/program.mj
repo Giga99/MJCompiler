@@ -1,7 +1,16 @@
-program MJProgram
-	int x, y;
+program Program
+	const int pi = 3, e = 2;
+	int a, b;
 {
-	void main() {
-		
+	void main() int i; int x[]; char ch; {
+		x = new int[3];
+		i = 0;
+		a = 0;
+		b = 1;
+		while (i < 5) {
+			a = a + b;
+			i++;
+		}
+		print(a);
 	}
 }
