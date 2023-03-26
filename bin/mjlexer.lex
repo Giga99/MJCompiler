@@ -1,9 +1,14 @@
-
+// IMPORT SECTION
 package rs.ac.bg.etf.pp1;
 
 import java_cup.runtime.Symbol;
 
+
+
 %%
+// DIRECTIVES SECTION
+
+
 
 %{
 
@@ -29,14 +34,21 @@ import java_cup.runtime.Symbol;
 	return new_symbol(sym.EOF);
 %eofval}
 
-%%
 
+
+%%
+// REGULAR EXPRESSIONS SECTION
+
+
+
+// Blank characters
 " " 	{ }
 "\b" 	{ }
 "\t" 	{ }
 "\r\n" 	{ }
 "\f" 	{ }
 
+// Keywords
 "program"   { return new_symbol(sym.PROG, yytext());}
 "print" 	{ return new_symbol(sym.PRINT, yytext()); }
 "return" 	{ return new_symbol(sym.RETURN, yytext()); }
