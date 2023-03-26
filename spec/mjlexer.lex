@@ -103,9 +103,9 @@ import java_cup.runtime.Symbol;
 <COMMENT> "\r\n" 				{ yybegin(YYINITIAL); }
 
 // TOKEN TYPES
-"true" | "false"				{ return new_symbol(sym.BOOL, new Boolean(yytext())); }
+"true" | "false"				{ return new_symbol(sym.BOOL, Boolean.valueOf(yytext())); }
 '[a-z|A-Z]'						{ return new_symbol(sym.CHAR, Character.valueOf(yytext().charAt(1))); }
-[0-9]+  						{ return new_symbol(sym.NUMBER, new Integer(yytext())); }
+[0-9]+  						{ return new_symbol(sym.NUMBER, Integer.valueOf(yytext())); }
 ([a-z]|[A-Z])[a-zA-Z0-9_]* 		{ return new_symbol(sym.IDENT, yytext()); }
 
 . { System.err.println("Lexical error (" + yytext() + ") on line " + (yyline+1) + ", on column " + yycolumn); }
