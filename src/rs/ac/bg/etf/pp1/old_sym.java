@@ -1,6 +1,6 @@
 package rs.ac.bg.etf.pp1;
 
-public class sym {
+public class old_sym {
 
 	// KEYWORDS
 	public static final int PROG = 1;

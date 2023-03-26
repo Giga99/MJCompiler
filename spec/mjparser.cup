@@ -1,0 +1,79 @@
+// IMPORT SECTION
+
+
+
+package rs.ac.bg.etf.pp1;
+
+import java_cup.runtime.*;
+import org.apache.log4j.*;
+import rs.ac.bg.etf.pp1.ast.*;
+
+
+
+// CODE SECTION
+
+
+
+parser code {:
+	Logger log = Logger.getLogger(getClass());
+	
+	boolean errorDetected;
+   
+    // Redefined error handling methods
+    public void report_fatal_error(String message, Object info) throws java.lang.Exception {
+      done_parsing();
+      report_error(message, info);
+      errorDetected = true;
+    }
+  
+    public void syntax_error(String message, Symbol cur_token) {
+        report_error("\nSyntax error: " + message, cur_token);
+        errorDetected = true;
+    }
+  
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        report_fatal_error("Fatal error, parsing can't be continued", cur_token);
+        errorDetected = true;
+    }
+
+    public void report_error(String message, Object info) {
+    	StringBuilder msg = new StringBuilder(message); 
+    	if (info instanceof Symbol)
+            msg.append (" on line ").append(((Symbol)info).left);
+        log.error(msg.toString());
+        errorDetected = true;
+    }
+    
+    public void report_info(String message, Object info) {
+    	StringBuilder msg = new StringBuilder(message); 
+    	if (info instanceof Symbol)
+            msg.append (" on line ").append(((Symbol)info).left);
+        log.info(msg.toString());
+    }
+
+:}
+
+init with {:
+	errorDetected = false;
+:}
+
+scan with {:
+	Symbol s = this.getScanner().next_token();
+	if (s != null && s.value != null) 
+		log.info(s.toString() + " " + s.value.toString());
+	return s;
+:}
+
+
+
+// TERMINALS
+
+
+// KEYWORDS
+
+
+
+
+// NONTERMINALS
+
+
