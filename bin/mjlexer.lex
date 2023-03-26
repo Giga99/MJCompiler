@@ -1,4 +1,4 @@
-// IMPORT SECTION
+// IMPORT SECTION --------------------------------------------------------------------------------------------------
 
 
 
@@ -9,7 +9,7 @@ import java_cup.runtime.Symbol;
 
 
 %%
-// DIRECTIVES SECTION
+// DIRECTIVES SECTION ----------------------------------------------------------------------------------------------
 
 
 
@@ -40,7 +40,7 @@ import java_cup.runtime.Symbol;
 
 
 %%
-// REGULAR EXPRESSIONS SECTION
+// REGULAR EXPRESSIONS SECTION -------------------------------------------------------------------------------------
 
 
 

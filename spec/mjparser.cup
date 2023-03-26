@@ -1,4 +1,4 @@
-// IMPORT SECTION
+// IMPORT SECTION -------------------------------------------------------------------------------------------------
 
 
 
@@ -10,7 +10,7 @@ import rs.ac.bg.etf.pp1.ast.*;
 
 
 
-// CODE SECTION
+// CODE SECTION ---------------------------------------------------------------------------------------------------
 
 
 
@@ -66,14 +66,43 @@ scan with {:
 
 
 
-// TERMINALS
+// TERMINALS ------------------------------------------------------------------------------------------------------
 
 
+  
 // KEYWORDS
+terminal PROG, BREAK, CLASS, ELSE, CONST, IF, WHILE, NEW, PRINT, READ, RETURN, VOID, EXTENDS, CONTINUE, FOREACH;
+
+// OPERATORS
+terminal PLUS, MINUS, MUL, DIV, MOD, EQUALS, NOTEQUALS, GRTEATER, GRTEATEREQUALS, LESS, LESSEQUALS, AND, OR, ASSIGN;
+terminal INC, DEC, SEMI, COLON, COMMA, DOT, LPAREN, RPAREN, LSQUARE, RSQUARE, LBRACE, RBRACE, ARROW;
+
+// TOKEN TYPES
+terminal Boolean BOOL;
+terminal Character CHAR;
+terminal Integer NUMBER;
+terminal String IDENT;
 
 
 
+// NONTERMINALS ---------------------------------------------------------------------------------------------------
 
-// NONTERMINALS
 
 
+nonterminal Program;
+
+
+
+// PRECEDENCE -----------------------------------------------------------------------------------------------------
+
+
+
+precedence left ELSE;
+
+
+
+// SYNTAX ---------------------------------------------------------------------------------------------------------
+
+
+
+Program ::= (Program) PROG IDENT LBRACE RBRACE;
