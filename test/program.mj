@@ -9,8 +9,14 @@ program Program
 		b = 1;
 		while (i < 5) {
 			a = a + b;
+			b = b * b;
 			i++;
 		}
 		print(a);
+		if (false) {
+			print(b);
+		}
+		// Some comment
+		char x = 'c';
 	}
 }
