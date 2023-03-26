@@ -1,3 +1,10 @@
+bin/
+settings
+.classpath
+.project
+*.class
+
 logs/
+
 src/rs/ac/bg/etf/pp1/ast/
 src/rs/ac/bg/etf/pp1/Yylex.*
