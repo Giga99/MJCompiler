@@ -9,12 +9,12 @@ class Table {
  		void  putn (int a, int idx) { this.neg[idx] = a; }     
  		int  getp (int idx) { return pos[idx]; }     
  		int  getn (int idx) { return neg[idx]; } 
- 	} 
- }  
+	} 
+}  
  
- Table val; 
- Int rows, columns; 
- { 
+Table val; 
+Int rows, columns; 
+{ 
  	void f(char ch, int a, int arg) 
  		int x; 
  	{   
