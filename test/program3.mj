@@ -1,9 +1,8 @@
 program Program3
-	int a, a2, a3;
-	char b, b2, b3;
-	bool c, c2;
-	int a4[], a6[], a7[];
-	char b4[], b5[];
-	bool c3[], c4[];
+	int a;
 {
+	void fun1() {}
+	int fun2() {}
+	char fun3() {}
+	bool fun4() {}
 }
