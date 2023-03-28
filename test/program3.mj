@@ -1,2 +1,4 @@
-program Program3 {
+program Program3
+	const int a = 10;
+{
 }
