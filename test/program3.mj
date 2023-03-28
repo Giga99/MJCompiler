@@ -1,6 +1,9 @@
 program Program3
-	const int a = 10;
-	const char b = 'x';
-	const bool c = true;
+	const int a = 10, a2 = 20, a3 = 5;
+	const char b = 'x', b2 = 'y';
+	const bool c = true, c2 = false;
+	const int a4 = 2;
+	const char b3 = 'z';
+	const bool c3 = true;
 {
 }
