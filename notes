@@ -1,0 +1,10 @@
+Syntax Parsing Done:
+
+Program, ConstDecl, VarDecl, MethodDecl, FormPars, Type
+
+========================================================================================
+
+To Check:
+
+Check if FormParam should use VarDeclaration or it should have its own var declaration
+What is better LIST COMMA ITEM or ITEM COMMA LIST?
