@@ -89,7 +89,7 @@ terminal String IDENT;
 
 
 
-nonterminal Program, ProgramDeclList, ConstDecl, Type;
+nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue;
 
 
 
@@ -112,7 +112,12 @@ ProgramDeclList ::= (ProgramConstDeclList) ProgramDeclList ConstDecl
 					(ProgramEmptyDeclList) /* epsilon */
 					;
 
-ConstDecl ::= (ConstDecl) CONST Type IDENT ASSIGN NUMBER SEMI;
+ConstDecl ::= (ConstDecl) CONST Type IDENT ASSIGN ConstValue SEMI;
+
+ConstValue ::= (NumberConstValue) NUMBER
+			|
+			(CharConstValue) CHAR
+			;
 
 Type ::= (Type) IDENT;
 
