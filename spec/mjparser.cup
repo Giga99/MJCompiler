@@ -78,7 +78,7 @@ terminal PLUS, MINUS, MUL, DIV, MOD, EQUALS, NOTEQUALS, GRTEATER, GRTEATEREQUALS
 terminal INC, DEC, SEMI, COLON, COMMA, DOT, LPAREN, RPAREN, LSQUARE, RSQUARE, LBRACE, RBRACE, ARROW;
 
 // TOKEN TYPES
-terminal Boolean BOOL;
+terminal String BOOL;
 terminal Character CHAR;
 terminal Integer NUMBER;
 terminal String IDENT;
@@ -117,6 +117,8 @@ ConstDecl ::= (ConstDecl) CONST Type IDENT ASSIGN ConstValue SEMI;
 ConstValue ::= (NumberConstValue) NUMBER
 			|
 			(CharConstValue) CHAR
+			|
+			(BoolConstValue) BOOL
 			;
 
 Type ::= (Type) IDENT;

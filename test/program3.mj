@@ -1,5 +1,6 @@
 program Program3
 	const int a = 10;
 	const char b = 'x';
+	const bool c = true;
 {
 }

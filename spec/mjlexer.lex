@@ -103,7 +103,7 @@ import java_cup.runtime.Symbol;
 <COMMENT> "\r\n" 				{ yybegin(YYINITIAL); }
 
 // TOKEN TYPES
-"true" | "false"				{ return new_symbol(sym.BOOL, Boolean.valueOf(yytext())); }
+("true" | "false")				{ return new_symbol(sym.BOOL, yytext()); }
 '[a-z|A-Z]'						{ return new_symbol(sym.CHAR, Character.valueOf(yytext().charAt(1))); }
 [0-9]+  						{ return new_symbol(sym.NUMBER, Integer.valueOf(yytext())); }
 ([a-z]|[A-Z])[a-zA-Z0-9_]* 		{ return new_symbol(sym.IDENT, yytext()); }
