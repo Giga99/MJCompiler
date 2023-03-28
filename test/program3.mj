@@ -1,8 +1,5 @@
 program Program3
 	int a;
 {
-	void fun1() {}
-	int fun2() {}
-	char fun3() {}
-	bool fun4() {}
+	void fun1(int param1[], char param2, bool param3) {}
 }

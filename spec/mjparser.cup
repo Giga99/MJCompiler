@@ -89,8 +89,8 @@ terminal String IDENT;
 
 
 
-nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclListItem;
-nonterminal MethodDeclList, MethodDecl, MethodReturnType;
+nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
+nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 
 
 
@@ -133,27 +133,39 @@ ConstValue ::= (NumberConstValue) NUMBER
 			
 VarDecl ::= (VarDecl) Type VarDeclList SEMI;
 
-VarDeclList ::= (VarDeclListMultipleItems) VarDeclList COMMA VarDeclListItem
+VarDeclList ::= (VarDeclListMultipleItems) VarDeclList COMMA VarDeclaration
 			|
-			(VarDeclListSingleItem) VarDeclListItem
+			(VarDeclListSingleItem) VarDeclaration
 			;
-			
-VarDeclListItem ::= (DefaultVar) IDENT
-				|
-				(ArrayVar) IDENT LSQUARE RSQUARE
-				;
 				
 MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				|
 				(MethodDeclEmptyList) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN RPAREN LBRACE RBRACE;
+MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN LBRACE RBRACE;
 
 MethodReturnType ::= (MethodAnyReturnType) Type
 					|
 					(MethodVoidReturnType) VOID
 					;
+					
+FormParmsDecl ::= (FormParsItemsList) FormParmsList
+				|
+				(FormParsEmptyList) /* epsilon */
+				;
+				
+FormParmsList ::= (FormParmsListMultipleItems) FormParmsList COMMA FormParam
+				|
+				(FormParmsListSingleItem) FormParam
+				;
+
+FormParam ::= (FormParam) Type VarDeclaration;
+			
+VarDeclaration ::= (DefaultVar) IDENT
+				|
+				(ArrayVar) IDENT LSQUARE RSQUARE
+				;
 
 Type ::= (Type) IDENT;
 
