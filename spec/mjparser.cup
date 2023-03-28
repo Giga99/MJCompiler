@@ -89,7 +89,7 @@ terminal String IDENT;
 
 
 
-nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem;
+nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclListItem;
 
 
 
@@ -109,6 +109,8 @@ Program ::= (Program) PROG IDENT ProgramDeclList LBRACE RBRACE;
 
 ProgramDeclList ::= (ProgramConstDeclList) ProgramDeclList ConstDecl
 					|
+					(ProgramVarDecList) ProgramDeclList VarDecl
+					|
 					(ProgramEmptyDeclList) /* epsilon */
 					;
 
@@ -127,6 +129,18 @@ ConstValue ::= (NumberConstValue) NUMBER
 			|
 			(BoolConstValue) BOOL
 			;
+			
+VarDecl ::= (VarDecl) Type VarDeclList SEMI;
+
+VarDeclList ::= (VarDeclListMultipleItems) VarDeclList COMMA VarDeclListItem
+			|
+			(VarDeclListSingleItem) VarDeclListItem
+			;
+			
+VarDeclListItem ::= (DefaultVar) IDENT
+				|
+				(ArrayVar) IDENT LSQUARE RSQUARE
+				;
 
 Type ::= (Type) IDENT;
 
