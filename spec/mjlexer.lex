@@ -109,13 +109,3 @@ import java_cup.runtime.Symbol;
 ([a-z]|[A-Z])[a-zA-Z0-9_]* 		{ return new_symbol(sym.IDENT, yytext()); }
 
 . { System.err.println("Lexical error (" + yytext() + ") on line " + (yyline+1) + ", on column " + yycolumn); }
-
-
-
-
-
-
-
-
-
-
