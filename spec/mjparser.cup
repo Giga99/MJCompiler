@@ -91,6 +91,7 @@ terminal String IDENT;
 
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
+nonterminal StatementList, Statement;
 
 
 
@@ -143,7 +144,7 @@ MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				(MethodDeclEmptyList) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN LBRACE RBRACE;
+MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN LBRACE StatementList RBRACE;
 
 MethodReturnType ::= (MethodAnyReturnType) Type
 					|
@@ -161,6 +162,16 @@ FormParmsList ::= (FormParmsListMultipleItems) FormParmsList COMMA FormParam
 				;
 
 FormParam ::= (FormParam) Type VarDeclaration;
+
+StatementList ::= (StatementsItemsList) StatementList Statement
+				|
+				(StatementsEmptyList) /* epsilon */
+				;
+				
+Statement ::= (StatementRead) READ LPAREN RPAREN SEMI
+				|
+				(StatementPrint) PRINT LPAREN RPAREN SEMI
+				;
 			
 VarDeclaration ::= (DefaultVar) IDENT
 				|
