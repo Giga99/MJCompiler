@@ -204,6 +204,8 @@ Factor ::= (FactorNumber) NUMBER
 		(FactorChar) CHAR
 		|
 		(FactorBool) BOOL
+		|
+		(FactorExpr) LPAREN Expr RPAREN
 		;
 
 Type ::= (Type) IDENT;
