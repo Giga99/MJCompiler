@@ -4,6 +4,12 @@ Program, ConstDecl, VarDecl, MethodDecl, FormPars, Type
 
 ========================================================================================
 
+In progress:
+
+Statement, Expr, Read
+
+========================================================================================
+
 To Check:
 
 Check if FormParam should use VarDeclaration or it should have its own var declaration

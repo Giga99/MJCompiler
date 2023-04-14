@@ -4,12 +4,12 @@ program Program3
 	void fun1(int param1[], char param2, bool param3) {}
 	
 	void fun2() {
-		print();
+		print(a, 5);
 		read();
 	}
 	
 	void fun3(int param1[], char param2, bool param3) {
-		print();
+		print(a);
 		read();
 	}
 }

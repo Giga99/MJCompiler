@@ -91,7 +91,7 @@ terminal String IDENT;
 
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
-nonterminal StatementList, Statement;
+nonterminal StatementList, Statement, PrintNumOptional, Expr;
 
 
 
@@ -170,13 +170,20 @@ StatementList ::= (StatementsItemsList) StatementList Statement
 				
 Statement ::= (StatementRead) READ LPAREN RPAREN SEMI
 				|
-				(StatementPrint) PRINT LPAREN RPAREN SEMI
+				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI
 				;
 			
 VarDeclaration ::= (DefaultVar) IDENT
 				|
 				(ArrayVar) IDENT LSQUARE RSQUARE
 				;
+				
+PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
+					|
+					(PrintNumNoConst) /* epsilon */
+					;
+				
+Expr ::= (Expr) IDENT;
 
 Type ::= (Type) IDENT;
 
