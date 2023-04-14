@@ -189,9 +189,9 @@ Expr ::= (ExprPositiveFirstTerm) TermList
 		(ExprNegativeFirstTerm) MINUS TermList
 		;
 
-TermList ::= (TermSingle) Term
+TermList ::= (TermListSingle) Term
 			|
-			(TermMultiple) Term Addop TermList
+			(TermListMultiple) Term Addop TermList
 			;
 
 Term ::= (TermSingleFactor) Factor
