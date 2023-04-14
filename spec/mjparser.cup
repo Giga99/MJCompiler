@@ -92,7 +92,7 @@ terminal String IDENT;
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor;
-nonterminal Assignop, Addop, Mulop;
+nonterminal Label, Assignop, Addop, Mulop;
 
 
 
@@ -207,6 +207,8 @@ Factor ::= (FactorNumber) NUMBER
 		;
 
 Type ::= (Type) IDENT;
+
+Label ::= (Label) IDENT;
 
 Assignop ::= (Assign) ASSIGN;
 
