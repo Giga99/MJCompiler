@@ -92,6 +92,7 @@ terminal String IDENT;
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
+nonterminal DesignatorStatement;
 nonterminal Label, Assignop, Addop, Mulop;
 
 
@@ -196,12 +197,18 @@ StatementList ::= (StatementsItemsList) StatementList Statement
 Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the read */
 				|
 				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI /* Rule for the print */
+				|
+				(StatementDesignator) DesignatorStatement SEMI
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 					|
 					(PrintNumNoConst) /* epsilon */
 					;
+				
+				
+				
+DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr;
 				
 				
 				

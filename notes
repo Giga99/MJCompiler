@@ -6,7 +6,7 @@ Program, ConstDecl, VarDecl, MethodDecl, FormPars, Type, Label, Assignop, Addop,
 
 In progress:
 
-Statement
+Statement, DesignatorStatement
 
 ========================================================================================
 
