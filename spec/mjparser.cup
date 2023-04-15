@@ -237,7 +237,13 @@ Factor ::= (FactorNumber) NUMBER
 		(FactorNewTypeExpr) NEW Type LSQUARE Expr RSQUARE /* Rule for the array factor */
 		|
 		(FactorDesignator) Designator
+		|
+		(FactorMethodCall) Designator LPAREN RPAREN /* Rule for the method call */
 		;
+
+
+
+/* Rules for the using variable or accessing element in the array */
 
 Designator ::= (DesignatorIdent) IDENT
 			|
