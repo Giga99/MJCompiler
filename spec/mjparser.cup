@@ -110,12 +110,20 @@ precedence left ELSE;
 
 Program ::= (Program) PROG IDENT ProgramDeclList LBRACE MethodDeclList RBRACE;
 
+
+
+/* Rule for the list of global program variables example:	program Program3 int a; const int b; {} */
+
 ProgramDeclList ::= (ProgramConstDeclList) ProgramDeclList ConstDecl
 					|
 					(ProgramVarDecList) ProgramDeclList VarDecl
 					|
 					(ProgramEmptyDeclList) /* epsilon */
 					;
+					
+					
+
+/* Rules for the const declaration */
 
 ConstDecl ::= (ConstDecl) CONST Type ConstDeclList SEMI;
 
@@ -133,12 +141,20 @@ ConstValue ::= (NumberConstValue) NUMBER
 			(BoolConstValue) BOOL
 			;
 			
+		
+		
+/* Rules for the variable declaration */	
+			
 VarDecl ::= (VarDecl) Type VarDeclList SEMI;
 
 VarDeclList ::= (VarDeclListMultipleItems) VarDeclList COMMA VarDeclaration
 			|
 			(VarDeclListSingleItem) VarDeclaration
 			;
+			
+			
+			
+/* Rules for the method declaration */
 				
 MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				|
@@ -152,6 +168,10 @@ MethodReturnType ::= (MethodAnyReturnType) Type
 					(MethodVoidReturnType) VOID
 					;
 					
+					
+					
+/* Rules for the formal parameters */
+					
 FormParmsDecl ::= (FormParsItemsList) FormParmsList
 				|
 				(FormParsEmptyList) /* epsilon */
@@ -164,25 +184,28 @@ FormParmsList ::= (FormParmsListMultipleItems) FormParmsList COMMA FormParam
 
 FormParam ::= (FormParam) Type VarDeclaration;
 
+
+
+/* Rules for the methods body */
+
 StatementList ::= (StatementsItemsList) StatementList Statement
 				|
 				(StatementsEmptyList) /* epsilon */
 				;
 				
-Statement ::= (StatementRead) READ LPAREN RPAREN SEMI
+Statement ::= (StatementRead) READ LPAREN RPAREN SEMI /* Rule for the read */
 				|
-				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI
-				;
-			
-VarDeclaration ::= (DefaultVar) IDENT
-				|
-				(ArrayVar) IDENT LSQUARE RSQUARE
+				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI /* Rule for the print */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 					|
 					(PrintNumNoConst) /* epsilon */
 					;
+				
+				
+				
+/* Rules for the expressions */
 				
 Expr ::= (ExprPositiveFirstTerm) TermList
 		|
@@ -191,13 +214,17 @@ Expr ::= (ExprPositiveFirstTerm) TermList
 
 TermList ::= (TermListSingle) Term
 			|
-			(TermListMultiple) Term Addop TermList
+			(TermListMultiple) Term Addop TermList /* Rule for the additions and subtractions */
 			;
 
 Term ::= (TermSingleFactor) Factor
 		|
-		(TermMultipleFactor) Term Mulop Factor
+		(TermMultipleFactor) Term Mulop Factor /* Rule for the mul, div and mod operations */
 		;
+		
+		
+		
+/* Rules for the factor in expressions */
 		
 Factor ::= (FactorNumber) NUMBER
 		|
@@ -205,12 +232,21 @@ Factor ::= (FactorNumber) NUMBER
 		|
 		(FactorBool) BOOL
 		|
-		(FactorExpr) LPAREN Expr RPAREN
+		(FactorExpr) LPAREN Expr RPAREN /* Rule for the expression inside parentheses, example: (4 + 5 * 3) */
 		;
+		
+		
+		
+/* Rules for the commonly used things */
 
 Type ::= (Type) IDENT;
 
 Label ::= (Label) IDENT;
+			
+VarDeclaration ::= (DefaultVar) IDENT
+				|
+				(ArrayVar) IDENT LSQUARE RSQUARE
+				;
 
 Assignop ::= (Assign) ASSIGN;
 
