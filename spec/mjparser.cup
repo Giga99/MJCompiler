@@ -193,7 +193,7 @@ StatementList ::= (StatementsItemsList) StatementList Statement
 				(StatementsEmptyList) /* epsilon */
 				;
 				
-Statement ::= (StatementRead) READ LPAREN RPAREN SEMI /* Rule for the read */
+Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the read */
 				|
 				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI /* Rule for the print */
 				;
