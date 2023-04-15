@@ -91,7 +91,7 @@ terminal String IDENT;
 
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
-nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor;
+nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator;
 nonterminal Label, Assignop, Addop, Mulop;
 
 
@@ -235,8 +235,15 @@ Factor ::= (FactorNumber) NUMBER
 		(FactorExpr) LPAREN Expr RPAREN /* Rule for the expression inside parentheses, example: (4 + 5 * 3) */
 		|
 		(FactorNewTypeExpr) NEW Type LSQUARE Expr RSQUARE /* Rule for the array factor */
+		|
+		(FactorDesignator) Designator
 		;
-		
+
+Designator ::= (DesignatorIdent) IDENT
+			|
+			(DesignatorArray) Designator LSQUARE Expr RSQUARE
+			;		
+
 		
 		
 /* Rules for the commonly used things */
