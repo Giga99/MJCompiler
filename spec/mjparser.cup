@@ -208,7 +208,12 @@ PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 				
 				
 				
-DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr;
+DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr
+						|
+						(DesignatorStatementInc) Designator INC
+						|
+						(DesignatorStatementDec) Designator DEC
+						;
 				
 				
 				

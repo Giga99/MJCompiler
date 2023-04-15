@@ -2,7 +2,7 @@ program Program3
 	int a;
 {
 	void fun1() {
-		a = 2;
-		a = 5 * 8 - 6;
+		a++;
+		a--;
 	}
 }
