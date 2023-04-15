@@ -234,7 +234,7 @@ Factor ::= (FactorNumber) NUMBER
 		|
 		(FactorExpr) LPAREN Expr RPAREN /* Rule for the expression inside parentheses, example: (4 + 5 * 3) */
 		|
-		(FactorNewTypeExpr) NEW Type LSQUARE Expr RSQUARE
+		(FactorNewTypeExpr) NEW Type LSQUARE Expr RSQUARE /* Rule for the array factor */
 		;
 		
 		
