@@ -91,7 +91,7 @@ terminal String IDENT;
 
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
-nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator;
+nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
 nonterminal Label, Assignop, Addop, Mulop;
 
 
@@ -238,12 +238,23 @@ Factor ::= (FactorNumber) NUMBER
 		|
 		(FactorDesignator) Designator
 		|
-		(FactorMethodCall) Designator LPAREN RPAREN /* Rule for the method call */
+		(FactorMethodCall) Designator LPAREN RPAREN /* Rule for the method call without actual params */
+		|
+		(FactorMethodCallWithActParams) Designator LPAREN ActPars RPAREN /* Rule for the method call with actual params */
 		;
+		
+		
+		
+/* Rules for the actual parameters */
+		
+ActPars ::= (ActParamsMultiple) ActPars COMMA Expr
+			|
+			(ActParamsSingle) Expr
+			;
 
 
 
-/* Rules for the using variable or accessing element in the array */
+/* Rules for using variable or accessing element in the array */
 
 Designator ::= (DesignatorIdent) IDENT
 			|
