@@ -208,11 +208,15 @@ PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 				
 				
 				
-DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr
+DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr /* Rule for assigning the value */
 						|
-						(DesignatorStatementInc) Designator INC
+						(DesignatorStatementInc) Designator INC /* Rule for incrementing variable, example a++ */
 						|
-						(DesignatorStatementDec) Designator DEC
+						(DesignatorStatementDec) Designator DEC /* Rule for decrementing variable, example a-- */
+						|
+						(DesignatorStatementMethodCall) Designator LPAREN RPAREN /* Rule for the method call without actual params */
+						|
+						(DesignatorStatementMethodCallWithActParams) Designator LPAREN ActPars RPAREN /* Rule for the method call with actual params */
 						;
 				
 				

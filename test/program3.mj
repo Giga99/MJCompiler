@@ -4,5 +4,9 @@ program Program3
 	void fun1() {
 		a++;
 		a--;
+		fun2();
+		fun2(a);
 	}
+	
+	void fun2() {}
 }
