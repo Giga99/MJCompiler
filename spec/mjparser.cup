@@ -92,7 +92,7 @@ terminal String IDENT;
 nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
-nonterminal DesignatorStatement;
+nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Label, Assignop, Addop, Mulop;
 
 
@@ -210,6 +210,8 @@ PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 				
 DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr /* Rule for assigning the value */
 						|
+						(DesignatorStatementArrayAssign) LSQUARE DesignatorOptionalList RSQUARE Assignop Designator
+						|
 						(DesignatorStatementInc) Designator INC /* Rule for incrementing variable, example a++ */
 						|
 						(DesignatorStatementDec) Designator DEC /* Rule for decrementing variable, example a-- */
@@ -218,6 +220,16 @@ DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr /* 
 						|
 						(DesignatorStatementMethodCallWithActParams) Designator LPAREN ActPars RPAREN /* Rule for the method call with actual params */
 						;
+						
+DesignatorOptionalList ::= (DesignatorOptionalListItem) DesignatorOptional
+						|
+						(DesignatorOptionalListItems) DesignatorOptionalList COMMA DesignatorOptional
+						; 
+				
+DesignatorOptional ::= (DesignatorOptionalExist) Designator
+					|
+					(DesignatorOptionalEmpty) /* epsilon */
+					;
 				
 				
 				

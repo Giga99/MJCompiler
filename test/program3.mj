@@ -1,11 +1,10 @@
 program Program3
-	int a;
+	int a[];
+	int b;
+	int izlaz[];
 {
 	void fun1() {
-		a++;
-		a--;
-		fun2();
-		fun2(a);
+		izlaz = new int[4];
 	}
 	
 	void fun2() {}
