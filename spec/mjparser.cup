@@ -89,8 +89,9 @@ terminal String IDENT;
 
 
 
-nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem, VarDecl, VarDeclList, VarDeclaration;
+nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
+nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Label, Assignop, Addop, Mulop;
@@ -142,17 +143,6 @@ ConstValue ::= (NumberConstValue) NUMBER
 			(BoolConstValue) BOOL
 			;
 			
-		
-		
-/* Rules for the variable declaration */	
-			
-VarDecl ::= (VarDecl) Type VarDeclList SEMI;
-
-VarDeclList ::= (VarDeclListMultipleItems) VarDeclList COMMA VarDeclaration
-			|
-			(VarDeclListSingleItem) VarDeclaration
-			;
-			
 			
 			
 /* Rules for the method declaration */
@@ -162,7 +152,7 @@ MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				(MethodDeclEmptyList) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN LBRACE StatementList RBRACE;
+MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN VarDeclList LBRACE StatementList RBRACE;
 
 MethodReturnType ::= (MethodAnyReturnType) Type
 					|
@@ -184,6 +174,27 @@ FormParmsList ::= (FormParmsListMultipleItems) FormParmsList COMMA FormParam
 				;
 
 FormParam ::= (FormParam) Type VarDeclaration;
+			
+		
+		
+/* Rules for the variable declaration */
+
+VarDeclList ::= (VarDeclListItems) VarDeclList VarDecl
+				|
+				(VarDeclListEmpty) /* epsilon */
+				;
+			
+VarDecl ::= (VarDecl) Type VarDeclIdentList SEMI;
+
+VarDeclIdentList ::= (VarDeclIdentListMultipleItems) VarDeclIdentList COMMA VarDeclaration
+			|
+			(VarDeclIdentListSingleItem) VarDeclaration
+			;
+			
+VarDeclaration ::= (DefaultVar) IDENT
+				|
+				(ArrayVar) IDENT LSQUARE RSQUARE
+				;
 
 
 
@@ -296,11 +307,6 @@ Designator ::= (DesignatorIdent) IDENT
 Type ::= (Type) IDENT;
 
 Label ::= (Label) IDENT;
-			
-VarDeclaration ::= (DefaultVar) IDENT
-				|
-				(ArrayVar) IDENT LSQUARE RSQUARE
-				;
 
 Assignop ::= (Assign) ASSIGN;
 

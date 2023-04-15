@@ -3,7 +3,7 @@ program Program3
 	int b;
 	int izlaz[];
 {
-	void fun1() {
+	void fun1() int temp1; int temp2; bool temp3, temp4; {
 		izlaz = new int[4];
 	}
 	
