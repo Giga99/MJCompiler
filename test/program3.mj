@@ -4,12 +4,9 @@ program Program3
 	int izlaz[];
 {
 	void fun1() {
-		if (true) {
-			b = 6;
-		} else if (a > b) {
-			b = 5;
-		} else {
-			b = 3;
+		b = 0;
+		while (5 > 2 && true) {
+			b++;
 		}
 	}
 	

@@ -225,6 +225,8 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				(StatementIf) IF LPAREN Condition RPAREN Statement
 				|
 				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement
+				|
+				(StatementWhile) WHILE LPAREN Condition RPAREN Statement
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
