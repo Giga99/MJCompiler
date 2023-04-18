@@ -209,7 +209,15 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementPrint) PRINT LPAREN Expr PrintNumOptional RPAREN SEMI /* Rule for the print */
 				|
-				(StatementDesignator) DesignatorStatement SEMI
+				(StatementDesignator) DesignatorStatement SEMI /* Rule for the various statements like assignements, inc, dec, method call and so on */
+				|
+				(StatementBreak) BREAK SEMI /* Rule for the break */
+				|
+				(StatementContinue) CONTINUE SEMI /* Rule for the continue */
+				|
+				(StatementEmptyReturn) RETURN SEMI /* Rule for the return void */
+				|
+				(StatementValueReturn) RETURN Expr SEMI /* Rule for the return expression */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER

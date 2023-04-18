@@ -4,7 +4,11 @@ program Program3
 	int izlaz[];
 {
 	void fun1() int temp1; int temp2; bool temp3, temp4; {
-		izlaz = new int[4];
+		break;
+		continue;
+		return;
+		return izlaz;
+		return 5+2;
 	}
 	
 	void fun2() {}
