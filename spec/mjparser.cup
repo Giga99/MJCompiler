@@ -227,6 +227,8 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement
 				|
 				(StatementWhile) WHILE LPAREN Condition RPAREN Statement
+				|
+				(StatementForeach) Designator DOT FOREACH LPAREN IDENT ARROW Statement RPAREN SEMI
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER

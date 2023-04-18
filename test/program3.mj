@@ -4,10 +4,7 @@ program Program3
 	int izlaz[];
 {
 	void fun1() {
-		b = 0;
-		while (5 > 2 && true) {
-			b++;
-		}
+		a.foreach(item => { item++; });
 	}
 	
 	void fun2() {}
