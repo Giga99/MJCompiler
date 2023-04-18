@@ -94,7 +94,8 @@ nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormPar
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
-nonterminal Label, Assignop, Addop, Mulop;
+nonterminal Condition, CondTerm, CondFact;
+nonterminal Label, Assignop, Relop, Addop, Mulop;
 
 
 
@@ -220,6 +221,10 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				(StatementValueReturn) RETURN Expr SEMI /* Rule for the return expression */
 				|
 				(StatementBracekets) LBRACE StatementList RBRACE
+				|
+				(StatementIf) IF LPAREN Condition RPAREN Statement
+				|
+				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
@@ -270,6 +275,25 @@ Term ::= (TermSingleFactor) Factor
 		|
 		(TermMultipleFactor) Term Mulop Factor /* Rule for the mul, div and mod operations */
 		;
+					
+					
+					
+/* Rules for the conditions */
+
+Condition ::= (ConditionList) Condition OR CondTerm
+			|
+			(ConditionSingleItem) CondTerm
+			;
+			
+CondTerm ::= (CondTermList) CondTerm AND CondFact
+			|
+			(CondTermSingleItem) CondFact
+			;
+			
+CondFact ::= (CondFactDoubleExpr) Expr Relop Expr
+			|
+			(CondFactSingleExpr) Expr
+			;		
 		
 		
 		
@@ -319,6 +343,19 @@ Type ::= (Type) IDENT;
 Label ::= (Label) IDENT;
 
 Assignop ::= (Assign) ASSIGN;
+
+Relop ::= (Equals) EQUALS
+		|
+		(NotEquals) NOTEQUALS
+		|
+		(Greater) GRTEATER
+		|
+		(GreaterEquals) GRTEATEREQUALS
+		|
+		(Less) LESS
+		|
+		(LessEquals) LESSEQUALS
+		;
 
 Addop ::= (Plus) PLUS
 		|
