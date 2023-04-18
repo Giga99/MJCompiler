@@ -27,8 +27,8 @@ public class old_sym {
 	public static final int MOD = 20;
 	public static final int EQUALS = 21;
 	public static final int NOTEQUALS = 22;
-	public static final int GRTEATER = 23;
-	public static final int GRTEATEREQUALS = 24;
+	public static final int GREATER = 23;
+	public static final int GREATEREQUALS = 24;
 	public static final int LESS = 25;
 	public static final int LESSEQUALS = 26;
 	public static final int AND = 27;
