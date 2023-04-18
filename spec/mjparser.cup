@@ -218,6 +218,8 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				(StatementEmptyReturn) RETURN SEMI /* Rule for the return void */
 				|
 				(StatementValueReturn) RETURN Expr SEMI /* Rule for the return expression */
+				|
+				(StatementBracekets) LBRACE StatementList RBRACE
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
