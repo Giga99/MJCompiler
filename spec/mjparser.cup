@@ -220,15 +220,15 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementValueReturn) RETURN Expr SEMI /* Rule for the return expression */
 				|
-				(StatementBracekets) LBRACE StatementList RBRACE
+				(StatementBrackets) LBRACE StatementList RBRACE /* Rule for the statement section */
 				|
-				(StatementIf) IF LPAREN Condition RPAREN Statement
+				(StatementIf) IF LPAREN Condition RPAREN Statement /* Rule for the if */
 				|
-				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement
+				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement /* Rule for the if else */
 				|
-				(StatementWhile) WHILE LPAREN Condition RPAREN Statement
+				(StatementWhile) WHILE LPAREN Condition RPAREN Statement /* Rule for the while */
 				|
-				(StatementForeach) Designator DOT FOREACH LPAREN IDENT ARROW Statement RPAREN SEMI
+				(StatementForeach) Designator DOT FOREACH LPAREN IDENT ARROW Statement RPAREN SEMI /* Rule for the foreach */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
