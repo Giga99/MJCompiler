@@ -16,8 +16,6 @@ program Program
 		if (false) {
 			print(b);
 		}
-		int d = a - b;
 		// Some comment
-		char x = 'c';
 	}
 }

@@ -1,12 +1,12 @@
 Syntax Parsing Done:
 
-Program, ConstDecl, VarDecl, MethodDecl, FormPars, Type, Label, Assignop, Addop, Mulop, Expr, Term, Designator, Factor, Read
+Program, ConstDecl, VarDecl, MethodDecl, FormPars, Type, Label, Assignop, Addop, Mulop, Expr, Term, Designator, Factor, ActPars, DesignatorStatement, Statement, Condition, CondTerm, CondFact
 
 ========================================================================================
 
 In progress:
 
-Statement, Conditional statements
+
 
 ========================================================================================
 
