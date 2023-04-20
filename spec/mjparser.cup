@@ -89,13 +89,15 @@ terminal String IDENT;
 
 
 
-nonterminal Program, ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem;
+nonterminal ProgramDeclList, ConstDecl, Type, ConstValue, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Condition, CondTerm, CondFact;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
+
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program;
 
 
 
@@ -111,7 +113,9 @@ precedence left ELSE;
 
 
 
-Program ::= (Program) PROG IDENT ProgramDeclList LBRACE MethodDeclList RBRACE;
+Program ::= (Program) PROG ProgName ProgramDeclList LBRACE MethodDeclList RBRACE;
+
+ProgName ::= (ProgName) IDENT:progName;
 
 
 
