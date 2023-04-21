@@ -3,15 +3,17 @@ package rs.ac.bg.etf.pp1;
 import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
-import rs.etf.pp1.symboltable.Tab;
-import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.*;
+import rs.etf.pp1.symboltable.concepts.*;
 
 public class SemanticAnalyzer extends VisitorAdaptor {
-	Logger log = Logger.getLogger(getClass());
+	private Logger log = Logger.getLogger(getClass());
 
-	boolean errorDetected = false;
+	private boolean errorDetected = false;
+	
+	private Struct currentType = null;
 
-	public void report_error(String message, SyntaxNode info) {
+	public void reportError(String message, SyntaxNode info) {
 		errorDetected = true;
 		StringBuilder msg = new StringBuilder(message);
 		int line = (info == null) ? 0 : info.getLine();
@@ -20,7 +22,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		log.error(msg.toString());
 	}
 
-	public void report_info(String message, SyntaxNode info) {
+	public void reportInfo(String message, SyntaxNode info) {
 		StringBuilder msg = new StringBuilder(message);
 		int line = (info == null) ? 0 : info.getLine();
 		if (line != 0)
@@ -40,5 +42,24 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(Program program) {
 		Tab.chainLocalSymbols(program.getProgName().obj);
 		Tab.closeScope();
+	}
+	
+	public void visit(Type type) {
+		String typeName = type.getTypeName();
+		Obj typeNode = Tab.find(typeName);
+		
+		if (typeNode == Tab.noObj) {
+			reportError("Type " + typeName + " not found in the Symbol Table", type);
+			type.struct = Tab.noType;
+		} else {
+			if (typeNode.getKind() == Obj.Type) {
+				type.struct = typeNode.getType();
+			} else {
+				reportError("Type " + typeName + " is not a valid type in the Symbol Table", type);
+				type.struct = Tab.noType;
+			}
+		}
+		
+		currentType = type.struct;
 	}
 }
