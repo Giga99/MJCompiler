@@ -89,7 +89,7 @@ terminal String IDENT;
 
 
 
-nonterminal ProgramDeclList, ConstDecl, ConstValue, ConstDeclList, ConstDeclListItem;
+nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
@@ -97,7 +97,7 @@ nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Condition, CondTerm, CondFact;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
-nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type;
 
 
@@ -140,13 +140,13 @@ ConstDeclList ::= (ConstDeclListMultipleItems) ConstDeclList COMMA ConstDeclList
 				(ConstDeclListSingleItem) ConstDeclListItem
 				;
 				
-ConstDeclListItem ::= (ConstDeclListItem) IDENT ASSIGN ConstValue;
+ConstDeclListItem ::= (ConstDeclListItem) IDENT:constName ASSIGN ConstValue;
 
-ConstValue ::= (NumberConstValue) NUMBER
+ConstValue ::= (ConstValueNumber) NUMBER:value
 			|
-			(CharConstValue) CHAR
+			(ConstValueChar) CHAR:value
 			|
-			(BoolConstValue) BOOL
+			(ConstValueBool) BOOL:value
 			;
 			
 			

@@ -1,7 +1,7 @@
 program Program3
-	int a[];
-	int b;
-	int izlaz[];
+	const int a = 4;
+	const char b = 'a';
+	const bool c = true;
 {
 	void fun1() {
 		a.foreach(item => { item++; });

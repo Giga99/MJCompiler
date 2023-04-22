@@ -39,7 +39,7 @@ public class MJTest {
 			MJParser p = new MJParser(lexer);
 			Symbol s = p.parse(); // Start of the parsing
 
-			Tab.init();
+			TabExtended.init();
 			Program prog = (Program) (s.value);
 			
 			// Syntax tree print

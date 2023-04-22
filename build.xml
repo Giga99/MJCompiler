@@ -8,6 +8,8 @@
 				<exclude name="sym.java" />
 				<exclude name="util/Log4JUtils.java" />
 				<exclude name="SemanticAnalyzer.java" />
+				<exclude name="helpers/DeclarationManager.java" />
+				<exclude name="TabExtended.java" />
 			</fileset>
 		</delete>
 	</target>

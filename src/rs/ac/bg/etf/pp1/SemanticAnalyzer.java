@@ -3,6 +3,7 @@ package rs.ac.bg.etf.pp1;
 import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
+import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
@@ -10,6 +11,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private Logger log = Logger.getLogger(getClass());
 
 	private boolean errorDetected = false;
+	
+	private DeclarationManager declarationManager = new DeclarationManager();
 	
 	private Struct currentType = null;
 
@@ -61,5 +64,37 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 		
 		currentType = type.struct;
+	}
+	
+	public void visit(ConstDeclListItem constDeclListItem) {
+		String constName = constDeclListItem.getConstName();
+		Struct valueType = constDeclListItem.getConstValue().obj.getType();
+		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(constName)) {
+			reportError("Symbol " + constName + " is already declared in this scope", constDeclListItem);
+		} else if (declarationManager.typesNotMatching(currentType, valueType)) {
+			reportError("Symbol type " + currentType.getKind() + " is not matching with the value type " + valueType.getKind(), constDeclListItem);
+		} else {
+			Obj obj = Tab.insert(Obj.Con, constName, currentType);
+			obj.setAdr(constDeclListItem.getConstValue().obj.getAdr());
+			constDeclListItem.getConstValue().obj = obj;
+		}
+	}
+	
+	public void visit(ConstValueNumber constValueNumber) {
+		Obj obj = Tab.insert(Obj.Con, "constInt", Tab.intType);
+		obj.setAdr(constValueNumber.getValue());
+		constValueNumber.obj = obj;
+	}
+	
+	public void visit(ConstValueChar constValueChar) {
+		Obj obj = Tab.insert(Obj.Con, "constChar", Tab.charType);
+		obj.setAdr(constValueChar.getValue());
+		constValueChar.obj = obj;
+	}
+	
+	public void visit(ConstValueBool constValueBool) {
+		Obj obj = Tab.insert(Obj.Con, "constBool", TabExtended.boolType);
+		obj.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
+		constValueBool.obj = obj;
 	}
 }
