@@ -51,7 +51,7 @@ public class MJTest {
 			prog.traverseBottomUp(semanticAnalyzer);
 			
 			log.info("===================================");
-			Tab.dump();
+			TabExtended.tsdump();
 			
 			if (!p.errorDetected && semanticAnalyzer.passed()) {
 				log.info("Parsing successfully completed!");

@@ -197,9 +197,9 @@ VarDeclIdentList ::= (VarDeclIdentListMultipleItems) VarDeclIdentList COMMA VarD
 			(VarDeclIdentListSingleItem) VarDeclaration
 			;
 			
-VarDeclaration ::= (DefaultVar) IDENT
+VarDeclaration ::= (DefaultVar) IDENT:varName
 				|
-				(ArrayVar) IDENT LSQUARE RSQUARE
+				(ArrayVar) IDENT:arrayName LSQUARE RSQUARE
 				;
 
 

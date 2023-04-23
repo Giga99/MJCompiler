@@ -1,8 +1,8 @@
 package rs.ac.bg.etf.pp1;
 
-import rs.etf.pp1.symboltable.Tab;
-import rs.etf.pp1.symboltable.concepts.Obj;
-import rs.etf.pp1.symboltable.concepts.Struct;
+import rs.etf.pp1.symboltable.*;
+import rs.etf.pp1.symboltable.concepts.*;
+import rs.etf.pp1.symboltable.visitors.*;
 
 public class TabExtended {
 
@@ -12,5 +12,10 @@ public class TabExtended {
 		Tab.init();
 		Obj newBoolType = new Obj(Obj.Type, "bool", boolType);
 		Tab.currentScope.addToLocals(newBoolType);
+	}
+	
+	public static void tsdump() {
+		SymbolTableVisitor visitor = new SymbolTableVisitorExtended();
+		Tab.dump(visitor);
 	}
 }

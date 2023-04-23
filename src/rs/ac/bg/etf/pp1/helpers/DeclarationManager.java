@@ -12,4 +12,8 @@ public class DeclarationManager {
 	public boolean typesNotMatching(Struct symbolType, Struct valueType) {
 		return !valueType.assignableTo(symbolType);
 	}
+	
+	public Struct getArrayTypeForGivenType(Struct type) {
+		return new Struct(Struct.Array, type);
+	}
 }
