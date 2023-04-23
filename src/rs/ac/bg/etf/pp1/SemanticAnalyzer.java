@@ -48,6 +48,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(Program program) {
 		Tab.chainLocalSymbols(program.getProgName().obj);
 		Tab.closeScope();
+		if (!methodManager.isMainMethodPresent()) {
+			reportError("Main method doesn't exist", program);
+		}
 	}
 
 	public void visit(Type type) {
