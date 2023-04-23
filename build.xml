@@ -9,7 +9,8 @@
 				<exclude name="util/Log4JUtils.java" />
 				<exclude name="SemanticAnalyzer.java" />
 				<exclude name="helpers/DeclarationManager.java" />
-				<exclude name="TabExtended.java" />
+				<exclude name="tabextended/TabExtended.java" />
+				<exclude name="tabextended/SymbolTableVisitorExtended.java" />
 			</fileset>
 		</delete>
 	</target>

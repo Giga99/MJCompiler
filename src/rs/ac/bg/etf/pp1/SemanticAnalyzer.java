@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
+import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
