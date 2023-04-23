@@ -4,7 +4,7 @@ program Program3
 	bool c;
 {
 	void fun1() {
-		a.foreach(item => { item++; });
+	
 	}
 	
 	void fun2() {}

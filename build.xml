@@ -11,6 +11,7 @@
 				<exclude name="helpers/DeclarationManager.java" />
 				<exclude name="tabextended/TabExtended.java" />
 				<exclude name="tabextended/SymbolTableVisitorExtended.java" />
+				<exclude name="helpers/MethodManager.java" />
 			</fileset>
 		</delete>
 	</target>

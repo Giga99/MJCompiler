@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
+import rs.ac.bg.etf.pp1.helpers.MethodManager;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
@@ -14,6 +15,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private boolean errorDetected = false;
 
 	private DeclarationManager declarationManager = new DeclarationManager();
+	private MethodManager methodManager = new MethodManager();
 
 	private Struct currentType = null;
 
@@ -124,5 +126,26 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	/* Rules for the method declaration */
 	
+	public void visit(MethodVoidReturnType methodVoidReturnType) {
+		methodManager.setCurrentMethodReturnType(Tab.noType);
+	}
 	
+	public void visit(MethodAnyReturnType methodAnyReturnType) {
+		methodManager.setCurrentMethodReturnType(currentType);
+	}
+	
+	public void visit(MethodName methodName) {
+		methodManager.setCurrentMethod(methodName.getMethodName());
+		Tab.openScope();
+	}
+	
+	public void visit(MethodDecl methodDecl) {
+		Tab.chainLocalSymbols(methodManager.getCurrentMethod());
+		Tab.closeScope();
+		if (methodManager.isMethodCorrect()) {
+			methodManager.reset();
+		} else {
+			reportError("Method " + methodDecl.getMethodName().getMethodName() + " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly", methodDecl);
+		}
+	}
 }
