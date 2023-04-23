@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
+import rs.ac.bg.etf.pp1.helpers.ExprManager;
 import rs.ac.bg.etf.pp1.helpers.MethodManager;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
@@ -16,6 +17,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	private DeclarationManager declarationManager = new DeclarationManager();
 	private MethodManager methodManager = new MethodManager();
+	private ExprManager exprManager = new ExprManager();
 
 	private Struct currentType = null;
 
@@ -128,30 +130,32 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	/* Rules for the method declaration */
-	
+
 	public void visit(MethodVoidReturnType methodVoidReturnType) {
 		methodManager.setCurrentMethodReturnType(Tab.noType);
 	}
-	
+
 	public void visit(MethodAnyReturnType methodAnyReturnType) {
 		methodManager.setCurrentMethodReturnType(currentType);
 	}
-	
+
 	public void visit(MethodName methodName) {
 		methodManager.setCurrentMethod(methodName.getMethodName());
 		Tab.openScope();
 	}
-	
+
 	public void visit(MethodDecl methodDecl) {
 		Tab.chainLocalSymbols(methodManager.getCurrentMethod());
 		Tab.closeScope();
 		if (methodManager.isMethodCorrect()) {
 			methodManager.finishMethod();
 		} else {
-			reportError("Method " + methodDecl.getMethodName().getMethodName() + " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly", methodDecl);
+			reportError("Method " + methodDecl.getMethodName().getMethodName()
+					+ " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly",
+					methodDecl);
 		}
 	}
-	
+
 	public void visit(FormParamDeclarationVar formParamDeclarationVar) {
 		String varName = formParamDeclarationVar.getVarName();
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
@@ -161,7 +165,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			Tab.insert(Obj.Var, varName, currentType);
 		}
 	}
-	
+
 	public void visit(FormParamDeclarationArray formParamDeclarationArray) {
 		String arrayName = formParamDeclarationArray.getArrayName();
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
@@ -170,5 +174,63 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			methodManager.addFormParam(currentType);
 			Tab.insert(Obj.Var, arrayName, declarationManager.getArrayTypeForGivenType(currentType));
 		}
+	}
+
+	/* Rules for the expressions */
+	
+	public void visit(ExprPositiveFirstTerm exprPositiveFirstTerm) {
+		exprPositiveFirstTerm.struct = exprPositiveFirstTerm.getTermList().struct;
+	}
+	
+	public void visit(ExprNegativeFirstTerm exprNegativeFirstTerm) {
+		Struct termType = exprNegativeFirstTerm.getTermList().struct;
+		if (exprManager.isTermTypeInt(termType)) {
+			exprNegativeFirstTerm.struct = termType;
+		} else {
+			reportError("Type in expression starting with negative term must be int", exprNegativeFirstTerm);
+			exprNegativeFirstTerm.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(TermListSingle termListSingle) {
+		termListSingle.struct = termListSingle.getTerm().struct;
+	}
+	
+	public void visit(TermListMultiple termListMultiple) {
+		Term term = termListMultiple.getTerm();
+		TermList termList = termListMultiple.getTermList();
+		if (exprManager.areCompatibleTypesInAddopExpr(term, termList)) {
+			termListMultiple.struct = term.struct;
+		} else {
+			reportError("Type in expression with multiple terms must be int", termListMultiple);
+			termListMultiple.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(TermSingleFactor termSingleFactor) {
+		termSingleFactor.struct = termSingleFactor.getFactor().struct;
+	}
+	
+	public void visit(TermMultipleFactor termMultipleFactor) {
+		Term term = termMultipleFactor.getTerm();
+		Factor factor = termMultipleFactor.getFactor();
+		if (exprManager.areCompatibleTypesInMulopExpr(term, factor)) {
+			termMultipleFactor.struct = term.struct;
+		} else {
+			reportError("Type in expression multiple factors must be int", termMultipleFactor);
+			termMultipleFactor.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(FactorNumber factorNumber) {
+		factorNumber.struct = Tab.intType;
+	}
+	
+	public void visit(FactorChar factorChar) {
+		factorChar.struct = Tab.charType;
+	}
+	
+	public void visit(FactorBool factorBool) {
+		factorBool.struct = TabExtended.boolType;
 	}
 }

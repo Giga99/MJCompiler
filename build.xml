@@ -12,6 +12,7 @@
 				<exclude name="tabextended/TabExtended.java" />
 				<exclude name="tabextended/SymbolTableVisitorExtended.java" />
 				<exclude name="helpers/MethodManager.java" />
+				<exclude name="helpers/ExprManager.java" />
 			</fileset>
 		</delete>
 	</target>

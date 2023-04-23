@@ -3,9 +3,8 @@ program Program3
 	char b[];
 	bool c;
 {
-	void fun1(int a, int b[], char c) {
-		
-	
+	void fun1() {
+		return 5 + 'c' * 4;
 	}
 	
 	void fun2() {}
