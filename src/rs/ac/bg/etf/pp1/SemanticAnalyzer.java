@@ -146,7 +146,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		Tab.chainLocalSymbols(methodManager.getCurrentMethod());
 		Tab.closeScope();
 		if (methodManager.isMethodCorrect()) {
-			methodManager.reset();
+			methodManager.finishMethod();
 		} else {
 			reportError("Method " + methodDecl.getMethodName().getMethodName() + " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly", methodDecl);
 		}

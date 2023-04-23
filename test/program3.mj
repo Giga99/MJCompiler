@@ -3,7 +3,7 @@ program Program3
 	char b[];
 	bool c;
 {
-	void fun1() {
+	void fun1(int a, int b, char c) {
 	
 	}
 	

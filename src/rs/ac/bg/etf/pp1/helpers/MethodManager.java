@@ -41,7 +41,8 @@ public class MethodManager {
 		return mainMethodExists;
 	}
 	
-	public void reset() {
+	public void finishMethod() {
+		currentMethod.setLevel(numberOfFormParms);
 		currentMethodReturnType = null;
 		currentMethodName = null;
 		currentMethod = null;

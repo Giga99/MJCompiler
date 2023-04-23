@@ -90,7 +90,7 @@ terminal String IDENT;
 
 
 nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
-nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormParmsDecl, FormParmsList, FormParam;
+nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormPars, FormParmsList, FormParam;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, Expr, TermList, Term, Factor, Designator, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
@@ -158,7 +158,7 @@ MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				(MethodDeclEmptyList) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) MethodReturnType MethodName LPAREN FormParmsDecl RPAREN VarDeclList LBRACE StatementList RBRACE;
+MethodDecl ::= (MethodDecl) MethodReturnType MethodName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE;
 
 MethodName ::= (MethodName) IDENT:methodName;
 
@@ -171,7 +171,7 @@ MethodReturnType ::= (MethodAnyReturnType) Type:returnType
 					
 /* Rules for the formal parameters */
 					
-FormParmsDecl ::= (FormParsItemsList) FormParmsList
+FormPars ::= (FormParsItemsList) FormParmsList
 				|
 				(FormParsEmptyList) /* epsilon */
 				;
