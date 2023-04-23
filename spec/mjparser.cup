@@ -92,12 +92,12 @@ terminal String IDENT;
 nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
-nonterminal StatementList, Statement, PrintNumOptional, Designator, ActPars;
+nonterminal StatementList, Statement, PrintNumOptional, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Condition, CondTerm, CondFact;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
-nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor;
 
 
@@ -345,7 +345,7 @@ ActPars ::= (ActParamsMultiple) ActPars COMMA Expr
 
 /* Rules for using variable or accessing element in the array */
 
-Designator ::= (DesignatorIdent) IDENT
+Designator ::= (DesignatorIdent) IDENT:designatorName
 			|
 			(DesignatorArray) Designator LSQUARE Expr RSQUARE
 			;		

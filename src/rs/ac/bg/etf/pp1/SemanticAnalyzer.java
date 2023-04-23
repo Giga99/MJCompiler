@@ -177,11 +177,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	/* Rules for the expressions */
-	
+
 	public void visit(ExprPositiveFirstTerm exprPositiveFirstTerm) {
 		exprPositiveFirstTerm.struct = exprPositiveFirstTerm.getTermList().struct;
 	}
-	
+
 	public void visit(ExprNegativeFirstTerm exprNegativeFirstTerm) {
 		Struct termType = exprNegativeFirstTerm.getTermList().struct;
 		if (exprManager.isTermTypeInt(termType)) {
@@ -191,11 +191,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			exprNegativeFirstTerm.struct = Tab.noType;
 		}
 	}
-	
+
 	public void visit(TermListSingle termListSingle) {
 		termListSingle.struct = termListSingle.getTerm().struct;
 	}
-	
+
 	public void visit(TermListMultiple termListMultiple) {
 		Term term = termListMultiple.getTerm();
 		TermList termList = termListMultiple.getTermList();
@@ -206,11 +206,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			termListMultiple.struct = Tab.noType;
 		}
 	}
-	
+
 	public void visit(TermSingleFactor termSingleFactor) {
 		termSingleFactor.struct = termSingleFactor.getFactor().struct;
 	}
-	
+
 	public void visit(TermMultipleFactor termMultipleFactor) {
 		Term term = termMultipleFactor.getTerm();
 		Factor factor = termMultipleFactor.getFactor();
@@ -221,16 +221,52 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			termMultipleFactor.struct = Tab.noType;
 		}
 	}
-	
+
+	/* Rules for the factor in expressions */
+
 	public void visit(FactorNumber factorNumber) {
 		factorNumber.struct = Tab.intType;
 	}
-	
+
 	public void visit(FactorChar factorChar) {
 		factorChar.struct = Tab.charType;
 	}
-	
+
 	public void visit(FactorBool factorBool) {
 		factorBool.struct = TabExtended.boolType;
+	}
+	
+	public void visit(FactorExpr factorExpr) {
+		factorExpr.struct = factorExpr.getExpr().struct;
+	}
+	
+	public void visit(FactorNewTypeExpr factorNewTypeExpr) {
+		Expr exprForSizeOfArray = factorNewTypeExpr.getExpr();
+		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
+			factorNewTypeExpr.struct = new Struct(Struct.Array, factorNewTypeExpr.getType().struct);
+		} else {
+			reportError("Type in expression for size of the array must be int", factorNewTypeExpr);
+			factorNewTypeExpr.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(FactorDesignator factorDesignator) {
+		factorDesignator.struct = factorDesignator.getDesignator().obj.getType();
+	}
+
+	/* Rules for using variable or accessing element in the array */
+	
+	public void visit(DesignatorIdent designatorIdent) {
+		String designatorName = designatorIdent.getDesignatorName();
+		Obj designator = Tab.find(designatorName);
+		if (designator == Tab.noObj) {
+			reportError("Designator " + designatorName, designatorIdent);
+		} else {
+			designatorIdent.obj = designator;
+		}
+	}
+	
+	public void visit(DesignatorArray designatorArray) {
+		
 	}
 }

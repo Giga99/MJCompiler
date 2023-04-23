@@ -22,4 +22,8 @@ public class ExprManager {
 		Struct factorType = factor.struct.getKind() == Struct.Array ? factor.struct.getElemType() : factor.struct;
 		return termType == Tab.intType && factorType == Tab.intType;
 	}
+	
+	public boolean isCorrectTypeForSizeOfArray(Expr expr) {
+		return expr.struct == Tab.intType;
+	}
 }
