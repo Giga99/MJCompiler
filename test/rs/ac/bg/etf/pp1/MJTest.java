@@ -25,6 +25,10 @@ public class MJTest {
 		Log4JUtils.instance().prepareLogFile(Logger.getRootLogger());
 	}
 	
+	public static void tsdump() {
+		TabExtended.dump();
+	}
+	
 	public static void main(String[] args) throws Exception {
 		Logger log = Logger.getLogger(MJTest.class);
 		Reader br = null;
@@ -52,7 +56,7 @@ public class MJTest {
 			prog.traverseBottomUp(semanticAnalyzer);
 			
 			log.info("===================================");
-			TabExtended.tsdump();
+			tsdump();
 			
 			if (!p.errorDetected && semanticAnalyzer.passed()) {
 				log.info("Parsing successfully completed!");

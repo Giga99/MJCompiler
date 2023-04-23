@@ -101,9 +101,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		obj.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
 		constValueBool.obj = obj;
 	}
-	
+
 	/* Rules for the variable declaration */
-	
+
 	public void visit(DefaultVar defaultVar) {
 		String varName = defaultVar.getVarName();
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
@@ -112,7 +112,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			Tab.insert(Obj.Var, varName, currentType);
 		}
 	}
-	
+
 	public void visit(ArrayVar arrayVar) {
 		String arrayName = arrayVar.getArrayName();
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
@@ -121,4 +121,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			Tab.insert(Obj.Var, arrayName, declarationManager.getArrayTypeForGivenType(currentType));
 		}
 	}
+
+	/* Rules for the method declaration */
+	
+	
 }

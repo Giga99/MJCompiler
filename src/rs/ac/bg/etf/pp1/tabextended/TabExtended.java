@@ -14,7 +14,7 @@ public class TabExtended {
 		Tab.currentScope.addToLocals(newBoolType);
 	}
 	
-	public static void tsdump() {
+	public static void dump() {
 		SymbolTableVisitor visitor = new SymbolTableVisitorExtended();
 		Tab.dump(visitor);
 	}

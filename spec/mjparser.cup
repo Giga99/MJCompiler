@@ -158,9 +158,9 @@ MethodDeclList ::= (MethodDeclItemsList) MethodDeclList MethodDecl
 				(MethodDeclEmptyList) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) MethodReturnType IDENT LPAREN FormParmsDecl RPAREN VarDeclList LBRACE StatementList RBRACE;
+MethodDecl ::= (MethodDecl) MethodReturnType IDENT:methodName LPAREN FormParmsDecl RPAREN VarDeclList LBRACE StatementList RBRACE;
 
-MethodReturnType ::= (MethodAnyReturnType) Type
+MethodReturnType ::= (MethodAnyReturnType) Type:returnType
 					|
 					(MethodVoidReturnType) VOID
 					;
