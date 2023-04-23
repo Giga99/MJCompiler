@@ -1,16 +1,15 @@
 Syntax Parsing Done:
 
-Program, Type, ConstDecl, VarDecl
+Program, Type, ConstDecl, VarDecl, MethodDecl, FormPars
 
 ========================================================================================
 
 In progress:
 
-MethodDecl, FormPars
+Statement, DesignatorStatement
 
 ========================================================================================
 
 To Check:
 
-Check if FormParam should use VarDeclaration or it should have its own var declaration
 What is better LIST COMMA ITEM or ITEM COMMA LIST?

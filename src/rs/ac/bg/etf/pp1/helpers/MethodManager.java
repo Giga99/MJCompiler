@@ -1,5 +1,8 @@
 package rs.ac.bg.etf.pp1.helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
@@ -10,9 +13,9 @@ public class MethodManager {
 	private Struct currentMethodReturnType;
 	private String currentMethodName;
 	private Obj currentMethod;
-	private boolean isMethodReturnedCorrectly;
+	private boolean isMethodReturnedCorrectly = false;
 	private boolean mainMethodExists = false;
-	private int numberOfFormParms = 0;
+	private List<Struct> formParams = new ArrayList<Struct>();
 
 	public void setCurrentMethodReturnType(Struct methodReturnType) {
 		currentMethodReturnType = methodReturnType;
@@ -29,6 +32,7 @@ public class MethodManager {
 	}
 
 	public boolean isMethodCorrect() {
+		int numberOfFormParms = formParams.size();
 		if (currentMethodName.equals(MAIN_METHOD)) {
 			mainMethodExists = true;
 			return currentMethodReturnType == Tab.noType && numberOfFormParms == 0;
@@ -42,9 +46,15 @@ public class MethodManager {
 	}
 	
 	public void finishMethod() {
+		int numberOfFormParms = formParams.size();
 		currentMethod.setLevel(numberOfFormParms);
 		currentMethodReturnType = null;
 		currentMethodName = null;
 		currentMethod = null;
+		formParams.clear();
+	}
+	
+	public void addFormParam(Struct formParamType) {
+		formParams.add(formParamType);
 	}
 }

@@ -151,4 +151,24 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Method " + methodDecl.getMethodName().getMethodName() + " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly", methodDecl);
 		}
 	}
+	
+	public void visit(FormParamDeclarationVar formParamDeclarationVar) {
+		String varName = formParamDeclarationVar.getVarName();
+		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
+			reportError("Symbol " + varName + " is already declared in this scope", formParamDeclarationVar);
+		} else {
+			methodManager.addFormParam(currentType);
+			Tab.insert(Obj.Var, varName, currentType);
+		}
+	}
+	
+	public void visit(FormParamDeclarationArray formParamDeclarationArray) {
+		String arrayName = formParamDeclarationArray.getArrayName();
+		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
+			reportError("Symbol " + arrayName + " is already declared in this scope", formParamDeclarationArray);
+		} else {
+			methodManager.addFormParam(currentType);
+			Tab.insert(Obj.Var, arrayName, declarationManager.getArrayTypeForGivenType(currentType));
+		}
+	}
 }
