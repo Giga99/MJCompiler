@@ -245,7 +245,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
 			factorNewTypeExpr.struct = new Struct(Struct.Array, factorNewTypeExpr.getType().struct);
 		} else {
-			reportError("Type in expression for size of the array must be int", factorNewTypeExpr);
+			reportError("Type in expression for the size of the array must be int", factorNewTypeExpr);
 			factorNewTypeExpr.struct = Tab.noType;
 		}
 	}
