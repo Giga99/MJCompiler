@@ -13,6 +13,7 @@
 				<exclude name="tabextended/SymbolTableVisitorExtended.java" />
 				<exclude name="helpers/MethodManager.java" />
 				<exclude name="helpers/ExprManager.java" />
+				<exclude name="helpers/StatementManager.java" />
 			</fileset>
 		</delete>
 	</target>

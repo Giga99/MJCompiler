@@ -8,6 +8,7 @@ import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
 import rs.ac.bg.etf.pp1.helpers.ExprManager;
 import rs.ac.bg.etf.pp1.helpers.MethodManager;
+import rs.ac.bg.etf.pp1.helpers.StatementManager;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
@@ -20,6 +21,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private DeclarationManager declarationManager = new DeclarationManager();
 	private MethodManager methodManager = new MethodManager();
 	private ExprManager exprManager = new ExprManager();
+	private StatementManager statementManager = new StatementManager();
 
 	private Struct currentType = null;
 
@@ -311,5 +313,18 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	public void visit(ActParamsMultiple actParamsMultiple) {
 		methodManager.addActParam(actParamsMultiple.getExpr().struct);
+	}
+	
+	/* Rules for the statement */
+	
+	public void visit(StatementRead statementRead) {
+		Designator designator = statementRead.getDesignator();
+		if (designator.obj == null) {
+			reportError("Designator doesn't exist", statementRead);
+		} else if (!statementManager.isDesignatorKindCompatibleWithRead(designator)) {
+			reportError("Kind of designator " + designator.obj.getName() + " is not compatible with read statement, it should be Var or Elem", statementRead);
+		} else if (!statementManager.isDesignatorKindCompatibleWithRead(designator)) {
+			reportError("Type of designator " + designator.obj.getName() + " is not compatible with read statement, it should be int, char or bool", statementRead);
+		}
 	}
 }
