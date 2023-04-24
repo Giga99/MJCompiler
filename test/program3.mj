@@ -1,14 +1,18 @@
 program Program3
 	int a;
 	int a2[];
-	char b[];
+	char b;
 	bool c;
 {
-	void fun1() {
-		return a2[3+1] + 5;
-	}
+
+	void fun3() {}
 	
-	void fun2() {}
+	void fun2(int a, int b, char c, bool d) {}
+	
+	void fun1() {
+		fun3();
+		return fun2(a, a, b, c);
+	}
 	
 	void main() {}
 }

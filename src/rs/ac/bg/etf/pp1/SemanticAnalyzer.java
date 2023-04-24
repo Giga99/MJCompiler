@@ -1,5 +1,7 @@
 package rs.ac.bg.etf.pp1;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
@@ -82,8 +84,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(constName)) {
 			reportError("Symbol " + constName + " is already declared in this scope", constDeclListItem);
 		} else if (declarationManager.typesNotMatching(currentType, valueType)) {
-			reportError("Symbol type " + currentType.getKind() + " is not matching with the value type "
-					+ valueType.getKind(), constDeclListItem);
+			reportError("Symbol type " + currentType.getKind() + " is not matching with the value type " + valueType.getKind(), constDeclListItem);
 		} else {
 			Obj obj = Tab.insert(Obj.Con, constName, currentType);
 			obj.setAdr(constDeclListItem.getConstValue().obj.getAdr());
@@ -150,9 +151,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (methodManager.isMethodCorrect()) {
 			methodManager.finishMethod();
 		} else {
-			reportError("Method " + methodDecl.getMethodName().getMethodName()
-					+ " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly",
-					methodDecl);
+			reportError("Method " + methodDecl.getMethodName().getMethodName() + " is not declared correctly, either the return is not present or it returns the wrong type or the main is not declared correctly", methodDecl);
 		}
 	}
 
@@ -235,11 +234,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(FactorBool factorBool) {
 		factorBool.struct = TabExtended.boolType;
 	}
-	
+
 	public void visit(FactorExpr factorExpr) {
 		factorExpr.struct = factorExpr.getExpr().struct;
 	}
-	
+
 	public void visit(FactorNewTypeExpr factorNewTypeExpr) {
 		Expr exprForSizeOfArray = factorNewTypeExpr.getExpr();
 		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
@@ -249,13 +248,36 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			factorNewTypeExpr.struct = Tab.noType;
 		}
 	}
-	
+
 	public void visit(FactorDesignator factorDesignator) {
 		factorDesignator.struct = factorDesignator.getDesignator().obj.getType();
 	}
 
+	public void visit(FactorMethodCall factorMethodCall) {
+		Designator designator = factorMethodCall.getDesignator();
+		if (methodManager.isDesignatorMethod(designator)) {
+			factorMethodCall.struct = designator.obj.getType();
+		} else {
+			reportError("Accessed designator " + designator.obj.getName() + " is not a method", factorMethodCall);
+			factorMethodCall.struct = Tab.noType;
+		}
+	}
+
+	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
+		Designator designator = factorMethodCallWithActParams.getDesignator();
+		if (!methodManager.isDesignatorMethod(designator)) {
+			reportError("Accessed designator " + designator.obj.getName() + " is not a method", factorMethodCallWithActParams);
+			factorMethodCallWithActParams.struct = Tab.noType;
+		} else if (!methodManager.areActParamsMathcingWithFormParamsForMethodDesignator(designator)) {
+			reportError("Actual params in call of method " + designator.obj.getName() + " doesn't match formal params", factorMethodCallWithActParams);
+			factorMethodCallWithActParams.struct = Tab.noType;
+		} else {
+			factorMethodCallWithActParams.struct = designator.obj.getType();
+		}
+	}
+
 	/* Rules for using variable or accessing element in the array */
-	
+
 	public void visit(DesignatorIdent designatorIdent) {
 		String designatorName = designatorIdent.getDesignatorName();
 		Obj designator = Tab.find(designatorName);
@@ -265,7 +287,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			designatorIdent.obj = designator;
 		}
 	}
-	
+
 	public void visit(DesignatorArray designatorArray) {
 		Designator designator = designatorArray.getDesignator();
 		if (!exprManager.isCorrectTypeForIndexOfArray(designatorArray.getExpr())) {
@@ -279,5 +301,15 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			Obj newDesignatorObj = new Obj(Obj.Elem, oldDesignatorObj.getName(), oldDesignatorObj.getType().getElemType());
 			designatorArray.obj = newDesignatorObj;
 		}
+	}
+
+	/* Rules for the actual parameters */
+
+	public void visit(ActParamsSingle actParamsSingle) {
+		methodManager.addActParam(actParamsSingle.getExpr().struct);
+	}
+
+	public void visit(ActParamsMultiple actParamsMultiple) {
+		methodManager.addActParam(actParamsMultiple.getExpr().struct);
 	}
 }
