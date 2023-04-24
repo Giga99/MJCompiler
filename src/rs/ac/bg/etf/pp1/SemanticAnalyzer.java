@@ -284,7 +284,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		String designatorName = designatorIdent.getDesignatorName();
 		Obj designator = Tab.find(designatorName);
 		if (designator == Tab.noObj) {
-			reportError("Designator " + designatorName, designatorIdent);
+			reportError("Designator " + designatorName + " was not found", designatorIdent);
 		} else {
 			designatorIdent.obj = designator;
 		}
