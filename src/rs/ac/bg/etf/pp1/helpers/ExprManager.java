@@ -26,4 +26,12 @@ public class ExprManager {
 	public boolean isCorrectTypeForSizeOfArray(Expr expr) {
 		return expr.struct == Tab.intType;
 	}
+	
+	public boolean isCorrectTypeForIndexOfArray(Expr expr) {
+		return expr.struct == Tab.intType;
+	}
+	
+	public boolean isDesignatorArray(Designator designator) {
+		return designator.obj.getType().getKind() == Struct.Array;
+	}
 }

@@ -1,10 +1,11 @@
 program Program3
 	int a;
+	int a2[];
 	char b[];
 	bool c;
 {
 	void fun1() {
-		return new int['c'];
+		return a2[3+1] + 5;
 	}
 	
 	void fun2() {}

@@ -267,6 +267,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(DesignatorArray designatorArray) {
-		
+		Designator designator = designatorArray.getDesignator();
+		if (!exprManager.isCorrectTypeForIndexOfArray(designatorArray.getExpr())) {
+			reportError("Type in expression for the index of the array must be int", designatorArray);
+			designatorArray.obj = Tab.noObj;
+		} else if (!exprManager.isDesignatorArray(designator)) {
+			reportError("Type of the designator of the array must be array", designatorArray);
+			designatorArray.obj = Tab.noObj;
+		} else {
+			Obj oldDesignatorObj = designator.obj;
+			Obj newDesignatorObj = new Obj(Obj.Elem, oldDesignatorObj.getName(), oldDesignatorObj.getType().getElemType());
+			designatorArray.obj = newDesignatorObj;
+		}
 	}
 }
