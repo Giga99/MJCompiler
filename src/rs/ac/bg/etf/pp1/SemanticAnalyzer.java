@@ -329,6 +329,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementPrint statementPrint) {
-		
+		if (!statementManager.isExprTypeCompatibleWithPrint(statementPrint.getExpr().struct)) {
+			reportError("Expr type in the print statement must be int, char or bool", statementPrint);
+		}
 	}
 }

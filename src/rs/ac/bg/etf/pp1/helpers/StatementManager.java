@@ -17,4 +17,8 @@ public class StatementManager {
 		Struct designatorType = designator.obj.getType();
 		return designatorType == Tab.intType || designatorType == Tab.charType || designatorType == TabExtended.boolType;
 	}
+	
+	public boolean isExprTypeCompatibleWithPrint(Struct exprType) {
+		return exprType == Tab.intType || exprType == Tab.charType || exprType == TabExtended.boolType;
+	}
 }
