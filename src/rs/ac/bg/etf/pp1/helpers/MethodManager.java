@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import rs.ac.bg.etf.pp1.ast.*;
+import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
@@ -89,6 +90,22 @@ public class MethodManager {
 	
 	public void resetActParams() {
 		actParams.clear();
+	}
+	
+	public boolean isReturnExprTypeCompatibleWithCurrentMethodReturnType(Struct exprType) {
+		isMethodReturnedCorrectly = currentMethodReturnType == exprType;
+		return isMethodReturnedCorrectly;
+	}
+	
+	public String getCurrentMethodReturnTypeFriendlyName() {
+		if (currentMethodReturnType == Tab.intType) return "int";
+		else if (currentMethodReturnType == Tab.charType) return "char";
+		else if (currentMethodReturnType == TabExtended.boolType) return "bool";
+		else return "void";
+	}
+	
+	public boolean isAnalyzerCurrentlyInMethod() {
+		return currentMethod != null;
 	}
 	
 	private List<Struct> getFormParamsForMethodDesignator(Designator designator) {

@@ -333,4 +333,20 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Expr type in the print statement must be int, char or bool", statementPrint);
 		}
 	}
+	
+	public void visit(StatementEmptyReturn statementEmptyReturn) {
+		if (!methodManager.isAnalyzerCurrentlyInMethod()) {
+			reportError("The return statement must be in the method", statementEmptyReturn);
+		} else if (!methodManager.isReturnExprTypeCompatibleWithCurrentMethodReturnType(Tab.noType)) {
+			reportError("The method doesn't return the correct type, it should return " + methodManager.getCurrentMethodReturnTypeFriendlyName(), statementEmptyReturn);
+		}
+	}
+	
+	public void visit(StatementValueReturn statementValueReturn) {
+		if (!methodManager.isAnalyzerCurrentlyInMethod()) {
+			reportError("The return statement must be in the method", statementValueReturn);
+		} else if (!methodManager.isReturnExprTypeCompatibleWithCurrentMethodReturnType(statementValueReturn.getExpr().struct)) {
+			reportError("The method doesn't return the correct type, it should return " + methodManager.getCurrentMethodReturnTypeFriendlyName(), statementValueReturn);
+		}
+	}
 }
