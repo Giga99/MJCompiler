@@ -9,7 +9,7 @@ program Program3
 	
 	void fun2(int a, int b, char c, bool d) {}
 	
-	void fun1(int f) int e; {
+	void fun1(char f) int e; {
 		read(f);
 	}
 	

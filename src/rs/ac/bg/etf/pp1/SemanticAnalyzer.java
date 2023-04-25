@@ -323,8 +323,12 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Designator doesn't exist", statementRead);
 		} else if (!statementManager.isDesignatorKindCompatibleWithRead(designator)) {
 			reportError("Kind of designator " + designator.obj.getName() + " is not compatible with read statement, it should be Var or Elem", statementRead);
-		} else if (!statementManager.isDesignatorKindCompatibleWithRead(designator)) {
+		} else if (!statementManager.isDesignatorTypeCompatibleWithRead(designator)) {
 			reportError("Type of designator " + designator.obj.getName() + " is not compatible with read statement, it should be int, char or bool", statementRead);
 		}
+	}
+	
+	public void visit(StatementPrint statementPrint) {
+		
 	}
 }
