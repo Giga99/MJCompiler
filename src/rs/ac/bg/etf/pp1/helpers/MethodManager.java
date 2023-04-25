@@ -98,10 +98,7 @@ public class MethodManager {
 	}
 	
 	public String getCurrentMethodReturnTypeFriendlyName() {
-		if (currentMethodReturnType == Tab.intType) return "int";
-		else if (currentMethodReturnType == Tab.charType) return "char";
-		else if (currentMethodReturnType == TabExtended.boolType) return "bool";
-		else return "void";
+		return Utils.getFriendlyNameForType(currentMethodReturnType);
 	}
 	
 	public boolean isAnalyzerCurrentlyInMethod() {

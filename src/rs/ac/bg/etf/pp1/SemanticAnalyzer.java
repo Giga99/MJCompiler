@@ -5,11 +5,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
-import rs.ac.bg.etf.pp1.helpers.DeclarationManager;
-import rs.ac.bg.etf.pp1.helpers.ExprManager;
-import rs.ac.bg.etf.pp1.helpers.MethodManager;
-import rs.ac.bg.etf.pp1.helpers.StatementManager;
-import rs.ac.bg.etf.pp1.tabextended.TabExtended;
+import rs.ac.bg.etf.pp1.helpers.*;
+import rs.ac.bg.etf.pp1.tabextended.*;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
@@ -22,6 +19,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private MethodManager methodManager = new MethodManager();
 	private ExprManager exprManager = new ExprManager();
 	private StatementManager statementManager = new StatementManager();
+	private DesignatorStatementManager designatorStatementManager = new DesignatorStatementManager();
 
 	private Struct currentType = null;
 
@@ -348,5 +346,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else if (!methodManager.isReturnExprTypeCompatibleWithCurrentMethodReturnType(statementValueReturn.getExpr().struct)) {
 			reportError("The method doesn't return the correct type, it should return " + methodManager.getCurrentMethodReturnTypeFriendlyName(), statementValueReturn);
 		}
+	}
+	
+	public void visit(DesignatorStatementAssign designatorStatementAssign) {
+		Designator designator = designatorStatementAssign.getDesignator();
+		Expr expr = designatorStatementAssign.getExpr();
+		if (!designatorStatementManager.isDesignatorKindCorrectForAssign(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssign);
+		} else if(!designatorStatementManager.isSameTypeOfDesignatorAndExprInAssign(designator, expr)) {
+			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssign);
+		}
+		// TODO check if it is a foreach value ======================================================                  <<<<<<<<<<<<<==========================================
 	}
 }

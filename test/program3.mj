@@ -9,8 +9,8 @@ program Program3
 	
 	void fun2(int a, int b, char c, bool d) {}
 	
-	int fun1(char f) int e; {
-		return e;
+	void fun1(char f) int e; {
+		e = a;
 	}
 	
 	void main() {}

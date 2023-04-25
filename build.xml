@@ -14,6 +14,8 @@
 				<exclude name="helpers/MethodManager.java" />
 				<exclude name="helpers/ExprManager.java" />
 				<exclude name="helpers/StatementManager.java" />
+				<exclude name="helpers/DesignatorStatementManager.java" />
+				<exclude name="helpers/Utils.java" />
 			</fileset>
 		</delete>
 	</target>
