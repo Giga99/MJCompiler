@@ -358,4 +358,22 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 		// TODO check if it is a foreach value ======================================================                  <<<<<<<<<<<<<==========================================
 	}
+	
+	public void visit(DesignatorStatementInc designatorStatementInc) {
+		Designator designator = designatorStatementInc.getDesignator();
+		if (!designatorStatementManager.isDesignatorKindCorrectForIncAndDec(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementInc);
+		} else if (!designatorStatementManager.isDesignatorTypeCorrectForIncAndDec(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be int", designatorStatementInc);
+		}
+	}
+	
+	public void visit(DesignatorStatementDec designatorStatementDec) {
+		Designator designator = designatorStatementDec.getDesignator();
+		if (!designatorStatementManager.isDesignatorKindCorrectForIncAndDec(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementDec);
+		} else if (!designatorStatementManager.isDesignatorTypeCorrectForIncAndDec(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be int", designatorStatementDec);
+		}
+	}
 }

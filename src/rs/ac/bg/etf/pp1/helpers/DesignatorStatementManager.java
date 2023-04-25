@@ -16,4 +16,14 @@ public class DesignatorStatementManager {
 	public boolean isSameTypeOfDesignatorAndExprInAssign(Designator designator, Expr expr) {
 		return expr.struct.assignableTo(designator.obj.getType());
 	}
+
+	public boolean isDesignatorKindCorrectForIncAndDec(Designator designator) {
+		int designatorKind = designator.obj.getKind();
+		return designatorKind == Obj.Var || designatorKind == Obj.Elem;
+	}
+
+	public boolean isDesignatorTypeCorrectForIncAndDec(Designator designator) {
+		Struct designatorType = designator.obj.getType();
+		return designatorType == Tab.intType;
+	}
 }

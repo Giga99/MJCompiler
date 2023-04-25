@@ -10,7 +10,8 @@ program Program3
 	void fun2(int a, int b, char c, bool d) {}
 	
 	void fun1(char f) int e; {
-		e = a;
+		e++;
+		e--;
 	}
 	
 	void main() {}
