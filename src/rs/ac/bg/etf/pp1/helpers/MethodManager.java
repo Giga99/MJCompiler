@@ -88,6 +88,11 @@ public class MethodManager {
 		return true;
 	}
 	
+	public boolean methodHaveNoFormalParams(Designator designator) {
+		List<Struct> formParams = getFormParamsForMethodDesignator(designator);
+		return formParams.size() == 0;
+	}
+	
 	public void resetActParams() {
 		actParams.clear();
 	}

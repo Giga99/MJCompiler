@@ -255,11 +255,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	public void visit(FactorMethodCall factorMethodCall) {
 		Designator designator = factorMethodCall.getDesignator();
-		if (methodManager.isDesignatorMethod(designator)) {
-			factorMethodCall.struct = designator.obj.getType();
-		} else {
+		if (!methodManager.isDesignatorMethod(designator)) {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", factorMethodCall);
 			factorMethodCall.struct = Tab.noType;
+		} else if (!methodManager.methodHaveNoFormalParams(designator)) {
+			reportError("You need to include actual params as this method has formal params", factorMethodCall);
+			factorMethodCall.struct = Tab.noType;
+		} else {
+			factorMethodCall.struct = designator.obj.getType();
 		}
 	}
 
@@ -374,6 +377,24 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementDec);
 		} else if (!designatorStatementManager.isDesignatorTypeCorrectForIncAndDec(designator)) {
 			reportError("Designator " + designator.obj.getName() + " has to be int", designatorStatementDec);
+		}
+	}
+	
+	public void visit(DesignatorStatementMethodCall designatorStatementMethodCall) {
+		Designator designator = designatorStatementMethodCall.getDesignator();
+		if (!methodManager.isDesignatorMethod(designator)) {
+			reportError("Accessed designator " + designator.obj.getName() + " is not a method", designatorStatementMethodCall);
+		} else if (!methodManager.methodHaveNoFormalParams(designator)) {
+			reportError("You need to include actual params as this method has formal params", designatorStatementMethodCall);
+		}
+	}
+	
+	public void visit(DesignatorStatementMethodCallWithActParams designatorStatementMethodCallWithActParams) {
+		Designator designator = designatorStatementMethodCallWithActParams.getDesignator();
+		if (!methodManager.isDesignatorMethod(designator)) {
+			reportError("Accessed designator " + designator.obj.getName() + " is not a method", designatorStatementMethodCallWithActParams);
+		} else if (!methodManager.areActParamsMathcingWithFormParamsForMethodDesignator(designator)) {
+			reportError("Actual params in call of method " + designator.obj.getName() + " doesn't match formal params", designatorStatementMethodCallWithActParams);
 		}
 	}
 }

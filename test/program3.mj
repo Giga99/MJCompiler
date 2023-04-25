@@ -5,13 +5,12 @@ program Program3
 	bool c;
 {
 
-	void fun3() {}
+	int fun3() { return 2; }
 	
 	void fun2(int a, int b, char c, bool d) {}
 	
 	void fun1(char f) int e; {
-		e++;
-		e--;
+		e = a + fun3();
 	}
 	
 	void main() {}
