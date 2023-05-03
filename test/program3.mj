@@ -1,7 +1,7 @@
 program Program3
 	int a;
 	int a2[];
-	char b;
+	char b[];
 	bool c;
 {
 
@@ -10,7 +10,7 @@ program Program3
 	void fun2(int a, int b, char c, bool d) {}
 	
 	void fun1(char f) int e; {
-		e = a + fun3();
+		[a, e] = a2;
 	}
 	
 	void main() {}

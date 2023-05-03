@@ -351,6 +351,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 	}
 	
+	/* Rules for the designator statement */
+	
 	public void visit(DesignatorStatementAssign designatorStatementAssign) {
 		Designator designator = designatorStatementAssign.getDesignator();
 		Expr expr = designatorStatementAssign.getExpr();
@@ -395,6 +397,26 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", designatorStatementMethodCallWithActParams);
 		} else if (!methodManager.areActParamsMathcingWithFormParamsForMethodDesignator(designator)) {
 			reportError("Actual params in call of method " + designator.obj.getName() + " doesn't match formal params", designatorStatementMethodCallWithActParams);
+		}
+	}
+	
+	public void visit(DesignatorStatementArrayAssign designatorStatementArrayAssign) {
+		Designator designatorToAssign = designatorStatementArrayAssign.getDesignator();
+		if (!exprManager.isDesignatorArray(designatorToAssign)) {
+			reportError("Type of the designator to assign in the array assign must be array", designatorStatementArrayAssign);
+		} else if (!designatorStatementManager.isCorrectTypeOfDesignatorsInArrayAssign(designatorToAssign)) {
+			reportError("Type of the elements in the array assign must be the same", designatorStatementArrayAssign);
+		} else {
+			designatorStatementManager.clearArrayAssignDesignators();
+		}
+	}
+	
+	public void visit(DesignatorOptionalExist designatorOptionalExist) {
+		Designator designator = designatorOptionalExist.getDesignator();
+		if (!designatorStatementManager.isDesignatorKindCorrectForAssign(designator)) {
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorOptionalExist);
+		} else {
+			designatorStatementManager.addDesignatorFromArrayAssign(designator);
 		}
 	}
 }
