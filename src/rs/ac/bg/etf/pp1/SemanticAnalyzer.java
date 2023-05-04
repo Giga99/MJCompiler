@@ -352,6 +352,24 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 	}
 	
+	public void visit(StatementIf statementIf) {
+		Condition condition = statementIf.getCondition();
+		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+			reportError("Condition inside parenthesis of the if must be of type boolean", statementIf);
+		}
+	}
+	
+	public void visit(StatementIfElse statementIfElse) {
+		Condition condition = statementIfElse.getCondition();
+		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+			reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
+		}
+	}
+	
+	public void visit(StatementWhile statementWhile) {
+		
+	}
+	
 	/* Rules for the designator statement */
 	
 	public void visit(DesignatorStatementAssign designatorStatementAssign) {
@@ -421,19 +439,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 	}
 	
-	public void visit(StatementIf statementIf) {
-		Condition condition = statementIf.getCondition();
-		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
-			reportError("Condition inside parenthesis of the if must be of type boolean", statementIf);
-		}
-	}
-	
-	public void visit(StatementIfElse statementIfElse) {
-		Condition condition = statementIfElse.getCondition();
-		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
-			reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
-		}
-	}
+	/* Rules for the condition */
 	
 	public void visit(ConditionSingleItem conditionSingleItem) {
 		CondTerm condTerm = conditionSingleItem.getCondTerm();
