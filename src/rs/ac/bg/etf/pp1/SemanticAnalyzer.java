@@ -20,6 +20,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private ExprManager exprManager = new ExprManager();
 	private StatementManager statementManager = new StatementManager();
 	private DesignatorStatementManager designatorStatementManager = new DesignatorStatementManager();
+	private ControlFlowManager controlFlowManager = new ControlFlowManager();
 
 	private Struct currentType = null;
 
@@ -417,6 +418,84 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorOptionalExist);
 		} else {
 			designatorStatementManager.addDesignatorFromArrayAssign(designator);
+		}
+	}
+	
+	public void visit(StatementIf statementIf) {
+		Condition condition = statementIf.getCondition();
+		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+			reportError("Condition inside parenthesis of the if must be of type boolean", statementIf);
+		}
+	}
+	
+	public void visit(StatementIfElse statementIfElse) {
+		Condition condition = statementIfElse.getCondition();
+		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+			reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
+		}
+	}
+	
+	public void visit(ConditionSingleItem conditionSingleItem) {
+		CondTerm condTerm = conditionSingleItem.getCondTerm();
+		if (controlFlowManager.isCondTermTypeCorrectForControlFlow(condTerm)) {
+			conditionSingleItem.struct = condTerm.struct;
+		} else {
+			reportError("CondTerm inside Condition must be of type boolean", conditionSingleItem);
+			conditionSingleItem.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(ConditionList conditionList) {
+		CondTerm condTerm = conditionList.getCondTerm();
+		Condition condition = conditionList.getCondition();
+		if (controlFlowManager.areCompatibleTypesInConditionList(condTerm, condition)) {
+			conditionList.struct = condTerm.struct;
+		} else {
+			reportError("Types in ConditionList must be compatible", conditionList);
+			conditionList.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(CondTermSingleItem condTermSingleItem) {
+		CondFact condFact = condTermSingleItem.getCondFact();
+		if (controlFlowManager.isCondFactTypeCorrectForControlFlow(condFact)) {
+			condTermSingleItem.struct = condFact.struct;
+		} else {
+			reportError("CondFact inside CondTerm must be of type boolean", condTermSingleItem);
+			condTermSingleItem.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(CondTermList condTermList) {
+		CondFact condFact = condTermList.getCondFact();
+		CondTerm condTerm = condTermList.getCondTerm();
+		if (controlFlowManager.areCompatibleTypesInCondTermList(condFact, condTerm)) {
+			condTermList.struct = condTerm.struct;
+		} else {
+			reportError("Types in CondTermList must be compatible", condTermList);
+			condTermList.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(CondFactSingleExpr condFactSingleExpr) {
+		Expr expr = condFactSingleExpr.getExpr();
+		if (controlFlowManager.isExprTypeCorrectForControlFlow(expr)) {
+			condFactSingleExpr.struct = expr.struct;
+		} else {
+			reportError("Expr inside CondFact must be of type boolean", condFactSingleExpr);
+			condFactSingleExpr.struct = Tab.noType;
+		}
+	}
+	
+	public void visit(CondFactDoubleExpr condFactDoubleExpr) {
+		Expr leftExpr = condFactDoubleExpr.getExpr();
+		Relop relop = condFactDoubleExpr.getRelop();
+		Expr rightExpr = condFactDoubleExpr.getExpr1();
+		if (controlFlowManager.areExprTypesCorrectForRelop(leftExpr, relop, rightExpr)) {
+			condFactDoubleExpr.struct = TabExtended.boolType;
+		} else {
+			reportError("Expr inside CondFactDoubleExpr are not compatible with Relop, arrays can only be used with equals and not equals or leftExpr is not compatible with rightExpr", condFactDoubleExpr);
+			condFactDoubleExpr.struct = Tab.noType;
 		}
 	}
 }

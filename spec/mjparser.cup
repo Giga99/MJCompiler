@@ -94,11 +94,10 @@ nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormPars, 
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, ActPars;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
-nonterminal Condition, CondTerm, CondFact;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator;
-nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, Condition, CondTerm, CondFact;
 
 
 

@@ -16,6 +16,7 @@
 				<exclude name="helpers/StatementManager.java" />
 				<exclude name="helpers/DesignatorStatementManager.java" />
 				<exclude name="helpers/Utils.java" />
+				<exclude name="helpers/ControlFlowManager.java" />
 			</fileset>
 		</delete>
 	</target>

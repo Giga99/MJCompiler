@@ -6,7 +6,7 @@ Program, Type, ConstDecl, VarDecl, MethodDecl, FormPars, Expr, Term, Factor, Des
 
 In progress:
 
-Statement
+Statement, StatementIf, StatementIfElse, StatementWhile, StatementForeach
 
 ========================================================================================
 
