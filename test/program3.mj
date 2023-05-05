@@ -11,7 +11,12 @@ program Program3
 	void fun2(int a, int b, char c, bool d) {}
 	
 	void fun1(char f) int e; {
-		
+		while (a > 0) {
+			while(a == 1) {
+				while (true) {}
+			}
+			continue;
+		}
 	}
 	
 	void main() {}

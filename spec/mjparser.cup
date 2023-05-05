@@ -92,7 +92,7 @@ terminal String IDENT;
 nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
-nonterminal StatementList, Statement, PrintNumOptional, ActPars;
+nonterminal StatementList, Statement, PrintNumOptional, ActPars, StatementWhileHead, StatementForeachHead;
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
@@ -237,15 +237,19 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement /* Rule for the if else */
 				|
-				(StatementWhile) WHILE LPAREN Condition RPAREN Statement /* Rule for the while */
+				(StatementWhile) StatementWhileHead Statement /* Rule for the while */
 				|
-				(StatementForeach) Designator DOT FOREACH LPAREN IDENT ARROW Statement RPAREN SEMI /* Rule for the foreach */
+				(StatementForeach) StatementForeachHead LPAREN IDENT ARROW Statement RPAREN SEMI /* Rule for the foreach */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 					|
 					(PrintNumNoConst) /* epsilon */
 					;
+						
+StatementWhileHead ::= (StatementWhileHead) WHILE LPAREN Condition RPAREN;
+
+StatementForeachHead ::= (StatementForeachHead) Designator DOT FOREACH;
 				
 				
 				

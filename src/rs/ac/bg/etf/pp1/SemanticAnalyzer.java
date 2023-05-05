@@ -367,7 +367,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementWhile statementWhile) {
-		
+		controlFlowManager.decreaseNumberOfNestedLoops();
 	}
 	
 	/* Rules for the designator statement */
@@ -502,6 +502,24 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else {
 			reportError("Expr inside CondFactDoubleExpr are not compatible with Relop, arrays can only be used with equals and not equals or leftExpr is not compatible with rightExpr", condFactDoubleExpr);
 			condFactDoubleExpr.struct = Tab.noType;
+		}
+	}
+
+	/* Rules for the loops */
+	
+	public void visit(StatementWhileHead statementWhileHead) {
+		controlFlowManager.increaseNumberOfNestedLoops();
+	}
+	
+	public void visit(StatementBreak statementBreak) {
+		if (!controlFlowManager.isBreakAllowed()) {
+			reportError("Break is not allowed outside of the loops", statementBreak);
+		}
+	}
+	
+	public void visit(StatementContinue statementContinue) {
+		if (!controlFlowManager.isBreakAllowed()) {
+			reportError("Continue is not allowed outside of the loops", statementContinue);
 		}
 	}
 }

@@ -7,6 +7,8 @@ import rs.etf.pp1.symboltable.concepts.*;
 
 public class ControlFlowManager {
 	
+	int numberOfNestedLoops = 0;
+	
 	public boolean isConditionTypeCorrectForControlFlow(Condition condition) {
 		return condition.struct == TabExtended.boolType;
 	}
@@ -41,5 +43,21 @@ public class ControlFlowManager {
 		return (relop instanceof Equals || relop instanceof NotEquals)
 				? leftExprType.compatibleWith(rightExprType)
 				: leftExprType.getKind() != Struct.Array && rightExprType.getKind() != Struct.Array && leftExprType.compatibleWith(rightExprType);
+	}
+	
+	public void increaseNumberOfNestedLoops() {
+		numberOfNestedLoops++;
+	}
+	
+	public void decreaseNumberOfNestedLoops() {
+		numberOfNestedLoops--;
+	}
+	
+	public boolean isBreakAllowed() {
+		return numberOfNestedLoops > 0;
+	}
+	
+	public boolean isContinueAllowed() {
+		return numberOfNestedLoops > 0;
 	}
 }
