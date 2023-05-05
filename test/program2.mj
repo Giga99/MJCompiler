@@ -1,8 +1,7 @@
 program p
 
 const int size = 10;
-Table val; 
-Int rows, columns;
+int rows, columns;
 
 { 
  	void f(char ch, int a, int arg) 

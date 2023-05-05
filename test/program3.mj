@@ -13,7 +13,14 @@ program Program3
 	void fun1(char f) int e; {
 		while (a > 0) {
 			while(a == 1) {
-				while (true) {}
+				while (true) {
+					a2.foreach(e => { 
+						print(e);
+						a2.foreach(e => { 
+							print(e);
+						});
+					});
+				}
 			}
 			continue;
 		}

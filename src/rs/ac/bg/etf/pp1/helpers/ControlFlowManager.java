@@ -60,4 +60,16 @@ public class ControlFlowManager {
 	public boolean isContinueAllowed() {
 		return numberOfNestedLoops > 0;
 	}
+		
+	public boolean isDesignatorTypeCompatibleWithForeach(Designator designator) {
+		return designator.obj.getType().getKind() == Struct.Array;
+	}
+	
+	public boolean isForeachVarTypeCompatibleWithForeach(Obj objVar) {
+		return objVar.getKind() == Obj.Var;
+	}
+	
+	public boolean areTypesCompatibleInForeach(Designator array, Obj foreachVar) {
+		return array.obj.getType().getElemType() == foreachVar.getType();
+	}
 }

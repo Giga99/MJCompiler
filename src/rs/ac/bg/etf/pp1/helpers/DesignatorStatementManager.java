@@ -12,6 +12,7 @@ import rs.etf.pp1.symboltable.concepts.*;
 public class DesignatorStatementManager {
 	
 	private List<Designator> arrayAssignDesignators = new ArrayList<Designator>();
+	private List<String> foreachVariables = new ArrayList<String>();
 
 	public boolean isDesignatorKindCorrectForAssign(Designator designator) {
 		int designatorKind = designator.obj.getKind();
@@ -46,5 +47,21 @@ public class DesignatorStatementManager {
 		}
 		
 		return true;
+	}
+	
+	public void addForeachVariable(String foreachVariableName) {
+		foreachVariables.add(foreachVariableName);
+	}
+	
+	public void removeForeachVariable(String foreachVariableName) {
+		foreachVariables.remove(foreachVariableName);
+	}
+	
+	public boolean isDesignatorForeachVariable(Designator designator) {
+		for(String foreachVariable : foreachVariables) {
+			if (foreachVariable.equalsIgnoreCase(designator.obj.getName())) return true;
+		}
+		
+		return false;
 	}
 }

@@ -365,9 +365,56 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
 		}
 	}
+
+	/* Rules for the loops */
 	
 	public void visit(StatementWhile statementWhile) {
 		controlFlowManager.decreaseNumberOfNestedLoops();
+	}
+	
+	public void visit(StatementForeach statementForeach) {
+		controlFlowManager.decreaseNumberOfNestedLoops();
+		Designator designator = statementForeach.getStatementForeachHead().getDesignator();
+		StatementForeachIdent foreachVariable = statementForeach.getStatementForeachIdent();
+		String foreachVariableName = foreachVariable.getForeachVariableName();
+		if (!controlFlowManager.isDesignatorTypeCompatibleWithForeach(designator)) {
+			reportError("Designator " + designator.obj.getName() + " must be array when calling foreach", statementForeach);
+		} else if (!declarationManager.isSymbolAlreadyDeclaredInCurrentScope(foreachVariableName)) {
+			reportError("Symbol " + foreachVariableName + " is not declared in this scope", statementForeach);
+		} else {
+			Obj foreachVar = declarationManager.getObjFromTableBySymbolName(foreachVariableName);
+			foreachVariable.obj = foreachVar;
+			if (!controlFlowManager.isForeachVarTypeCompatibleWithForeach(foreachVar)) {
+				reportError("Foreach variable " + foreachVar.getName() + " must be variable when calling foreach", statementForeach);
+			} else if(!controlFlowManager.areTypesCompatibleInForeach(designator, foreachVar)) {
+				reportError("Elements in array " + designator.obj.getName() + " and foreach variable " + foreachVar.getName() + " must have the same type", statementForeach);
+			}
+			designatorStatementManager.removeForeachVariable(foreachVariableName);
+		}
+	}
+	
+	public void visit(StatementBreak statementBreak) {
+		if (!controlFlowManager.isBreakAllowed()) {
+			reportError("Break is not allowed outside of the loops", statementBreak);
+		}
+	}
+	
+	public void visit(StatementContinue statementContinue) {
+		if (!controlFlowManager.isBreakAllowed()) {
+			reportError("Continue is not allowed outside of the loops", statementContinue);
+		}
+	}
+	
+	public void visit(StatementWhileHead statementWhileHead) {
+		controlFlowManager.increaseNumberOfNestedLoops();
+	}
+	
+	public void visit(StatementForeachHead statementForeachHead) {
+		controlFlowManager.increaseNumberOfNestedLoops();
+	}
+	
+	public void visit(StatementForeachIdent statementForeachIdent) {
+		designatorStatementManager.addForeachVariable(statementForeachIdent.getForeachVariableName());
 	}
 	
 	/* Rules for the designator statement */
@@ -379,8 +426,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssign);
 		} else if(!designatorStatementManager.isSameTypeOfDesignatorAndExprInAssign(designator, expr)) {
 			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssign);
+		} else if(designatorStatementManager.isDesignatorForeachVariable(designator)) {
+			reportError("Designator " + designator.obj.getName() + " can't be modified because it is a foreach variable", designatorStatementAssign);
 		}
-		// TODO check if it is a foreach value ======================================================                  <<<<<<<<<<<<<==========================================
 	}
 	
 	public void visit(DesignatorStatementInc designatorStatementInc) {
@@ -502,24 +550,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else {
 			reportError("Expr inside CondFactDoubleExpr are not compatible with Relop, arrays can only be used with equals and not equals or leftExpr is not compatible with rightExpr", condFactDoubleExpr);
 			condFactDoubleExpr.struct = Tab.noType;
-		}
-	}
-
-	/* Rules for the loops */
-	
-	public void visit(StatementWhileHead statementWhileHead) {
-		controlFlowManager.increaseNumberOfNestedLoops();
-	}
-	
-	public void visit(StatementBreak statementBreak) {
-		if (!controlFlowManager.isBreakAllowed()) {
-			reportError("Break is not allowed outside of the loops", statementBreak);
-		}
-	}
-	
-	public void visit(StatementContinue statementContinue) {
-		if (!controlFlowManager.isBreakAllowed()) {
-			reportError("Continue is not allowed outside of the loops", statementContinue);
 		}
 	}
 }

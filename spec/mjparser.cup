@@ -96,7 +96,7 @@ nonterminal StatementList, Statement, PrintNumOptional, ActPars, StatementWhileH
 nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
-nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementForeachIdent;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, Condition, CondTerm, CondFact;
 
 
@@ -239,7 +239,7 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementWhile) StatementWhileHead Statement /* Rule for the while */
 				|
-				(StatementForeach) StatementForeachHead LPAREN IDENT ARROW Statement RPAREN SEMI /* Rule for the foreach */
+				(StatementForeach) StatementForeachHead LPAREN StatementForeachIdent ARROW Statement RPAREN SEMI /* Rule for the foreach */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
@@ -250,6 +250,8 @@ PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 StatementWhileHead ::= (StatementWhileHead) WHILE LPAREN Condition RPAREN;
 
 StatementForeachHead ::= (StatementForeachHead) Designator DOT FOREACH;
+
+StatementForeachIdent ::= (StatementForeachIdent) IDENT:foreachVariableName;
 				
 				
 				
