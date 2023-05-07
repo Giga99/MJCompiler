@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
@@ -20,7 +21,7 @@ public class MethodManager {
 	private boolean isMethodReturnedCorrectly = false;
 	private boolean mainMethodExists = false;
 	private List<Struct> formParams = new ArrayList<Struct>();
-	private List<Struct> actParams = new ArrayList<Struct>();
+	private Stack<List<Struct>>  allActParams = new Stack<List<Struct>>();
 	private Map<String, List<Struct>> formalParamsPerMethods = new HashMap<String, List<Struct>>();
 
 	public void setCurrentMethodReturnType(Struct methodReturnType) {
@@ -66,8 +67,12 @@ public class MethodManager {
 		formParams.add(formParamType);
 	}
 	
+	public void startAddingActParams() {
+		allActParams.push(new ArrayList<Struct>());
+	}
+	
 	public void addActParam(Struct actParamType) {
-		actParams.add(actParamType);
+		allActParams.peek().add(actParamType);
 	}
 	
 	public boolean isDesignatorMethod(Designator designator) {
@@ -76,6 +81,7 @@ public class MethodManager {
 	
 	public boolean areActParamsMathcingWithFormParamsForMethodDesignator(Designator designator) {
 		List<Struct> formParams = getFormParamsForMethodDesignator(designator);
+		List<Struct> actParams = allActParams.pop();
 		
 		if (formParams.size() != actParams.size()) return false;
 		
@@ -91,10 +97,6 @@ public class MethodManager {
 	public boolean methodHaveNoFormalParams(Designator designator) {
 		List<Struct> formParams = getFormParamsForMethodDesignator(designator);
 		return formParams.size() == 0;
-	}
-	
-	public void resetActParams() {
-		actParams.clear();
 	}
 	
 	public boolean isReturnExprTypeCompatibleWithCurrentMethodReturnType(Struct exprType) {

@@ -288,7 +288,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(FactorMethodCall factorMethodCall) {
-		Designator designator = factorMethodCall.getDesignator();
+		Designator designator = factorMethodCall.getMethodNameCall().getDesignator();
 		if (!methodManager.isDesignatorMethod(designator)) {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", factorMethodCall);
 			factorMethodCall.struct = Tab.noType;
@@ -302,7 +302,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
-		Designator designator = factorMethodCallWithActParams.getDesignator();
+		Designator designator = factorMethodCallWithActParams.getMethodNameCall().getDesignator();
 		if (!methodManager.isDesignatorMethod(designator)) {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", factorMethodCallWithActParams);
 			factorMethodCallWithActParams.struct = Tab.noType;
@@ -345,6 +345,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	/* Rules for the actual parameters */
+	
+	public void visit(MethodNameCall methodNameCall) {
+		methodManager.startAddingActParams();
+		reportInfo("MethodNameCall", methodNameCall);
+	}
 
 	public void visit(ActParamsSingle actParamsSingle) {
 		methodManager.addActParam(actParamsSingle.getExpr().struct);
@@ -521,7 +526,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(DesignatorStatementMethodCall designatorStatementMethodCall) {
-		Designator designator = designatorStatementMethodCall.getDesignator();
+		Designator designator = designatorStatementMethodCall.getMethodNameCall().getDesignator();
 		if (!methodManager.isDesignatorMethod(designator)) {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", designatorStatementMethodCall);
 		} else if (!methodManager.methodHaveNoFormalParams(designator)) {
@@ -532,7 +537,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(DesignatorStatementMethodCallWithActParams designatorStatementMethodCallWithActParams) {
-		Designator designator = designatorStatementMethodCallWithActParams.getDesignator();
+		Designator designator = designatorStatementMethodCallWithActParams.getMethodNameCall().getDesignator();
 		if (!methodManager.isDesignatorMethod(designator)) {
 			reportError("Accessed designator " + designator.obj.getName() + " is not a method", designatorStatementMethodCallWithActParams);
 		} else if (!methodManager.areActParamsMathcingWithFormParamsForMethodDesignator(designator)) {

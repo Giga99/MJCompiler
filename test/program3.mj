@@ -5,10 +5,14 @@ program Program3
 	char b;
 	bool c;
 {
+
+	char fun3(int a, char b) { return b; }
+
+	int fun2(int a, char b) { return a; }
 	
 	void fun1(int a) {
-		if () {}
+		fun2(fun2(4, 'b'), fun3(3, 'c'));
 	}
 	
-	void main() {}
+	void main() { fun1(4); }
 }
