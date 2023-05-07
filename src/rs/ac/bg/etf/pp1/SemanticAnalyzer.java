@@ -353,16 +353,20 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementIf statementIf) {
-		Condition condition = statementIf.getCondition();
-		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
-			reportError("Condition inside parenthesis of the if must be of type boolean", statementIf);
+		if (statementIf.getIfCondition() instanceof ConditionSuccess) {
+			Condition condition = ((ConditionSuccess) statementIf.getIfCondition()).getCondition();
+			if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+				reportError("Condition inside parenthesis of the if must be of type boolean", statementIf);
+			}
 		}
 	}
 	
 	public void visit(StatementIfElse statementIfElse) {
-		Condition condition = statementIfElse.getCondition();
-		if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
-			reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
+		if (statementIfElse.getIfCondition() instanceof ConditionSuccess) {
+			Condition condition = ((ConditionSuccess) statementIfElse.getIfCondition()).getCondition();
+			if (!controlFlowManager.isConditionTypeCorrectForControlFlow(condition)) {
+				reportError("Condition inside parenthesis of the ifelse must be of type boolean", statementIfElse);
+			}
 		}
 	}
 
@@ -419,15 +423,15 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	
 	/* Rules for the designator statement */
 	
-	public void visit(DesignatorStatementAssign designatorStatementAssign) {
-		Designator designator = designatorStatementAssign.getDesignator();
-		Expr expr = designatorStatementAssign.getExpr();
+	public void visit(DesignatorStatementAssignExprSuccess designatorStatementAssignExprSuccess) {
+		Designator designator = designatorStatementAssignExprSuccess.getDesignator();
+		Expr expr = designatorStatementAssignExprSuccess.getExpr();
 		if (!designatorStatementManager.isDesignatorKindCorrectForAssign(designator)) {
-			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssign);
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssignExprSuccess);
 		} else if(!designatorStatementManager.isSameTypeOfDesignatorAndExprInAssign(designator, expr)) {
-			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssign);
+			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssignExprSuccess);
 		} else if(designatorStatementManager.isDesignatorForeachVariable(designator)) {
-			reportError("Designator " + designator.obj.getName() + " can't be modified because it is a foreach variable", designatorStatementAssign);
+			reportError("Designator " + designator.obj.getName() + " can't be modified because it is a foreach variable", designatorStatementAssignExprSuccess);
 		}
 	}
 	

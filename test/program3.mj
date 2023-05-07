@@ -5,25 +5,9 @@ program Program3
 	char b;
 	bool c;
 {
-
-	int fun3() { return 2; }
 	
-	void fun2(int a, int b, char c, bool d) {}
-	
-	void fun1(char f) int e; {
-		while (a > 0) {
-			while(a == 1) {
-				while (true) {
-					a2.foreach(e => { 
-						print(e);
-						a2.foreach(e => { 
-							print(e);
-						});
-					});
-				}
-			}
-			continue;
-		}
+	void fun1(int a) {
+		if () {}
 	}
 	
 	void main() {}

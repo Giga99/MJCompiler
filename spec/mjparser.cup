@@ -93,11 +93,11 @@ nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodName, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, ActPars, StatementWhileHead, StatementForeachHead;
-nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional;
+nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional, DesignatorStatementAssignExpr;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementForeachIdent;
-nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, Condition, CondTerm, CondFact;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, IfCondition, Condition, CondTerm, CondFact;
 
 
 
@@ -180,7 +180,11 @@ FormParmsList ::= (FormParmsListMultipleItems) FormParmsList COMMA FormParam
 				(FormParmsListSingleItem) FormParam
 				;
 
-FormParam ::= (FormParam) Type FormParamDeclaration;
+FormParam ::= (FormParamSuccess) Type FormParamDeclaration
+			|
+			(FormParamError) error:e
+			{: parser.report_error("Formal param declaration error at line: " + eleft + ". Successfully recovered from the error.", null); :}
+			;
 
 FormParamDeclaration ::= (FormParamDeclarationVar) IDENT:varName
 						|
@@ -206,6 +210,9 @@ VarDeclIdentList ::= (VarDeclIdentListMultipleItems) VarDeclIdentList COMMA VarD
 VarDeclaration ::= (DefaultVar) IDENT:varName
 				|
 				(ArrayVar) IDENT:arrayName LSQUARE RSQUARE
+				|
+				(VarDeclIdentListError) error:e
+				{: parser.report_error("Global var declaration error at line: " + eleft + ". Successfully recovered from the error.", null); :}
 				;
 
 
@@ -233,9 +240,9 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementBrackets) LBRACE StatementList RBRACE /* Rule for the statement section */
 				|
-				(StatementIf) IF LPAREN Condition RPAREN Statement /* Rule for the if */
+				(StatementIf) IF LPAREN IfCondition RPAREN Statement /* Rule for the if */
 				|
-				(StatementIfElse) IF LPAREN Condition RPAREN Statement ELSE Statement /* Rule for the if else */
+				(StatementIfElse) IF LPAREN IfCondition RPAREN Statement ELSE Statement /* Rule for the if else */
 				|
 				(StatementWhile) StatementWhileHead Statement /* Rule for the while */
 				|
@@ -255,7 +262,7 @@ StatementForeachIdent ::= (StatementForeachIdent) IDENT:foreachVariableName;
 				
 				
 				
-DesignatorStatement ::= (DesignatorStatementAssign) Designator Assignop Expr /* Rule for assigning the value */
+DesignatorStatement ::= (DesignatorStatementAssign) DesignatorStatementAssignExpr /* Rule for assigning the value */
 						|
 						(DesignatorStatementArrayAssign) LSQUARE DesignatorOptionalList RSQUARE Assignop Designator
 						|
@@ -277,6 +284,12 @@ DesignatorOptional ::= (DesignatorOptionalExist) Designator
 					|
 					(DesignatorOptionalEmpty) /* epsilon */
 					;
+					
+DesignatorStatementAssignExpr ::= (DesignatorStatementAssignExprSuccess) Designator Assignop Expr
+								|
+								(DesignatorStatementAssignExprError) error:e
+								{: parser.report_error("Designator assign operation error at line: " + eleft + ". Successfully recovered from the error.", null); :}
+								;
 				
 				
 				
@@ -300,6 +313,12 @@ Term ::= (TermSingleFactor) Factor
 					
 					
 /* Rules for the conditions */
+
+IfCondition ::= (ConditionSuccess) Condition
+			|
+			(ConditionError) error:e
+			{: parser.report_error("Condition error at line: " + eleft + ". Successfully recovered from the error.", null); :}
+			;
 
 Condition ::= (ConditionList) Condition OR CondTerm
 			|
