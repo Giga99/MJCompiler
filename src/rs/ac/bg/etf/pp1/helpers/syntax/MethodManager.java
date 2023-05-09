@@ -30,9 +30,10 @@ public class MethodManager {
 		isMethodReturnedCorrectly = methodReturnType == Tab.noType;
 	}
 	
-	public void setCurrentMethod(String methodName) {
+	public Obj setCurrentMethod(String methodName) {
 		currentMethodName = methodName;
 		currentMethod = Tab.insert(Obj.Meth, methodName, currentMethodReturnType);
+		return currentMethod;
 	}
 	
 	public Obj getCurrentMethod() {
@@ -111,6 +112,10 @@ public class MethodManager {
 	
 	public boolean isAnalyzerCurrentlyInMethod() {
 		return currentMethod != null;
+	}
+	
+	public boolean isMainMethod(String methodName) {
+		return methodName.equals(MAIN_METHOD);
 	}
 	
 	private List<Struct> getFormParamsForMethodDesignator(Designator designator) {

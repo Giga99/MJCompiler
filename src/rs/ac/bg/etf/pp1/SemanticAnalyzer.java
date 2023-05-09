@@ -18,6 +18,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private Logger log = Logger.getLogger(getClass());
 
 	private boolean errorDetected = false;
+	private int numberOfVars;
 
 	private DeclarationManager declarationManager = new DeclarationManager();
 	private MethodManager methodManager = new MethodManager();
@@ -48,14 +49,20 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public boolean passed() {
 		return !errorDetected;
 	}
+	
+	public int getNumberOfVars() {
+		return numberOfVars;
+	}
 
 	public void visit(ProgName progName) {
+		numberOfVars = 0;
 		progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
 		Tab.openScope();
 		reportInfo("ProgName", progName);
 	}
 
 	public void visit(Program program) {
+		numberOfVars = Tab.currentScope.getnVars();
 		Tab.chainLocalSymbols(program.getProgName().obj);
 		Tab.closeScope();
 		if (!methodManager.isMainMethodPresent()) {
@@ -165,7 +172,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(MethodName methodName) {
-		methodManager.setCurrentMethod(methodName.getMethodName());
+		methodName.obj = methodManager.setCurrentMethod(methodName.getMethodName());
 		Tab.openScope();
 		reportInfo("MethodName", methodName);
 	}
