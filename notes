@@ -1,17 +1,15 @@
-Syntax Parsing Done:
+Code Generation Done:
 
-Program, Type, ConstDecl, VarDecl, MethodDecl, FormPars, Expr, Term, Factor, Designator, ActParams, DesignatorStatement, Condition, CondTerm, CondFact
+
 
 ========================================================================================
 
 In progress:
 
-Statement, StatementForeach
+
 
 ========================================================================================
 
 To Check:
 
 - What is better LIST COMMA ITEM or ITEM COMMA LIST?
-- Return for void methods
-- Foreach variable in assign
