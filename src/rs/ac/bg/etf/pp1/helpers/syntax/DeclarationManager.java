@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.helpers;
+package rs.ac.bg.etf.pp1.helpers.syntax;
 
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;

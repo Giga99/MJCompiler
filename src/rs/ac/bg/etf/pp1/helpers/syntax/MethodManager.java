@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.helpers;
+package rs.ac.bg.etf.pp1.helpers.syntax;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import rs.ac.bg.etf.pp1.ast.*;
+import rs.ac.bg.etf.pp1.helpers.Utils;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;

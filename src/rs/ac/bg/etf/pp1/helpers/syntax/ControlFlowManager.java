@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.helpers;
+package rs.ac.bg.etf.pp1.helpers.syntax;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;

@@ -4,6 +4,12 @@ import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.*;
+import rs.ac.bg.etf.pp1.helpers.syntax.ControlFlowManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.DeclarationManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.DesignatorStatementManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.ExprManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.MethodManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.StatementManager;
 import rs.ac.bg.etf.pp1.tabextended.*;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;

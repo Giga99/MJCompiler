@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.helpers;
+package rs.ac.bg.etf.pp1.helpers.syntax;
 
 
 import java.util.ArrayList;
