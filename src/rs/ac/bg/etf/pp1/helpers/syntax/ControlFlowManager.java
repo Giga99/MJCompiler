@@ -72,4 +72,12 @@ public class ControlFlowManager {
 	public boolean areTypesCompatibleInForeach(Designator array, Obj foreachVar) {
 		return array.obj.getType().getElemType() == foreachVar.getType();
 	}
+	
+	public boolean isForeachVariableDefined(String variableName) {
+		return Tab.find(variableName) != null;
+	}
+	
+	public Obj getObjFromTableBySymbolName(String symbolName) {
+		return Tab.find(symbolName);
+	}
 }

@@ -21,7 +21,6 @@ int rows, columns;
  		arr.foreach(x => print(x);); 
  		read(x);  
  		
- 		[i,,x] = arr; 
  		while (i<size) {       
  			i++; 
  		}     

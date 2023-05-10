@@ -453,10 +453,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		String foreachVariableName = foreachVariable.getForeachVariableName();
 		if (!controlFlowManager.isDesignatorTypeCompatibleWithForeach(designator)) {
 			reportError("Designator " + designator.obj.getName() + " must be array when calling foreach", statementForeach);
-		} else if (!declarationManager.isSymbolAlreadyDeclaredInCurrentScope(foreachVariableName)) {
+		} else if (!controlFlowManager.isForeachVariableDefined(foreachVariableName)) {
 			reportError("Symbol " + foreachVariableName + " is not declared in this scope", statementForeach);
 		} else {
-			Obj foreachVar = declarationManager.getObjFromTableBySymbolName(foreachVariableName);
+			Obj foreachVar = controlFlowManager.getObjFromTableBySymbolName(foreachVariableName);
 			foreachVariable.obj = foreachVar;
 			if (!controlFlowManager.isForeachVarTypeCompatibleWithForeach(foreachVar)) {
 				reportError("Foreach variable " + foreachVar.getName() + " must be variable when calling foreach", statementForeach);
@@ -557,28 +557,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Actual params in call of method " + designator.obj.getName() + " doesn't match formal params", designatorStatementMethodCallWithActParams);
 		} else {
 			reportInfo("DesignatorStatementMethodCallWithActParams", designatorStatementMethodCallWithActParams);
-		}
-	}
-	
-	public void visit(DesignatorStatementArrayAssign designatorStatementArrayAssign) {
-		Designator designatorToAssign = designatorStatementArrayAssign.getDesignator();
-		if (!exprManager.isDesignatorArray(designatorToAssign)) {
-			reportError("Type of the designator to assign in the array assign must be array", designatorStatementArrayAssign);
-		} else if (!designatorStatementManager.isCorrectTypeOfDesignatorsInArrayAssign(designatorToAssign)) {
-			reportError("Type of the elements in the array assign must be the same", designatorStatementArrayAssign);
-		} else {
-			designatorStatementManager.clearArrayAssignDesignators();
-			reportInfo("DesignatorStatementArrayAssign", designatorStatementArrayAssign);
-		}
-	}
-	
-	public void visit(DesignatorOptionalExist designatorOptionalExist) {
-		Designator designator = designatorOptionalExist.getDesignator();
-		if (!designatorStatementManager.isDesignatorKindCorrectForAssign(designator)) {
-			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorOptionalExist);
-		} else {
-			designatorStatementManager.addDesignatorFromArrayAssign(designator);
-			reportInfo("DesignatorOptionalExist", designatorOptionalExist);
 		}
 	}
 	

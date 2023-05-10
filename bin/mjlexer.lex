@@ -67,6 +67,7 @@ import java_cup.runtime.Symbol;
 "extends"						{ return new_symbol(sym.EXTENDS, yytext()); }
 "continue"						{ return new_symbol(sym.CONTINUE, yytext()); }
 "foreach"						{ return new_symbol(sym.FOREACH, yytext()); }
+"map"							{ return new_symbol(sym.MAP, yytext()); }
 
 // OPERATORS
 "+" 							{ return new_symbol(sym.PLUS, yytext()); }
@@ -108,4 +109,4 @@ import java_cup.runtime.Symbol;
 [0-9]+  						{ return new_symbol(sym.NUMBER, Integer.valueOf(yytext())); }
 ([a-z]|[A-Z])[a-zA-Z0-9_]* 		{ return new_symbol(sym.IDENT, yytext()); }
 
-. { System.err.println("Lexical error (" + yytext() + ") on line " + (yyline+1) + ", on column " + yycolumn); }
+. 								{ System.err.println("Lexical error (" + yytext() + ") on line " + (yyline+1) + ", on column " + yycolumn); }

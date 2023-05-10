@@ -119,6 +119,20 @@ public class MethodManager {
 	}
 	
 	private List<Struct> getFormParamsForMethodDesignator(Designator designator) {
-		return formalParamsPerMethods.get(designator.obj.getName());
+		String methodName = designator.obj.getName();
+		List<Struct> formParams = formalParamsPerMethods.get(methodName);
+		
+		if (formParams == null) {
+			formParams = new ArrayList<Struct>();
+			Obj predefinedMethod = Tab.find(methodName);
+			if (predefinedMethod != null && predefinedMethod.getKind() == Obj.Meth) {
+				for (Obj localSymbol : predefinedMethod.getLocalSymbols()) {
+					formParams.add(localSymbol.getType());
+				}
+				return formParams;
+			}
+		}
+		
+		return formParams;
 	}
 }

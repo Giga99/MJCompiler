@@ -71,7 +71,7 @@ scan with {:
 
   
 // KEYWORDS
-terminal PROG, BREAK, CLASS, ELSE, CONST, IF, WHILE, NEW, PRINT, READ, RETURN, VOID, EXTENDS, CONTINUE, FOREACH;
+terminal PROG, BREAK, CLASS, ELSE, CONST, IF, WHILE, NEW, PRINT, READ, RETURN, VOID, EXTENDS, CONTINUE, FOREACH, MAP;
 
 // OPERATORS
 terminal PLUS, MINUS, MUL, DIV, MOD, EQUALS, NOTEQUALS, GREATER, GREATEREQUALS, LESS, LESSEQUALS, AND, OR, ASSIGN;
@@ -93,7 +93,7 @@ nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars, StatementWhileHead, StatementForeachHead;
-nonterminal DesignatorStatement, DesignatorOptionalList, DesignatorOptional, DesignatorStatementAssignExpr;
+nonterminal DesignatorStatement, DesignatorStatementAssignExpr;
 nonterminal Label, Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementForeachIdent, MethodName;
@@ -264,8 +264,6 @@ StatementForeachIdent ::= (StatementForeachIdent) IDENT:foreachVariableName;
 				
 DesignatorStatement ::= (DesignatorStatementAssign) DesignatorStatementAssignExpr /* Rule for assigning the value */
 						|
-						(DesignatorStatementArrayAssign) LSQUARE DesignatorOptionalList RSQUARE Assignop Designator
-						|
 						(DesignatorStatementInc) Designator INC /* Rule for incrementing variable, example a++ */
 						|
 						(DesignatorStatementDec) Designator DEC /* Rule for decrementing variable, example a-- */
@@ -274,16 +272,6 @@ DesignatorStatement ::= (DesignatorStatementAssign) DesignatorStatementAssignExp
 						|
 						(DesignatorStatementMethodCallWithActParams) MethodNameCall LPAREN ActPars RPAREN /* Rule for the method call with actual params */
 						;
-						
-DesignatorOptionalList ::= (DesignatorOptionalListItem) DesignatorOptional
-						|
-						(DesignatorOptionalListItems) DesignatorOptionalList COMMA DesignatorOptional
-						; 
-				
-DesignatorOptional ::= (DesignatorOptionalExist) Designator
-					|
-					(DesignatorOptionalEmpty) /* epsilon */
-					;
 					
 DesignatorStatementAssignExpr ::= (DesignatorStatementAssignExprSuccess) Designator Assignop Expr
 								|
