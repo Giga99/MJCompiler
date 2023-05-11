@@ -284,14 +284,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		reportInfo("FactorExpr", factorExpr);
 	}
 
-	public void visit(FactorNewTypeExpr factorNewTypeExpr) {
-		Expr exprForSizeOfArray = factorNewTypeExpr.getExpr();
+	public void visit(FactorArrayExpr factorArrayExpr) {
+		Expr exprForSizeOfArray = factorArrayExpr.getExpr();
 		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
-			factorNewTypeExpr.struct = new Struct(Struct.Array, factorNewTypeExpr.getType().struct);
-			reportInfo("FactorNewTypeExpr", factorNewTypeExpr);
+			factorArrayExpr.struct = new Struct(Struct.Array, factorArrayExpr.getType().struct);
+			reportInfo("FactorArrayExpr", factorArrayExpr);
 		} else {
-			reportError("Type in expression for the size of the array must be int", factorNewTypeExpr);
-			factorNewTypeExpr.struct = Tab.noType;
+			reportError("Type in expression for the size of the array must be int", factorArrayExpr);
+			factorArrayExpr.struct = Tab.noType;
 		}
 	}
 

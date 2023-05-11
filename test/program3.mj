@@ -6,7 +6,7 @@ program Program3
 {
 	
 	void fun1() {
-		a3 = a2.map(a => 2*a);
+		a3 = new int[5];
 	}
 	
 	void main() { fun1(); }
