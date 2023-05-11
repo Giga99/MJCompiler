@@ -61,23 +61,27 @@ public class ControlFlowManager {
 		return numberOfNestedLoops > 0;
 	}
 		
-	public boolean isDesignatorTypeCompatibleWithForeach(Designator designator) {
+	public boolean isDesignatorTypeCompatibleWithMap(Designator designator) {
 		return designator.obj.getType().getKind() == Struct.Array;
 	}
 	
-	public boolean isForeachVarTypeCompatibleWithForeach(Obj objVar) {
+	public boolean isMapVarTypeCompatibleWithMap(Obj objVar) {
 		return objVar.getKind() == Obj.Var;
 	}
 	
-	public boolean areTypesCompatibleInForeach(Designator array, Obj foreachVar) {
+	public boolean areTypesCompatibleInMap(Designator array, Obj foreachVar) {
 		return array.obj.getType().getElemType() == foreachVar.getType();
 	}
 	
-	public boolean isForeachVariableDefined(String variableName) {
+	public boolean isMapVariableDefined(String variableName) {
 		return Tab.find(variableName) != null;
 	}
 	
 	public Obj getObjFromTableBySymbolName(String symbolName) {
 		return Tab.find(symbolName);
+	}
+	
+	public boolean areResultingArrayTypeAndArrayToAssignToTypeInMapCompatible(Designator arrayDesignator, Obj resultingArrayObj) {
+		return resultingArrayObj.getType().assignableTo(arrayDesignator.obj.getType());
 	}
 }

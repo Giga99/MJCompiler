@@ -11,7 +11,7 @@ import rs.etf.pp1.symboltable.concepts.*;
 
 public class DesignatorStatementManager {
 	
-	private List<String> foreachVariables = new ArrayList<String>();
+	private List<String> mapVariables = new ArrayList<String>();
 
 	public boolean isDesignatorKindCorrectForAssign(Designator designator) {
 		int designatorKind = designator.obj.getKind();
@@ -32,19 +32,11 @@ public class DesignatorStatementManager {
 		return designatorType == Tab.intType;
 	}
 	
-	public void addForeachVariable(String foreachVariableName) {
-		foreachVariables.add(foreachVariableName);
+	public void addMapVariable(String mapVariableName) {
+		mapVariables.add(mapVariableName);
 	}
 	
-	public void removeForeachVariable(String foreachVariableName) {
-		foreachVariables.remove(foreachVariableName);
-	}
-	
-	public boolean isDesignatorForeachVariable(Designator designator) {
-		for(String foreachVariable : foreachVariables) {
-			if (foreachVariable.equalsIgnoreCase(designator.obj.getName())) return true;
-		}
-		
-		return false;
+	public void removeMapVariable(String mapVariableName) {
+		mapVariables.remove(mapVariableName);
 	}
 }

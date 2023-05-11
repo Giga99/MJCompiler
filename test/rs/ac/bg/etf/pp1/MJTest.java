@@ -33,7 +33,7 @@ public class MJTest {
 		Logger log = Logger.getLogger(MJTest.class);
 		Reader br = null;
 		try {
-			String programName = "test302";
+			String programName = "program3";
 			File sourceCode = new File("test/" + programName + ".mj");	
 			log.info("Compiling source file: " + sourceCode.getAbsolutePath());
 			

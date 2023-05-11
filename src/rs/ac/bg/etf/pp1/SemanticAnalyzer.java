@@ -446,26 +446,34 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		reportInfo("StatementWhile", statementWhile);
 	}
 	
-	public void visit(StatementForeach statementForeach) {
+	public void visit(StatementMap statementMap) {
 		controlFlowManager.decreaseNumberOfNestedLoops();
-		Designator designator = statementForeach.getStatementForeachHead().getDesignator();
-		StatementForeachIdent foreachVariable = statementForeach.getStatementForeachIdent();
-		String foreachVariableName = foreachVariable.getForeachVariableName();
-		if (!controlFlowManager.isDesignatorTypeCompatibleWithForeach(designator)) {
-			reportError("Designator " + designator.obj.getName() + " must be array when calling foreach", statementForeach);
-		} else if (!controlFlowManager.isForeachVariableDefined(foreachVariableName)) {
-			reportError("Symbol " + foreachVariableName + " is not declared in this scope", statementForeach);
+		Designator assignMapDesignator = statementMap.getStatementMapHead().getDesignator();
+		Designator mappedDesignator = statementMap.getStatementMapHead().getDesignator1();
+		StatementMapIdent mapVariable = statementMap.getStatementMapIdent();
+		String mapVariableName = mapVariable.getMapVariableName();
+		if (!controlFlowManager.isDesignatorTypeCompatibleWithMap(assignMapDesignator)) {
+			reportError("Designator " + assignMapDesignator.obj.getName() + " must be array when calling assigning map result into it", statementMap);
+		} else if (!controlFlowManager.isDesignatorTypeCompatibleWithMap(mappedDesignator)) {
+			reportError("Designator " + mappedDesignator.obj.getName() + " must be array when calling map on it", statementMap);
+		} else if (!controlFlowManager.isMapVariableDefined(mapVariableName)) {
+			reportError("Symbol " + mapVariableName + " is not declared in this scope", statementMap);
 		} else {
-			Obj foreachVar = controlFlowManager.getObjFromTableBySymbolName(foreachVariableName);
-			foreachVariable.obj = foreachVar;
-			if (!controlFlowManager.isForeachVarTypeCompatibleWithForeach(foreachVar)) {
-				reportError("Foreach variable " + foreachVar.getName() + " must be variable when calling foreach", statementForeach);
-			} else if(!controlFlowManager.areTypesCompatibleInForeach(designator, foreachVar)) {
-				reportError("Elements in array " + designator.obj.getName() + " and foreach variable " + foreachVar.getName() + " must have the same type", statementForeach);
+			Obj mapVar = controlFlowManager.getObjFromTableBySymbolName(mapVariableName);
+			mapVariable.obj = mapVar;
+			Obj resultingArrayObj = new Obj(Obj.Var, "mapResultingArray", new Struct(Struct.Array, statementMap.getExpr().struct));
+			if (!controlFlowManager.isMapVarTypeCompatibleWithMap(mapVar)) {
+				reportError("Map variable " + mapVar.getName() + " must be variable when calling map", statementMap);
+			} else if(!controlFlowManager.areTypesCompatibleInMap(mappedDesignator, mapVar)) {
+				reportError("Elements in array " + mappedDesignator.obj.getName() + " and map variable " + mapVar.getName() + " must have the same type", statementMap);
+			} else if (!controlFlowManager.areResultingArrayTypeAndArrayToAssignToTypeInMapCompatible(assignMapDesignator, resultingArrayObj)) {
+				String assignMapDesignatorElemTypeFriendlyName = Utils.getFriendlyNameForType(assignMapDesignator.obj.getType());
+				String resultingArrayElemTypeFriendlyName = Utils.getFriendlyNameForType(resultingArrayObj.getType());
+				reportError("Array to be assigned into " + assignMapDesignator.obj.getName() + "(" + assignMapDesignatorElemTypeFriendlyName + ") and resulting array(" + resultingArrayElemTypeFriendlyName + ") must have the same type", statementMap);
 			} else {
-				reportInfo("StatementForeach", statementForeach);
+				reportInfo("StatementMap", statementMap);
 			}
-			designatorStatementManager.removeForeachVariable(foreachVariableName);
+			designatorStatementManager.removeMapVariable(mapVariableName);
 		}
 	}
 	
@@ -490,14 +498,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		reportInfo("StatementWhileHead", statementWhileHead);
 	}
 	
-	public void visit(StatementForeachHead statementForeachHead) {
+	public void visit(StatementMapHead statementMapHead) {
 		controlFlowManager.increaseNumberOfNestedLoops();
-		reportInfo("StatementForeachHead", statementForeachHead);
+		reportInfo("StatementMapHead", statementMapHead);
 	}
 	
-	public void visit(StatementForeachIdent statementForeachIdent) {
-		designatorStatementManager.addForeachVariable(statementForeachIdent.getForeachVariableName());
-		reportInfo("StatementForeachIdent", statementForeachIdent);
+	public void visit(StatementMapIdent statementMapIdent) {
+		designatorStatementManager.addMapVariable(statementMapIdent.getMapVariableName());
+		reportInfo("StatementMapIdent", statementMapIdent);
 	}
 	
 	/* Rules for the designator statement */
@@ -509,8 +517,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssignExprSuccess);
 		} else if(!designatorStatementManager.isSameTypeOfDesignatorAndExprInAssign(designator, expr)) {
 			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssignExprSuccess);
-		} else if(designatorStatementManager.isDesignatorForeachVariable(designator)) {
-			reportError("Designator " + designator.obj.getName() + " can't be modified because it is a foreach variable", designatorStatementAssignExprSuccess);
 		} else {
 			reportInfo("DesignatorStatementAssignExprSuccess", designatorStatementAssignExprSuccess);
 		}

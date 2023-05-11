@@ -3,16 +3,11 @@ program Program3
 	int a2[];
 	int a3[];
 	char b;
-	bool c;
 {
-
-	char fun3(int a, char b) { return b; }
-
-	int fun2(int a, char b) { return a; }
 	
-	void fun1(int a) {
-		fun2(fun2(4, 'b'), fun3(3, 'c'));
+	void fun1() {
+		a3 = a2.map(a => 2*a);
 	}
 	
-	void main() { fun1(4); }
+	void main() { fun1(); }
 }
