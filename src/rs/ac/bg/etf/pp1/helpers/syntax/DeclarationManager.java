@@ -13,10 +13,6 @@ public class DeclarationManager {
 		return !valueType.assignableTo(symbolType);
 	}
 	
-	public Struct getArrayTypeForGivenType(Struct type) {
-		return new Struct(Struct.Array, type);
-	}
-	
 	public Obj getObjFromTableBySymbolName(String symbolName) {
 		return Tab.currentScope.findSymbol(symbolName);
 	}

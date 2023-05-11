@@ -154,7 +154,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
 			reportError("Symbol " + arrayName + " is already declared in this scope", arrayVar);
 		} else {
-			Tab.insert(Obj.Var, arrayName, declarationManager.getArrayTypeForGivenType(currentType));
+			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType));
 			reportInfo("ArrayVar", arrayVar);
 		}
 	}
@@ -205,7 +205,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Symbol " + arrayName + " is already declared in this scope", formParamDeclarationArray);
 		} else {
 			methodManager.addFormParam(currentType);
-			Tab.insert(Obj.Var, arrayName, declarationManager.getArrayTypeForGivenType(currentType));
+			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType));
 			reportInfo("FormParamDeclarationArray", formParamDeclarationArray);
 		}
 	}
@@ -287,7 +287,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(FactorArrayExpr factorArrayExpr) {
 		Expr exprForSizeOfArray = factorArrayExpr.getExpr();
 		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
-			factorArrayExpr.struct = new Struct(Struct.Array, factorArrayExpr.getType().struct);
+			factorArrayExpr.struct = Utils.getArrayTypeForGivenType(factorArrayExpr.getType().struct);
 			reportInfo("FactorArrayExpr", factorArrayExpr);
 		} else {
 			reportError("Type in expression for the size of the array must be int", factorArrayExpr);
@@ -461,7 +461,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else {
 			Obj mapVar = controlFlowManager.getObjFromTableBySymbolName(mapVariableName);
 			mapVariable.obj = mapVar;
-			Obj resultingArrayObj = new Obj(Obj.Var, "mapResultingArray", new Struct(Struct.Array, statementMap.getExpr().struct));
+			Obj resultingArrayObj = new Obj(Obj.Var, "mapResultingArray", Utils.getArrayTypeForGivenType(statementMap.getExpr().struct));
 			if (!controlFlowManager.isMapVarTypeCompatibleWithMap(mapVar)) {
 				reportError("Map variable " + mapVar.getName() + " must be variable when calling map", statementMap);
 			} else if(!controlFlowManager.areTypesCompatibleInMap(mappedDesignator, mapVar)) {
