@@ -94,7 +94,7 @@ nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormPars, FormParmsLis
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars, StatementWhileHead, StatementMapHead;
 nonterminal DesignatorStatement, DesignatorStatementAssignExpr;
-nonterminal Label, Assignop, Relop, Addop, Mulop;
+nonterminal Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementMapIdent, MethodName;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, IfCondition, Condition, CondTerm, CondFact;
@@ -263,6 +263,31 @@ StatementWhileHead ::= (StatementWhileHead) WHILE LPAREN Condition RPAREN;
 StatementMapHead ::= (StatementMapHead) Designator Assignop Designator DOT MAP;
 
 StatementMapIdent ::= (StatementMapIdent) IDENT:mapVariableName;
+					
+					
+					
+/* Rules for the conditions */
+
+IfCondition ::= (ConditionSuccess) Condition
+			|
+			(ConditionError) error:e
+			{: parser.report_error("Condition error at line: " + eleft + ". Successfully recovered from the error.", null); :}
+			;
+
+Condition ::= (ConditionList) Condition OR CondTerm
+			|
+			(ConditionSingleItem) CondTerm
+			;
+			
+CondTerm ::= (CondTermList) CondTerm AND CondFact
+			|
+			(CondTermSingleItem) CondFact
+			;
+			
+CondFact ::= (CondFactDoubleExpr) Expr Relop Expr
+			|
+			(CondFactSingleExpr) Expr
+			;
 				
 				
 				
@@ -301,31 +326,6 @@ Term ::= (TermSingleFactor) Factor
 		|
 		(TermMultipleFactor) Term Mulop Factor /* Rule for the mul, div and mod operations */
 		;
-					
-					
-					
-/* Rules for the conditions */
-
-IfCondition ::= (ConditionSuccess) Condition
-			|
-			(ConditionError) error:e
-			{: parser.report_error("Condition error at line: " + eleft + ". Successfully recovered from the error.", null); :}
-			;
-
-Condition ::= (ConditionList) Condition OR CondTerm
-			|
-			(ConditionSingleItem) CondTerm
-			;
-			
-CondTerm ::= (CondTermList) CondTerm AND CondFact
-			|
-			(CondTermSingleItem) CondFact
-			;
-			
-CondFact ::= (CondFactDoubleExpr) Expr Relop Expr
-			|
-			(CondFactSingleExpr) Expr
-			;		
 		
 		
 		
@@ -377,8 +377,6 @@ Designator ::= (DesignatorIdent) IDENT:designatorName
 /* Rules for the commonly used things */
 
 Type ::= (Type) IDENT:typeName;
-
-Label ::= (Label) IDENT;
 
 Assignop ::= (Assign) ASSIGN;
 
