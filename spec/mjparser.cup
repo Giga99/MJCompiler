@@ -189,6 +189,8 @@ FormParam ::= (FormParamSuccess) Type FormParamDeclaration
 FormParamDeclaration ::= (FormParamDeclarationVar) IDENT:varName
 						|
 						(FormParamDeclarationArray) IDENT:arrayName LSQUARE RSQUARE
+						|
+						(FormParamDeclarationMatrix) IDENT:matrixName LSQUARE RSQUARE LSQUARE RSQUARE
 						;
 			
 		
@@ -210,6 +212,8 @@ VarDeclIdentList ::= (VarDeclIdentListMultipleItems) VarDeclIdentList COMMA VarD
 VarDeclaration ::= (DefaultVar) IDENT:varName
 				|
 				(ArrayVar) IDENT:arrayName LSQUARE RSQUARE
+				|
+				(MatrixVar) IDENT:matrixName LSQUARE RSQUARE LSQUARE RSQUARE
 				|
 				(VarDeclIdentListError) error:e
 				{: parser.report_error("Global var declaration error at line: " + eleft + ". Successfully recovered from the error.", null); :}
@@ -335,7 +339,9 @@ Factor ::= (FactorNumber) NUMBER
 		|
 		(FactorExpr) LPAREN Expr RPAREN /* Rule for the expression inside parentheses, example: (4 + 5 * 3) */
 		|
-		(FactorArrayExpr) NEW Type LSQUARE Expr RSQUARE /* Rule for the array factor */
+		(FactorArray) NEW Type LSQUARE Expr RSQUARE /* Rule for the array factor */
+		|
+		(FactorMatrix) NEW Type LSQUARE Expr RSQUARE LSQUARE Expr RSQUARE /* Rule for the matrix factor */
 		|
 		(FactorDesignator) Designator
 		|
@@ -357,11 +363,13 @@ ActPars ::= (ActParamsMultiple) ActPars COMMA Expr
 
 
 
-/* Rules for using variable or accessing element in the array */
+/* Rules for using variable or accessing element in the array or accessing element in the matrix */
 
 Designator ::= (DesignatorIdent) IDENT:designatorName
 			|
-			(DesignatorArray) Designator LSQUARE Expr RSQUARE
+			(DesignatorArray) IDENT:designatorName LSQUARE Expr RSQUARE
+			|
+			(DesignatorMatrix) IDENT:designatorName LSQUARE Expr RSQUARE LSQUARE Expr RSQUARE
 			;		
 
 		

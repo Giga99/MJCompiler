@@ -9,6 +9,10 @@ public class Utils {
 	public static Struct getArrayTypeForGivenType(Struct elemType) {
 		return new Struct(Struct.Array, elemType);
 	}
+
+	public static Struct getMatrixTypeForGivenType(Struct elemType) {
+		return new Struct(Struct.Array, new Struct(Struct.Array, elemType));
+	}
 	
 	public static String getFriendlyNameForType(Struct type) {
 		if (type.getKind() == Struct.Array) return getFriendlyNameForBaseType(type.getElemType()) + "[]";

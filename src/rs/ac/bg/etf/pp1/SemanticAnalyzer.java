@@ -159,6 +159,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 	}
 
+	public void visit(MatrixVar matrixVar) {
+		String matrixName = matrixVar.getMatrixName();
+		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(matrixName)) {
+			reportError("Symbol " + matrixName + " is already declared in this scope", matrixVar);
+		} else {
+			Tab.insert(Obj.Var, matrixName, Utils.getMatrixTypeForGivenType(currentType));
+			reportInfo("MatrixVar", matrixVar);
+		}
+	}
+
 	/* Rules for the method declaration */
 
 	public void visit(MethodVoidReturnType methodVoidReturnType) {
@@ -204,9 +214,22 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
 			reportError("Symbol " + arrayName + " is already declared in this scope", formParamDeclarationArray);
 		} else {
-			methodManager.addFormParam(currentType);
-			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType));
+			Struct type = Utils.getArrayTypeForGivenType(currentType);
+			methodManager.addFormParam(type);
+			Tab.insert(Obj.Var, arrayName, type);
 			reportInfo("FormParamDeclarationArray", formParamDeclarationArray);
+		}
+	}
+
+	public void visit(FormParamDeclarationMatrix formParamDeclarationMatrix) {
+		String matrixName = formParamDeclarationMatrix.getMatrixName();
+		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(matrixName)) {
+			reportError("Symbol " + matrixName + " is already declared in this scope", formParamDeclarationMatrix);
+		} else {
+			Struct type = Utils.getMatrixTypeForGivenType(currentType);
+			methodManager.addFormParam(type);
+			Tab.insert(Obj.Var, matrixName, type);
+			reportInfo("FormParamDeclarationMatrix", formParamDeclarationMatrix);
 		}
 	}
 
@@ -284,14 +307,26 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		reportInfo("FactorExpr", factorExpr);
 	}
 
-	public void visit(FactorArrayExpr factorArrayExpr) {
-		Expr exprForSizeOfArray = factorArrayExpr.getExpr();
+	public void visit(FactorArray factorArray) {
+		Expr exprForSizeOfArray = factorArray.getExpr();
 		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfArray)) {
-			factorArrayExpr.struct = Utils.getArrayTypeForGivenType(factorArrayExpr.getType().struct);
-			reportInfo("FactorArrayExpr", factorArrayExpr);
+			factorArray.struct = Utils.getArrayTypeForGivenType(factorArray.getType().struct);
+			reportInfo("FactorArray", factorArray);
 		} else {
-			reportError("Type in expression for the size of the array must be int", factorArrayExpr);
-			factorArrayExpr.struct = Tab.noType;
+			reportError("Type in expression for the size of the array must be int", factorArray);
+			factorArray.struct = Tab.noType;
+		}
+	}
+
+	public void visit(FactorMatrix factorMatrix) {
+		Expr exprForSizeOfFirstMatrixDimension = factorMatrix.getExpr();
+		Expr exprForSizeOfSecondMatrixDimension = factorMatrix.getExpr1();
+		if (exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfFirstMatrixDimension) && exprManager.isCorrectTypeForSizeOfArray(exprForSizeOfSecondMatrixDimension)) {
+			factorMatrix.struct = Utils.getMatrixTypeForGivenType(factorMatrix.getType().struct);
+			reportInfo("FactorMatrix", factorMatrix);
+		} else {
+			reportError("Type in expression for the size of the matrix dimension must be int", factorMatrix);
+			factorMatrix.struct = Tab.noType;
 		}
 	}
 
@@ -328,7 +363,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 	}
 
-	/* Rules for using variable or accessing element in the array */
+	/* Rules for using variable or accessing element in the array or accessing element in the matrix */
 
 	public void visit(DesignatorIdent designatorIdent) {
 		String designatorName = designatorIdent.getDesignatorName();
@@ -342,18 +377,40 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(DesignatorArray designatorArray) {
-		Designator designator = designatorArray.getDesignator();
-		if (!exprManager.isCorrectTypeForIndexOfArray(designatorArray.getExpr())) {
+		String designatorName = designatorArray.getDesignatorName();
+		Obj designatorObj = Tab.find(designatorName);
+		if (designatorObj == Tab.noObj) {
+			reportError("Designator " + designatorName + " was not found", designatorArray);
+		} else if (!exprManager.isCorrectTypeForIndexOfArray(designatorArray.getExpr())) {
 			reportError("Type in expression for the index of the array must be int", designatorArray);
 			designatorArray.obj = Tab.noObj;
-		} else if (!exprManager.isDesignatorArray(designator)) {
-			reportError("Type of the designator of the array must be array", designatorArray);
+		} else if (!exprManager.isDesignatorArray(designatorObj)) {
+			reportError("Type of the designator must be array", designatorArray);
 			designatorArray.obj = Tab.noObj;
 		} else {
-			Obj oldDesignatorObj = designator.obj;
-			Obj newDesignatorObj = new Obj(Obj.Elem, oldDesignatorObj.getName(), oldDesignatorObj.getType().getElemType());
+			Obj newDesignatorObj = new Obj(Obj.Elem, designatorName, designatorObj.getType().getElemType());
 			designatorArray.obj = newDesignatorObj;
 			reportInfo("DesignatorArray", designatorArray);
+		}
+	}
+
+	public void visit(DesignatorMatrix designatorMatrix) {
+		String designatorName = designatorMatrix.getDesignatorName();
+		Obj designatorObj = Tab.find(designatorName);
+		Expr firstDimensionExpr = designatorMatrix.getExpr();
+		Expr secondDimensionExpr = designatorMatrix.getExpr1();
+		if (designatorObj == Tab.noObj) {
+			reportError("Designator " + designatorName + " was not found", designatorMatrix);
+		} else if (!exprManager.isCorrectTypeForIndexOfArray(firstDimensionExpr) || !exprManager.isCorrectTypeForIndexOfArray(secondDimensionExpr)) {
+			reportError("Type in expression for the index of the matrix must be int", designatorMatrix);
+			designatorMatrix.obj = Tab.noObj;
+		} else if (!exprManager.isDesignatorMatrix(designatorObj)) {
+			reportError("Type of the designator must be matrix", designatorMatrix);
+			designatorMatrix.obj = Tab.noObj;
+		} else {
+			Obj newDesignatorObj = new Obj(Obj.Elem, designatorName, designatorObj.getType().getElemType().getElemType());
+			designatorMatrix.obj = newDesignatorObj;
+			reportInfo("DesignatorMatrix", designatorMatrix);
 		}
 	}
 
@@ -381,7 +438,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (designator.obj == null) {
 			reportError("Designator doesn't exist", statementRead);
 		} else if (!statementManager.isDesignatorKindCompatibleWithRead(designator)) {
-			reportError("Kind of designator " + designator.obj.getName() + " is not compatible with read statement, it should be Var or Elem", statementRead);
+			reportError("Kind of designator " + designator.obj.getName() + " is not compatible with read statement, it should be variable or element of the array or element of the matrix", statementRead);
 		} else if (!statementManager.isDesignatorTypeCompatibleWithRead(designator)) {
 			reportError("Type of designator " + designator.obj.getName() + " is not compatible with read statement, it should be int, char or bool", statementRead);
 		} else {
@@ -514,7 +571,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		Designator designator = designatorStatementAssignExprSuccess.getDesignator();
 		Expr expr = designatorStatementAssignExprSuccess.getExpr();
 		if (!designatorStatementManager.isDesignatorKindCorrectForAssign(designator)) {
-			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementAssignExprSuccess);
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array or element of the matrix", designatorStatementAssignExprSuccess);
 		} else if(!designatorStatementManager.isSameTypeOfDesignatorAndExprInAssign(designator, expr)) {
 			reportError("Designator " + designator.obj.getName() + "(" + Utils.getFriendlyNameForType(designator.obj.getType()) + ") and Expr(" + Utils.getFriendlyNameForType(expr.struct) + ") don't have the same type", designatorStatementAssignExprSuccess);
 		} else {
@@ -525,7 +582,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(DesignatorStatementInc designatorStatementInc) {
 		Designator designator = designatorStatementInc.getDesignator();
 		if (!designatorStatementManager.isDesignatorKindCorrectForIncAndDec(designator)) {
-			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementInc);
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array or element of the matrix", designatorStatementInc);
 		} else if (!designatorStatementManager.isDesignatorTypeCorrectForIncAndDec(designator)) {
 			reportError("Designator " + designator.obj.getName() + " has to be int", designatorStatementInc);
 		} else {
@@ -536,7 +593,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(DesignatorStatementDec designatorStatementDec) {
 		Designator designator = designatorStatementDec.getDesignator();
 		if (!designatorStatementManager.isDesignatorKindCorrectForIncAndDec(designator)) {
-			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array", designatorStatementDec);
+			reportError("Designator " + designator.obj.getName() + " has to be variable or element of the array or element of the matrix", designatorStatementDec);
 		} else if (!designatorStatementManager.isDesignatorTypeCorrectForIncAndDec(designator)) {
 			reportError("Designator " + designator.obj.getName() + " has to be int", designatorStatementDec);
 		} else {

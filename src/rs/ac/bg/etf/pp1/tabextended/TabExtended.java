@@ -5,6 +5,7 @@ import rs.etf.pp1.symboltable.concepts.*;
 import rs.etf.pp1.symboltable.visitors.*;
 
 public class TabExtended {
+	// TODO Matrix
 
 	public static final Struct boolType = new Struct(Struct.Bool);
 	

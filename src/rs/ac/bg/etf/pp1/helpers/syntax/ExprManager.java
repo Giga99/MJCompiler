@@ -31,7 +31,11 @@ public class ExprManager {
 		return expr.struct == Tab.intType;
 	}
 	
-	public boolean isDesignatorArray(Designator designator) {
-		return designator.obj.getType().getKind() == Struct.Array;
+	public boolean isDesignatorArray(Obj designator) {
+		return designator.getType().getKind() == Struct.Array;
+	}
+	
+	public boolean isDesignatorMatrix(Obj designator) {
+		return designator.getType().getKind() == Struct.Array && designator.getType().getElemType().getKind() == Struct.Array;
 	}
 }
