@@ -15,7 +15,7 @@ public class Utils {
 	}
 	
 	public static String getFriendlyNameForType(Struct type) {
-		if (type.getKind() == Struct.Array) return getFriendlyNameForBaseType(type.getElemType()) + "[]";
+		if (type.getKind() == Struct.Array) return getFriendlyNameForType(type.getElemType()) + "[]";
 		else return getFriendlyNameForBaseType(type);
 	}
 	
