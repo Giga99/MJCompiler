@@ -9,7 +9,7 @@ import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
-public class DesignatorStatementManager {
+public class DesignatorStatementSyntaxParsingManager {
 	
 	private List<String> mapVariables = new ArrayList<String>();
 

@@ -6,7 +6,7 @@ import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
-public class StatementManager {
+public class StatementSyntaxParsingManager {
 
 	public boolean isDesignatorKindCompatibleWithRead(Designator designator) {
 		int designatorKind = designator.obj.getKind();

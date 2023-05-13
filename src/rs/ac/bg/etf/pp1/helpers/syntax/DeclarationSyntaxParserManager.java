@@ -3,7 +3,7 @@ package rs.ac.bg.etf.pp1.helpers.syntax;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
-public class DeclarationManager {
+public class DeclarationSyntaxParserManager {
 	
 	public boolean isSymbolAlreadyDeclaredInCurrentScope(String symbolName) {
 		return Tab.currentScope.findSymbol(symbolName) != null;

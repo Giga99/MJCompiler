@@ -5,7 +5,7 @@ import rs.ac.bg.etf.pp1.ast.*;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
-public class ExprManager {
+public class ExprSyntaxParsingManager {
 
 	public boolean isTermTypeInt(Struct termType) {
 		return termType == Tab.intType;
