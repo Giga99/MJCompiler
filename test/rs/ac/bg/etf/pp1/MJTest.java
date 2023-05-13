@@ -59,15 +59,15 @@ public class MJTest {
 			tsdump();
 			
 			if (!p.errorDetected && semanticAnalyzer.passed()) {
-//				File objFile = new File("test/" + programName + ".obj");
-//				if (objFile.exists()) objFile.delete();
-//				
-//				CodeGenerator codeGenerator = new CodeGenerator();
-//				prog.traverseBottomUp(codeGenerator);
-//				
-//				Code.dataSize = semanticAnalyzer.getNumberOfVars();
-//				Code.mainPc = codeGenerator.getMainFunctionPc();
-//				Code.write(new FileOutputStream(objFile));
+				File objFile = new File("test/" + programName + ".obj");
+				if (objFile.exists()) objFile.delete();
+				
+				CodeGenerator codeGenerator = new CodeGenerator();
+				prog.traverseBottomUp(codeGenerator);
+				
+				Code.dataSize = semanticAnalyzer.getNumberOfVars();
+				Code.mainPc = codeGenerator.getMainFunctionPc();
+				Code.write(new FileOutputStream(objFile));
 				
 				log.info("Parsing successfully completed!");
 			} else {

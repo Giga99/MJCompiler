@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.pp1.helpers.syntax;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +66,9 @@ public class MethodManager {
 		formParams.clear();
 	}
 	
-	public void addFormParam(Struct formParamType) {
+	public int addFormParam(Struct formParamType) {
 		formParams.add(formParamType);
+		return formParams.size() - 1;
 	}
 	
 	public void startAddingActParams() {
@@ -134,5 +136,23 @@ public class MethodManager {
 		}
 		
 		return formParams;
+	}
+	
+	public int getNumberOfParams(Obj methodObj) {
+		Collection<Obj> localSymbols = methodObj.getLocalSymbols();
+		int count = 0;
+		for (Obj symbol: localSymbols) { 
+			if (symbol.getFpPos() != -1) count++;
+		}
+		return count;
+	}
+
+	public int getNumberOfLocalVars(Obj methodObj) {
+		Collection<Obj> localSymbols = methodObj.getLocalSymbols();
+		int count = 0;
+		for (Obj symbol: localSymbols) { 
+			if (symbol.getFpPos() == -1) count++;
+		}
+		return count;
 	}
 }

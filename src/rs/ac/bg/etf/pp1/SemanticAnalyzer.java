@@ -144,7 +144,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
 			reportError("Symbol " + varName + " is already declared in this scope", defaultVar);
 		} else {
-			Tab.insert(Obj.Var, varName, currentType);
+			Tab.insert(Obj.Var, varName, currentType).setFpPos(-1);
 			reportInfo("DefaultVar", defaultVar);
 		}
 	}
@@ -154,7 +154,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
 			reportError("Symbol " + arrayName + " is already declared in this scope", arrayVar);
 		} else {
-			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType));
+			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType)).setFpPos(-1);
 			reportInfo("ArrayVar", arrayVar);
 		}
 	}
@@ -164,7 +164,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(matrixName)) {
 			reportError("Symbol " + matrixName + " is already declared in this scope", matrixVar);
 		} else {
-			Tab.insert(Obj.Var, matrixName, Utils.getMatrixTypeForGivenType(currentType));
+			Tab.insert(Obj.Var, matrixName, Utils.getMatrixTypeForGivenType(currentType)).setFpPos(-1);
 			reportInfo("MatrixVar", matrixVar);
 		}
 	}
@@ -203,8 +203,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
 			reportError("Symbol " + varName + " is already declared in this scope", formParamDeclarationVar);
 		} else {
-			methodManager.addFormParam(currentType);
-			Tab.insert(Obj.Var, varName, currentType);
+			int formParamPosition = methodManager.addFormParam(currentType);
+			Tab.insert(Obj.Var, varName, currentType).setFpPos(formParamPosition);
 			reportInfo("FormParamDeclarationVar", formParamDeclarationVar);
 		}
 	}
@@ -215,8 +215,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Symbol " + arrayName + " is already declared in this scope", formParamDeclarationArray);
 		} else {
 			Struct type = Utils.getArrayTypeForGivenType(currentType);
-			methodManager.addFormParam(type);
-			Tab.insert(Obj.Var, arrayName, type);
+			int formParamPosition = methodManager.addFormParam(type);
+			Tab.insert(Obj.Var, arrayName, type).setFpPos(formParamPosition);
 			reportInfo("FormParamDeclarationArray", formParamDeclarationArray);
 		}
 	}
@@ -227,8 +227,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Symbol " + matrixName + " is already declared in this scope", formParamDeclarationMatrix);
 		} else {
 			Struct type = Utils.getMatrixTypeForGivenType(currentType);
-			methodManager.addFormParam(type);
-			Tab.insert(Obj.Var, matrixName, type);
+			int formParamPosition = methodManager.addFormParam(type);
+			Tab.insert(Obj.Var, matrixName, type).setFpPos(formParamPosition);
 			reportInfo("FormParamDeclarationMatrix", formParamDeclarationMatrix);
 		}
 	}

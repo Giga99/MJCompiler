@@ -24,7 +24,10 @@ public class CodeGenerator extends VisitorAdaptor {
 		}
 		methodName.obj.setAdr(Code.pc);
 		Code.put(Code.enter);
-		// TODO formal params and local variables
+		int numberOfParams = methodManager.getNumberOfParams(methodName.obj);
+		int numberOfLocalVars = methodManager.getNumberOfLocalVars(methodName.obj);
+		Code.put(numberOfParams);
+		Code.put(numberOfLocalVars + numberOfParams);
 	}
 	
 	public void visit(MethodAnyReturnType methodAnyReturnType) {
