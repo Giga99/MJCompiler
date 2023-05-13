@@ -9,27 +9,18 @@ import java.util.Stack;
 
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.Utils;
+import rs.ac.bg.etf.pp1.helpers.base.MethodManager;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
-public class MethodManager {
+public class MethodSyntaxParsingManager extends MethodManager {
 
-	private String MAIN_METHOD = "main";
-
-	private Struct currentMethodReturnType;
-	private String currentMethodName;
 	private Obj currentMethod;
-	private boolean isMethodReturnedCorrectly = false;
 	private boolean mainMethodExists = false;
 	private List<Struct> formParams = new ArrayList<Struct>();
 	private Stack<List<Struct>>  allActParams = new Stack<List<Struct>>();
 	private Map<String, List<Struct>> formalParamsPerMethods = new HashMap<String, List<Struct>>();
-
-	public void setCurrentMethodReturnType(Struct methodReturnType) {
-		currentMethodReturnType = methodReturnType;
-		isMethodReturnedCorrectly = methodReturnType == Tab.noType;
-	}
 	
 	public Obj setCurrentMethod(String methodName) {
 		currentMethodName = methodName;
@@ -43,7 +34,7 @@ public class MethodManager {
 
 	public boolean isMethodCorrect() {
 		int numberOfFormParms = formParams.size();
-		if (currentMethodName.equals(MAIN_METHOD)) {
+		if (isMainMethod(currentMethodName)) {
 			mainMethodExists = true;
 			return currentMethodReturnType == Tab.noType && numberOfFormParms == 0;
 		} else {
@@ -116,10 +107,6 @@ public class MethodManager {
 		return currentMethod != null;
 	}
 	
-	public boolean isMainMethod(String methodName) {
-		return methodName.equals(MAIN_METHOD);
-	}
-	
 	private List<Struct> getFormParamsForMethodDesignator(Designator designator) {
 		String methodName = designator.obj.getName();
 		List<Struct> formParams = formalParamsPerMethods.get(methodName);
@@ -136,23 +123,5 @@ public class MethodManager {
 		}
 		
 		return formParams;
-	}
-	
-	public int getNumberOfParams(Obj methodObj) {
-		Collection<Obj> localSymbols = methodObj.getLocalSymbols();
-		int count = 0;
-		for (Obj symbol: localSymbols) { 
-			if (symbol.getFpPos() != -1) count++;
-		}
-		return count;
-	}
-
-	public int getNumberOfLocalVars(Obj methodObj) {
-		Collection<Obj> localSymbols = methodObj.getLocalSymbols();
-		int count = 0;
-		for (Obj symbol: localSymbols) { 
-			if (symbol.getFpPos() == -1) count++;
-		}
-		return count;
 	}
 }

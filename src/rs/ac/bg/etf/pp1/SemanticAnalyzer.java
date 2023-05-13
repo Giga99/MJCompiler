@@ -8,7 +8,7 @@ import rs.ac.bg.etf.pp1.helpers.syntax.ControlFlowManager;
 import rs.ac.bg.etf.pp1.helpers.syntax.DeclarationManager;
 import rs.ac.bg.etf.pp1.helpers.syntax.DesignatorStatementManager;
 import rs.ac.bg.etf.pp1.helpers.syntax.ExprManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.MethodManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.MethodSyntaxParsingManager;
 import rs.ac.bg.etf.pp1.helpers.syntax.StatementManager;
 import rs.ac.bg.etf.pp1.tabextended.*;
 import rs.etf.pp1.symboltable.*;
@@ -21,7 +21,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private int numberOfVars;
 
 	private DeclarationManager declarationManager = new DeclarationManager();
-	private MethodManager methodManager = new MethodManager();
+	private MethodSyntaxParsingManager methodManager = new MethodSyntaxParsingManager();
 	private ExprManager exprManager = new ExprManager();
 	private StatementManager statementManager = new StatementManager();
 	private DesignatorStatementManager designatorStatementManager = new DesignatorStatementManager();

@@ -11,13 +11,15 @@
 				<exclude name="helpers/syntax/DeclarationManager.java" />
 				<exclude name="tabextended/TabExtended.java" />
 				<exclude name="tabextended/SymbolTableVisitorExtended.java" />
-				<exclude name="helpers/syntax/MethodManager.java" />
+				<exclude name="helpers/syntax/MethodSyntaxParsingManager.java" />
 				<exclude name="helpers/syntax/ExprManager.java" />
 				<exclude name="helpers/syntax/StatementManager.java" />
 				<exclude name="helpers/syntax/DesignatorStatementManager.java" />
 				<exclude name="helpers/Utils.java" />
 				<exclude name="helpers/syntax/ControlFlowManager.java" />
 				<exclude name="CodeGenerator.java" />
+				<exclude name="helpers/base/MethodManager.java" />
+				<exclude name="helpers/codegeneration/MethodCodeGenerationManager.java" />
 			</fileset>
 		</delete>
 	</target>

@@ -4,15 +4,18 @@ import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
 import rs.ac.bg.etf.pp1.ast.MethodName;
 import rs.ac.bg.etf.pp1.ast.MethodVoidReturnType;
+import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
+import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
 import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
-import rs.ac.bg.etf.pp1.helpers.syntax.MethodManager;
+import rs.ac.bg.etf.pp1.helpers.codegeneration.MethodCodeGenerationManager;
+import rs.ac.bg.etf.pp1.helpers.syntax.MethodSyntaxParsingManager;
 import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.Tab;
 
 public class CodeGenerator extends VisitorAdaptor {
 	private int mainFunctionPc;
 	
-	private MethodManager methodManager = new MethodManager();
+	private MethodCodeGenerationManager methodManager = new MethodCodeGenerationManager();
 
 	public int getMainFunctionPc() {
 		return mainFunctionPc;
@@ -31,23 +34,32 @@ public class CodeGenerator extends VisitorAdaptor {
 	}
 	
 	public void visit(MethodAnyReturnType methodAnyReturnType) {
-		Code.put(Code.exit);
-		Code.put(Code.return_);
+		methodManager.setCurrentMethodReturnType(methodAnyReturnType.getType().struct);
 	}
 	
 	public void visit(MethodVoidReturnType methodVoidReturnType) {
+		methodManager.setCurrentMethodReturnType(Tab.noType);
+	}
+	
+	public void visit(MethodDecl methodDecl) {
+		if (methodManager.isErrorInReturn()) {
+			Code.put(Code.trap);
+			Code.put(0);
+		} else if(methodManager.isVoidMethodWithoutReturn()) {
+			Code.put(Code.exit);
+			Code.put(Code.return_);
+		}
+	}
+	
+	public void visit(StatementValueReturn statementValueReturn) {
+		methodManager.setMethodHasReturn();
 		Code.put(Code.exit);
 		Code.put(Code.return_);
 	}
 	
-	public void visit(MethodDecl methodDecl) {
-		if (methodDecl.getMethodName().obj.getType() != Tab.noType) {
-			Code.put(Code.trap);
-			Code.put(0);	
-		} 
-		if (methodDecl.getMethodName().obj.getType() == Tab.noType) {
-			Code.put(Code.exit);
-			Code.put(Code.return_);
-		}
+	public void visit(StatementEmptyReturn statementEmptyReturn) {
+		methodManager.setMethodHasReturn();
+		Code.put(Code.exit);
+		Code.put(Code.return_);
 	}
 }
