@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import rs.ac.bg.etf.pp1.ast.ConstValueBool;
 import rs.ac.bg.etf.pp1.ast.ConstValueChar;
 import rs.ac.bg.etf.pp1.ast.ConstValueNumber;
+import rs.ac.bg.etf.pp1.ast.DesignatorStatementAssignExprSuccess;
 import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
 import rs.ac.bg.etf.pp1.ast.MethodName;
@@ -147,5 +148,9 @@ public class CodeGenerator extends VisitorAdaptor {
 		} else {
 			Code.put(Code.print);
 		}
+	}
+	
+	public void visit(DesignatorStatementAssignExprSuccess designatorStatementAssignExprSuccess) {
+		Code.store(designatorStatementAssignExprSuccess.getDesignator().obj);
 	}
 }

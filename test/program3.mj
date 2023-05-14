@@ -5,9 +5,7 @@ program Program3
 	bool d;
 {
 	void main() {
-		read(a);
-		read(c);
-		read(d);
-		read(b);
+		a = 5;
+		b = 10 * 2 + 3;
 	}
 }
