@@ -9,25 +9,33 @@ import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
 import rs.ac.bg.etf.pp1.ast.MethodName;
 import rs.ac.bg.etf.pp1.ast.MethodVoidReturnType;
+import rs.ac.bg.etf.pp1.ast.PrintNumConst;
 import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
+import rs.ac.bg.etf.pp1.ast.StatementPrint;
+import rs.ac.bg.etf.pp1.ast.StatementRead;
 import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
 import rs.ac.bg.etf.pp1.ast.SyntaxNode;
 import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
 import rs.ac.bg.etf.pp1.helpers.Utils;
 import rs.ac.bg.etf.pp1.helpers.codegeneration.MethodCodeGenerationManager;
+import rs.ac.bg.etf.pp1.helpers.codegeneration.StatementCodeGenerationManager;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Struct;
 
 public class CodeGenerator extends VisitorAdaptor {
 	private final int MAX_SOURCE_CODE_SIZE = 8192;
+	private final int CHAR_PRINT_WIDTH = 1;
+	private final int INT_PRINT_WIDTH = 5;
 	
 	private Logger log = Logger.getLogger(getClass());
 	private int mainFunctionPc;
 	
 	private MethodCodeGenerationManager methodManager = new MethodCodeGenerationManager();
+	private StatementCodeGenerationManager statementManager = new StatementCodeGenerationManager();
 
 	public int getMainFunctionPc() {
 		return mainFunctionPc;
@@ -90,23 +98,54 @@ public class CodeGenerator extends VisitorAdaptor {
 	}
 	
 	public void visit(ConstValueNumber constValueNumber) {
-		Obj constant = Tab.insert(Obj.Con, "$", Tab.intType);
-		constant.setLevel(0);
-		constant.setAdr(constValueNumber.getValue());
-		Code.load(constant);
+		Obj constObj = Tab.insert(Obj.Con, "$", Tab.intType);
+		constObj.setLevel(0);
+		constObj.setAdr(constValueNumber.getValue());
+		Code.load(constObj);
 	}
 	
 	public void visit(ConstValueChar constValueChar) {
-		Obj constant = Tab.insert(Obj.Con, "$", Tab.charType);
-		constant.setLevel(0);
-		constant.setAdr(constValueChar.getValue());
-		Code.load(constant);
+		Obj constObj = Tab.insert(Obj.Con, "$", Tab.charType);
+		constObj.setLevel(0);
+		constObj.setAdr(constValueChar.getValue());
+		Code.load(constObj);
 	}
 
 	public void visit(ConstValueBool constValueBool) {
-		Obj constant = Tab.insert(Obj.Con, "$", TabExtended.boolType);
-		constant.setLevel(0);
-		constant.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
-		Code.load(constant);
+		Obj constObj = Tab.insert(Obj.Con, "$", TabExtended.boolType);
+		constObj.setLevel(0);
+		constObj.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
+		Code.load(constObj);
+	}
+	
+	public void visit(StatementRead statementRead) {
+		Obj designatorObj = statementRead.getDesignator().obj;
+		if (statementManager.useBRead(designatorObj)) {
+			Code.put(Code.bread);
+		} else {
+			Code.put(Code.read);
+		}
+		Code.store(designatorObj);
+	}
+	
+	public void visit(StatementPrint statementPrint) {
+		Struct exprType = statementPrint.getExpr().struct;
+		
+		int width;
+		if (statementManager.isPrintWidthDefined(statementPrint)) {
+			width = statementManager.getPrintWidth(statementPrint);
+		} else if (statementManager.useBPrint(exprType)) {
+			width = CHAR_PRINT_WIDTH;
+		} else {
+			width = INT_PRINT_WIDTH;
+		}
+		
+		Code.loadConst(width);
+	
+		if (statementManager.useBPrint(exprType)) {
+			Code.put(Code.bprint);
+		} else {
+			Code.put(Code.print);
+		}
 	}
 }

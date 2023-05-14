@@ -20,6 +20,7 @@
 				<exclude name="CodeGenerator.java" />
 				<exclude name="helpers/base/MethodManager.java" />
 				<exclude name="helpers/codegeneration/MethodCodeGenerationManager.java" />
+				<exclude name="helpers/codegeneration/StatementCodeGenerationManager.java" />
 			</fileset>
 		</delete>
 	</target>

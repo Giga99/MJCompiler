@@ -1,9 +1,13 @@
 program Program3
-	const int a = 5;
-	const int b = 6;
-	const char c = 'a';
-	const bool d = true;
+	int a;
+	int b;
+	char c;
+	bool d;
 {
-	
-	void main() {}
+	void main() {
+		read(a);
+		read(c);
+		read(d);
+		read(b);
+	}
 }

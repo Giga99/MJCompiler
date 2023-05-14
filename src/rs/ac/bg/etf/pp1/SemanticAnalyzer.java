@@ -125,23 +125,23 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(ConstValueNumber constValueNumber) {
-		Obj obj = Tab.insert(Obj.Con, "constInt", Tab.intType);
-		obj.setAdr(constValueNumber.getValue());
-		constValueNumber.obj = obj;
+		Obj constObj = Tab.insert(Obj.Con, "constInt", Tab.intType);
+		constObj.setAdr(constValueNumber.getValue());
+		constValueNumber.obj = constObj;
 		reportInfo("ConstValueNumber", constValueNumber);
 	}
 
 	public void visit(ConstValueChar constValueChar) {
-		Obj obj = Tab.insert(Obj.Con, "constChar", Tab.charType);
-		obj.setAdr(constValueChar.getValue());
-		constValueChar.obj = obj;
+		Obj constObj = Tab.insert(Obj.Con, "constChar", Tab.charType);
+		constObj.setAdr(constValueChar.getValue());
+		constValueChar.obj = constObj;
 		reportInfo("ConstValueChar", constValueChar);
 	}
 
 	public void visit(ConstValueBool constValueBool) {
-		Obj obj = Tab.insert(Obj.Con, "constBool", TabExtended.boolType);
-		obj.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
-		constValueBool.obj = obj;
+		Obj constObj = Tab.insert(Obj.Con, "constBool", TabExtended.boolType);
+		constObj.setAdr(constValueBool.getValue().equals("true") ? 1 : 0);
+		constValueBool.obj = constObj;
 		reportInfo("ConstValueBool", constValueBool);
 	}
 
