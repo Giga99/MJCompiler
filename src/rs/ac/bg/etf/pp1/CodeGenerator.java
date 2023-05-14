@@ -12,6 +12,7 @@ import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
 import rs.ac.bg.etf.pp1.ast.ExprNegativeFirstTerm;
 import rs.ac.bg.etf.pp1.ast.FactorBool;
 import rs.ac.bg.etf.pp1.ast.FactorChar;
+import rs.ac.bg.etf.pp1.ast.FactorDesignator;
 import rs.ac.bg.etf.pp1.ast.FactorNumber;
 import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
@@ -232,5 +233,9 @@ public class CodeGenerator extends VisitorAdaptor {
 		constObj.setLevel(0);
 		constObj.setAdr(factorBool.getB1().equals("true") ? 1 : 0);
 		Code.load(constObj);
+	}
+	
+	public void visit(FactorDesignator factorDesignator) {
+		Code.load(factorDesignator.getDesignator().obj);
 	}
 }

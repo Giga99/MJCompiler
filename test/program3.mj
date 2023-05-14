@@ -1,8 +1,9 @@
 program Program3
 	int a;
+	const int b = 3;
 {
 	void main() {
-		a = -10 + 5 * 2;
+		a = b;
 		a++;
 		a--;
 	}
