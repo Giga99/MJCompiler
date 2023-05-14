@@ -1,13 +1,9 @@
 program Program3
-	int a;
-	int a2[];
-	int a3[][];
-	char b;
+	const int a = 5;
+	const int b = 6;
+	const char c = 'a';
+	const bool d = true;
 {
 	
-	void fun1(int temp[][]) int a; int b;{
-		a2[2] = 1;
-	}
-	
-	void main() { fun1(a3); }
+	void main() {}
 }
