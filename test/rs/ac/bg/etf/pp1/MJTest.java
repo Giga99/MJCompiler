@@ -65,7 +65,7 @@ public class MJTest {
 				CodeGenerator codeGenerator = new CodeGenerator();
 				prog.traverseBottomUp(codeGenerator);
 				
-				Code.dataSize = semanticAnalyzer.getNumberOfVars();
+				Code.dataSize = semanticAnalyzer.getNumberOfGlobalVars();
 				Code.mainPc = codeGenerator.getMainFunctionPc();
 				Code.write(new FileOutputStream(objFile));
 				

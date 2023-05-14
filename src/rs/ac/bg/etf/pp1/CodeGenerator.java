@@ -1,24 +1,45 @@
 package rs.ac.bg.etf.pp1;
 
+import org.apache.log4j.Logger;
+
 import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
 import rs.ac.bg.etf.pp1.ast.MethodName;
 import rs.ac.bg.etf.pp1.ast.MethodVoidReturnType;
+import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
 import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
+import rs.ac.bg.etf.pp1.ast.SyntaxNode;
 import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
+import rs.ac.bg.etf.pp1.helpers.Utils;
 import rs.ac.bg.etf.pp1.helpers.codegeneration.MethodCodeGenerationManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.MethodSyntaxParsingManager;
 import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.Tab;
 
 public class CodeGenerator extends VisitorAdaptor {
+	private final int MAX_SOURCE_CODE_SIZE = 8192;
+	
+	private Logger log = Logger.getLogger(getClass());
 	private int mainFunctionPc;
 	
 	private MethodCodeGenerationManager methodManager = new MethodCodeGenerationManager();
 
 	public int getMainFunctionPc() {
 		return mainFunctionPc;
+	}
+
+	public void reportError(String message, SyntaxNode info) {
+		StringBuilder msg = new StringBuilder(message);
+		int line = (info == null) ? 0 : info.getLine();
+		if (line != 0)
+			msg.append(" on line ").append(line);
+		log.error(msg.toString());
+	}
+	
+	public void visit(Program program) {
+		if (Code.pc > MAX_SOURCE_CODE_SIZE) {
+			reportError("Source code can't be bigger than " + Utils.getUserFriendlyStringForNumberOfBytes(MAX_SOURCE_CODE_SIZE), program);
+		}
 	}
 
 	public void visit(MethodName methodName) {

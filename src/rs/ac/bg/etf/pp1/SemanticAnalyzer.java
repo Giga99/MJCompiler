@@ -15,10 +15,14 @@ import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
 
 public class SemanticAnalyzer extends VisitorAdaptor {
+	private final int MAX_NUMBER_OF_GLOBAL_VARS = 65536;
+	private final int MAX_NUMBER_OF_LOCAL_VARS = 256;
+	
 	private Logger log = Logger.getLogger(getClass());
 
 	private boolean errorDetected = false;
-	private int numberOfVars;
+	private int numberOfGlobalVars = 0;
+	private int numberOfLocalVars = 0;
 
 	private DeclarationSyntaxParserManager declarationManager = new DeclarationSyntaxParserManager();
 	private MethodSyntaxParsingManager methodManager = new MethodSyntaxParsingManager();
@@ -50,21 +54,29 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		return !errorDetected;
 	}
 	
-	public int getNumberOfVars() {
-		return numberOfVars;
+	public int getNumberOfGlobalVars() {
+		return numberOfGlobalVars;
 	}
 
 	public void visit(ProgName progName) {
-		numberOfVars = 0;
 		progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
 		Tab.openScope();
 		reportInfo("ProgName", progName);
 	}
 
 	public void visit(Program program) {
-		numberOfVars = Tab.currentScope.getnVars();
+		numberOfGlobalVars = Tab.currentScope.getnVars();
+		if (numberOfGlobalVars > MAX_NUMBER_OF_GLOBAL_VARS) {
+			reportError("Number of global vars can't be bigger than " + MAX_NUMBER_OF_GLOBAL_VARS, program);
+		}
+		
+		if (numberOfLocalVars > MAX_NUMBER_OF_LOCAL_VARS) {
+			reportError("Number of local vars can't be bigger than " + MAX_NUMBER_OF_LOCAL_VARS, program);
+		}
+		
 		Tab.chainLocalSymbols(program.getProgName().obj);
 		Tab.closeScope();
+		
 		if (!methodManager.isMainMethodPresent()) {
 			reportError("Main method doesn't exist", program);
 		}
@@ -188,8 +200,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	public void visit(MethodDecl methodDecl) {
+		numberOfLocalVars += Tab.currentScope.getnVars();
+		
 		Tab.chainLocalSymbols(methodManager.getCurrentMethod());
 		Tab.closeScope();
+		
 		if (methodManager.isMethodCorrect()) {
 			methodManager.finishMethod();
 			reportInfo("MethodDecl", methodDecl);
