@@ -18,4 +18,8 @@ public class ExprCodeGenerationManager {
 	public boolean isMulopDividion(Mulop mulop) {
 		return mulop instanceof Div;
 	}
+	
+	public boolean isCharArray(FactorArray factorArray) {
+		return factorArray.struct.getElemType() == Tab.charType;
+	}
 }

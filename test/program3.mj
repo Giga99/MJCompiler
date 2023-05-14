@@ -1,10 +1,7 @@
 program Program3
-	int a;
-	const int b = 3;
+	int a[];
 {
 	void main() {
-		a = b;
-		a++;
-		a--;
+		a = new int[3];
 	}
 }
