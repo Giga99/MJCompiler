@@ -156,7 +156,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(varName)) {
 			reportError("Symbol " + varName + " is already declared in this scope", defaultVar);
 		} else {
-			Tab.insert(Obj.Var, varName, currentType).setFpPos(-1);
+			Obj varObj = Tab.insert(Obj.Var, varName, currentType);
+			varObj.setFpPos(-1);
+			if (declarationManager.isGlobalVar(defaultVar)) {
+				varObj.setLevel(0);
+			}
 			reportInfo("DefaultVar", defaultVar);
 		}
 	}
@@ -166,7 +170,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(arrayName)) {
 			reportError("Symbol " + arrayName + " is already declared in this scope", arrayVar);
 		} else {
-			Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType)).setFpPos(-1);
+			Obj varObj = Tab.insert(Obj.Var, arrayName, Utils.getArrayTypeForGivenType(currentType));
+			varObj.setFpPos(-1);
+			if (declarationManager.isGlobalVar(arrayVar)) {
+				varObj.setLevel(0);
+			}
 			reportInfo("ArrayVar", arrayVar);
 		}
 	}
@@ -176,7 +184,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (declarationManager.isSymbolAlreadyDeclaredInCurrentScope(matrixName)) {
 			reportError("Symbol " + matrixName + " is already declared in this scope", matrixVar);
 		} else {
-			Tab.insert(Obj.Var, matrixName, Utils.getMatrixTypeForGivenType(currentType)).setFpPos(-1);
+			Obj varObj = Tab.insert(Obj.Var, matrixName, Utils.getMatrixTypeForGivenType(currentType));
+			varObj.setFpPos(-1);
+			if (declarationManager.isGlobalVar(matrixVar)) {
+				varObj.setLevel(0);
+			}
 			reportInfo("MatrixVar", matrixVar);
 		}
 	}

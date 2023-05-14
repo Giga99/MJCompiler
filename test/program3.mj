@@ -1,11 +1,9 @@
 program Program3
 	int a;
-	int b;
-	char c;
-	bool d;
 {
 	void main() {
-		a = 5;
-		b = 10 * 2 + 3;
+		a = -10 + 5 * 2;
+		a++;
+		a--;
 	}
 }
