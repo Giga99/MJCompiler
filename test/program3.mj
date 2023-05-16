@@ -1,9 +1,9 @@
 program Program3
-	int a[];
+	int a;
 {
+	int fun() { return 1; }
 
 	void main() {
-		a = new int[3];
-		print(ord('a'));
+		fun();
 	}
 }

@@ -56,4 +56,8 @@ public class MethodCodeGenerationManager extends MethodManager {
 	public void reset() {
 		methodHasReturn = false;
 	}
+	
+	public boolean methodHasReturnValue(Obj methodDesignatorObj) {
+		return methodDesignatorObj.getType() != Tab.noType;
+	}
 }

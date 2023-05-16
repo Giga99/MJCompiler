@@ -33,23 +33,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	private Struct currentType = null;
 
-	public void reportError(String message, SyntaxNode info) {
-		errorDetected = true;
-		StringBuilder msg = new StringBuilder(message);
-		int line = (info == null) ? 0 : info.getLine();
-		if (line != 0)
-			msg.append(" on line ").append(line);
-		log.error(msg.toString());
-	}
-
-	public void reportInfo(String message, SyntaxNode info) {
-		StringBuilder msg = new StringBuilder(message);
-		int line = (info == null) ? 0 : info.getLine();
-		if (line != 0)
-			msg.append(" on line ").append(line);
-		log.info(msg.toString());
-	}
-
 	public boolean passed() {
 		return !errorDetected;
 	}
@@ -720,5 +703,22 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			reportError("Expr inside CondFactDoubleExpr are not compatible with Relop, arrays can only be used with equals and not equals or leftExpr is not compatible with rightExpr", condFactDoubleExpr);
 			condFactDoubleExpr.struct = Tab.noType;
 		}
+	}
+
+	private void reportError(String message, SyntaxNode info) {
+		errorDetected = true;
+		StringBuilder msg = new StringBuilder(message);
+		int line = (info == null) ? 0 : info.getLine();
+		if (line != 0)
+			msg.append(" on line ").append(line);
+		log.error(msg.toString());
+	}
+
+	private void reportInfo(String message, SyntaxNode info) {
+		StringBuilder msg = new StringBuilder(message);
+		int line = (info == null) ? 0 : info.getLine();
+		if (line != 0)
+			msg.append(" on line ").append(line);
+		log.info(msg.toString());
 	}
 }

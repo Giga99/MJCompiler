@@ -9,6 +9,8 @@ import rs.ac.bg.etf.pp1.ast.Designator;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementAssignExprSuccess;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementDec;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
+import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCall;
+import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCallWithActParams;
 import rs.ac.bg.etf.pp1.ast.ExprNegativeFirstTerm;
 import rs.ac.bg.etf.pp1.ast.FactorArray;
 import rs.ac.bg.etf.pp1.ast.FactorBool;
@@ -59,14 +61,6 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	public int getMainFunctionPc() {
 		return mainFunctionPc;
-	}
-
-	public void reportError(String message, SyntaxNode info) {
-		StringBuilder msg = new StringBuilder(message);
-		int line = (info == null) ? 0 : info.getLine();
-		if (line != 0)
-			msg.append(" on line ").append(line);
-		log.error(msg.toString());
 	}
 	
 	public void visit(Program program) {
@@ -196,6 +190,16 @@ public class CodeGenerator extends VisitorAdaptor {
 		Code.store(designator.obj);
 	}
 	
+	public void visit(DesignatorStatementMethodCall designatorStatementMethodCall) {
+		Obj methodDesignatorObj = designatorStatementMethodCall.getMethodNameCall().getDesignator().obj;
+		processMethodCall(methodDesignatorObj, true);
+	}
+	
+	public void visit(DesignatorStatementMethodCallWithActParams designatorStatementMethodCallWithActParams) {
+		Obj methodDesignatorObj = designatorStatementMethodCallWithActParams.getMethodNameCall().getDesignator().obj;
+		processMethodCall(methodDesignatorObj, true);
+	}
+	
 	public void visit(ExprNegativeFirstTerm exprNegativeFirstTerm) {
 		Code.put(Code.neg);
 	}
@@ -274,6 +278,23 @@ public class CodeGenerator extends VisitorAdaptor {
 	
 	public void visit(FactorMethodCall factorMethodCall) {
 		Obj methodDesignatorObj = factorMethodCall.getMethodNameCall().getDesignator().obj;
+		processMethodCall(methodDesignatorObj, false);
+	}
+	
+	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
+		Obj methodDesignatorObj = factorMethodCallWithActParams.getMethodNameCall().getDesignator().obj;
+		processMethodCall(methodDesignatorObj, false);
+	}
+
+	private void reportError(String message, SyntaxNode info) {
+		StringBuilder msg = new StringBuilder(message);
+		int line = (info == null) ? 0 : info.getLine();
+		if (line != 0)
+			msg.append(" on line ").append(line);
+		log.error(msg.toString());
+	}
+	
+	private void processMethodCall(Obj methodDesignatorObj, boolean popReturnedValue) {
 		String methodName = methodDesignatorObj.getName();
 		if (methodManager.isLenFunction(methodName)) {
 			Code.put(Code.arraylength);
@@ -282,17 +303,9 @@ public class CodeGenerator extends VisitorAdaptor {
 			Code.put(Code.call);
 			Code.put2(offset);
 		}
-	}
-	
-	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
-		Obj methodDesignatorObj = factorMethodCallWithActParams.getMethodNameCall().getDesignator().obj;
-		String methodName = methodDesignatorObj.getName();
-		if (methodManager.isLenFunction(methodName)) {
-			Code.put(Code.arraylength);
-		} else if (!methodManager.isChrOrOrdFunction(methodName)) {
-			int offset = methodDesignatorObj.getAdr() - Code.pc;
-			Code.put(Code.call);
-			Code.put2(offset);
+		
+		if (methodManager.methodHasReturnValue(methodDesignatorObj) && popReturnedValue) {
+			Code.put(Code.pop);
 		}
 	}
 }
