@@ -22,4 +22,8 @@ public class ExprCodeGenerationManager {
 	public boolean isCharArray(FactorArray factorArray) {
 		return factorArray.struct.getElemType() == Tab.charType;
 	}
+	
+	public boolean isCharMatrix(FactorMatrix factorMatrix) {
+		return factorMatrix.struct.getElemType() == Tab.charType;
+	}
 }

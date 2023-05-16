@@ -1,7 +1,9 @@
 program Program3
 	int a[];
 {
+
 	void main() {
 		a = new int[3];
+		print(ord('a'));
 	}
 }

@@ -44,4 +44,16 @@ public class MethodCodeGenerationManager extends MethodManager {
 	public boolean isVoidMethodWithoutReturn() {
 		return currentMethodReturnType == Tab.noType && !methodHasReturn;
 	}
+	
+	public boolean isLenFunction(String methodName) {
+		return methodName == "len";
+	}
+	
+	public boolean isChrOrOrdFunction(String methodName) {
+		return methodName == "chr" || methodName == "ord";
+	}
+	
+	public void reset() {
+		methodHasReturn = false;
+	}
 }

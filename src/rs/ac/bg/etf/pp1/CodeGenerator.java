@@ -14,6 +14,9 @@ import rs.ac.bg.etf.pp1.ast.FactorArray;
 import rs.ac.bg.etf.pp1.ast.FactorBool;
 import rs.ac.bg.etf.pp1.ast.FactorChar;
 import rs.ac.bg.etf.pp1.ast.FactorDesignator;
+import rs.ac.bg.etf.pp1.ast.FactorMatrix;
+import rs.ac.bg.etf.pp1.ast.FactorMethodCall;
+import rs.ac.bg.etf.pp1.ast.FactorMethodCallWithActParams;
 import rs.ac.bg.etf.pp1.ast.FactorNumber;
 import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
@@ -100,6 +103,7 @@ public class CodeGenerator extends VisitorAdaptor {
 			Code.put(Code.exit);
 			Code.put(Code.return_);
 		}
+		methodManager.reset();
 	}
 	
 	public void visit(StatementValueReturn statementValueReturn) {
@@ -247,6 +251,48 @@ public class CodeGenerator extends VisitorAdaptor {
 			Code.put(0);
 		} else {
 			Code.put(1);
+		}
+	}
+	
+	public void visit(FactorMatrix factorMatrix) { // TODO check this one
+		Code.put(Code.newarray);
+		
+		if (exprManager.isCharMatrix(factorMatrix)) {
+			Code.put(0);
+		} else {
+			Code.put(1);
+		}
+		
+		Code.put(Code.newarray);
+		
+		if (exprManager.isCharMatrix(factorMatrix)) {
+			Code.put(0);
+		} else {
+			Code.put(1);
+		}
+	}
+	
+	public void visit(FactorMethodCall factorMethodCall) {
+		Obj methodDesignatorObj = factorMethodCall.getMethodNameCall().getDesignator().obj;
+		String methodName = methodDesignatorObj.getName();
+		if (methodManager.isLenFunction(methodName)) {
+			Code.put(Code.arraylength);
+		} else if (!methodManager.isChrOrOrdFunction(methodName)) {
+			int offset = methodDesignatorObj.getAdr() - Code.pc;
+			Code.put(Code.call);
+			Code.put2(offset);
+		}
+	}
+	
+	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
+		Obj methodDesignatorObj = factorMethodCallWithActParams.getMethodNameCall().getDesignator().obj;
+		String methodName = methodDesignatorObj.getName();
+		if (methodManager.isLenFunction(methodName)) {
+			Code.put(Code.arraylength);
+		} else if (!methodManager.isChrOrOrdFunction(methodName)) {
+			int offset = methodDesignatorObj.getAdr() - Code.pc;
+			Code.put(Code.call);
+			Code.put2(offset);
 		}
 	}
 }
