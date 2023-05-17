@@ -2,6 +2,9 @@ package rs.ac.bg.etf.pp1;
 
 import org.apache.log4j.Logger;
 
+import rs.ac.bg.etf.pp1.ast.CondFactDoubleExpr;
+import rs.ac.bg.etf.pp1.ast.CondFactSingleExpr;
+import rs.ac.bg.etf.pp1.ast.ConditionOrBlock;
 import rs.ac.bg.etf.pp1.ast.ConstValueBool;
 import rs.ac.bg.etf.pp1.ast.ConstValueChar;
 import rs.ac.bg.etf.pp1.ast.ConstValueNumber;
@@ -11,6 +14,7 @@ import rs.ac.bg.etf.pp1.ast.DesignatorStatementDec;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCall;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCallWithActParams;
+import rs.ac.bg.etf.pp1.ast.Equals;
 import rs.ac.bg.etf.pp1.ast.ExprNegativeFirstTerm;
 import rs.ac.bg.etf.pp1.ast.FactorArray;
 import rs.ac.bg.etf.pp1.ast.FactorBool;
@@ -20,14 +24,24 @@ import rs.ac.bg.etf.pp1.ast.FactorMatrix;
 import rs.ac.bg.etf.pp1.ast.FactorMethodCall;
 import rs.ac.bg.etf.pp1.ast.FactorMethodCallWithActParams;
 import rs.ac.bg.etf.pp1.ast.FactorNumber;
+import rs.ac.bg.etf.pp1.ast.Greater;
+import rs.ac.bg.etf.pp1.ast.GreaterEquals;
+import rs.ac.bg.etf.pp1.ast.Less;
+import rs.ac.bg.etf.pp1.ast.LessEquals;
 import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
 import rs.ac.bg.etf.pp1.ast.MethodDecl;
 import rs.ac.bg.etf.pp1.ast.MethodName;
 import rs.ac.bg.etf.pp1.ast.MethodVoidReturnType;
 import rs.ac.bg.etf.pp1.ast.Mulop;
+import rs.ac.bg.etf.pp1.ast.NotEquals;
 import rs.ac.bg.etf.pp1.ast.PrintNumConst;
 import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
+import rs.ac.bg.etf.pp1.ast.StatementIf;
+import rs.ac.bg.etf.pp1.ast.StatementIfConditionEnd;
+import rs.ac.bg.etf.pp1.ast.StatementIfElse;
+import rs.ac.bg.etf.pp1.ast.StatementIfEnd;
+import rs.ac.bg.etf.pp1.ast.StatementIfStart;
 import rs.ac.bg.etf.pp1.ast.StatementPrint;
 import rs.ac.bg.etf.pp1.ast.StatementRead;
 import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
@@ -36,6 +50,7 @@ import rs.ac.bg.etf.pp1.ast.TermListMultiple;
 import rs.ac.bg.etf.pp1.ast.TermMultipleFactor;
 import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
 import rs.ac.bg.etf.pp1.helpers.Utils;
+import rs.ac.bg.etf.pp1.helpers.codegeneration.ControlFlowCodeGenerationManager;
 import rs.ac.bg.etf.pp1.helpers.codegeneration.DesignatorStatementCodeGenerationManager;
 import rs.ac.bg.etf.pp1.helpers.codegeneration.ExprCodeGenerationManager;
 import rs.ac.bg.etf.pp1.helpers.codegeneration.MethodCodeGenerationManager;
@@ -58,6 +73,7 @@ public class CodeGenerator extends VisitorAdaptor {
 	private StatementCodeGenerationManager statementManager = new StatementCodeGenerationManager();
 	private DesignatorStatementCodeGenerationManager designatorStatementManager = new DesignatorStatementCodeGenerationManager();
 	private ExprCodeGenerationManager exprManager = new ExprCodeGenerationManager();
+	private ControlFlowCodeGenerationManager controlFlowManager = new ControlFlowCodeGenerationManager();
 
 	public int getMainFunctionPc() {
 		return mainFunctionPc;
@@ -162,6 +178,50 @@ public class CodeGenerator extends VisitorAdaptor {
 		} else {
 			Code.put(Code.print);
 		}
+	}
+	
+	public void visit(StatementIf statementIf) {
+		controlFlowManager.finishIf();
+	}
+	
+	public void visit(StatementIfElse statementIfElse) {
+		controlFlowManager.fixupDestinationsFromIfBlock();
+		controlFlowManager.finishIf();
+	}
+	
+	public void visit(StatementIfStart statementIfStart) {
+		controlFlowManager.startIf();
+	}
+	
+	public void visit(StatementIfConditionEnd statementIfConditionEnd) {
+		controlFlowManager.fixupDestinationsFromOrBlock();
+	}
+	
+	public void visit(StatementIfEnd statementIfEnd) {
+		if (controlFlowManager.isInsideIfElse(statementIfEnd)) {
+			Code.putJump(0);
+			controlFlowManager.addIfBlockDestinationToFix(Code.pc - 2);
+		}
+		
+		controlFlowManager.fixupDestinationsFromAndBlock();
+	}
+	
+	public void visit(ConditionOrBlock conditionOrBlock) {
+		Code.putJump(0);
+		controlFlowManager.addOrBlockDestinationToFix(Code.pc - 2);
+		controlFlowManager.fixupDestinationsFromAndBlock();
+	}
+	
+	public void visit(CondFactSingleExpr condFactSingleExpr) {
+		Code.loadConst(1);
+		Code.putFalseJump(Code.eq, 0);
+		controlFlowManager.addAndBlockDestinationToFix(Code.pc - 2);
+	}
+	
+	public void visit(CondFactDoubleExpr condFactDoubleExpr) {
+		int operationCode = controlFlowManager.getOperationCodeForRelop(condFactDoubleExpr.getRelop());
+		Code.putFalseJump(operationCode, 0);
+		controlFlowManager.addAndBlockDestinationToFix(Code.pc - 2);
 	}
 	
 	public void visit(DesignatorStatementAssignExprSuccess designatorStatementAssignExprSuccess) {

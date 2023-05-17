@@ -92,7 +92,8 @@ terminal String IDENT;
 nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
-nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars, StatementWhileHead, StatementMapHead;
+nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars;
+nonterminal StatementIfStart, StatementIfConditionEnd, StatementIfEnd, StatementWhileHead, StatementMapHead, ConditionOrBlock;
 nonterminal DesignatorStatement, DesignatorStatementAssignExpr;
 nonterminal Assignop, Relop, Addop, Mulop;
 
@@ -244,9 +245,9 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementBrackets) LBRACE StatementList RBRACE /* Rule for the statement section */
 				|
-				(StatementIf) IF LPAREN IfCondition RPAREN Statement /* Rule for the if */
+				(StatementIf) StatementIfStart IfCondition StatementIfConditionEnd Statement StatementIfEnd /* Rule for the if */
 				|
-				(StatementIfElse) IF LPAREN IfCondition RPAREN Statement ELSE Statement /* Rule for the if else */
+				(StatementIfElse) StatementIfStart IfCondition StatementIfConditionEnd Statement StatementIfEnd ELSE Statement /* Rule for the if else */
 				|
 				(StatementWhile) StatementWhileHead Statement /* Rule for the while */
 				|
@@ -257,6 +258,12 @@ PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
 					|
 					(PrintNumNoConst) /* epsilon */
 					;
+
+StatementIfStart ::= (StatementIfStart) IF LPAREN;
+
+StatementIfConditionEnd ::= (StatementIfConditionEnd) RPAREN;
+
+StatementIfEnd ::= (StatementIfEnd) /* epsilon */;
 						
 StatementWhileHead ::= (StatementWhileHead) WHILE LPAREN Condition RPAREN;
 
@@ -274,10 +281,12 @@ IfCondition ::= (ConditionSuccess) Condition
 			{: parser.report_error("Condition error at line: " + eleft + ". Successfully recovered from the error.", null); :}
 			;
 
-Condition ::= (ConditionList) Condition OR CondTerm
+Condition ::= (ConditionList) Condition ConditionOrBlock CondTerm
 			|
 			(ConditionSingleItem) CondTerm
 			;
+			
+ConditionOrBlock ::= (ConditionOrBlock) OR;
 			
 CondTerm ::= (CondTermList) CondTerm AND CondFact
 			|

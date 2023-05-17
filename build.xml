@@ -23,6 +23,7 @@
 				<exclude name="helpers/codegeneration/StatementCodeGenerationManager.java" />
 				<exclude name="helpers/codegeneration/DesignatorStatementCodeGenerationManager.java" />
 				<exclude name="helpers/codegeneration/ExprCodeGenerationManager.java" />
+				<exclude name="helpers/codegeneration/ControlFlowCodeGenerationManager.java" />
 			</fileset>
 		</delete>
 	</target>
