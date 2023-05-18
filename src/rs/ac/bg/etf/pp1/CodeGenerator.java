@@ -406,7 +406,6 @@ public class CodeGenerator extends VisitorAdaptor {
 	
 	public void visit(FactorArray factorArray) {
 		Code.put(Code.newarray);
-		
 		if (exprManager.isCharArray(factorArray.struct)) {
 			Code.put(0);
 		} else {
@@ -414,22 +413,59 @@ public class CodeGenerator extends VisitorAdaptor {
 		}
 	}
 	
-	public void visit(FactorMatrix factorMatrix) { // TODO check this one
-		Code.put(Code.newarray);
+	public void visit(FactorMatrix factorMatrix) { // rowCnt, colCnt
+		Code.put(Code.dup_x1); // colCnt, rowCnt, colCnts
+		Code.put(Code.pop); // colCnt, rowCnt
 		
+		Code.put(Code.newarray);
 		if (exprManager.isCharMatrix(factorMatrix)) {
 			Code.put(0);
 		} else {
 			Code.put(1);
-		}
+		} // colCnt, firstDimArr
+		Obj firstDimension = new Obj(Obj.Var, "firstDimension", Tab.intType);
+		Code.store(firstDimension); // colCnt
+		
+		Code.loadConst(-1); // colCnt, i
+		
+		int loopBegin = Code.pc;
+		
+		Code.loadConst(1); // colCnt, i, 1
+		Code.put(Code.add); // colCnt, i + 1
+		
+		Code.put(Code.dup); // colCnt, i, i
+		Code.load(firstDimension); // colCnt, i, i, firstDimArr
+		Code.put(Code.arraylength); // colCnt, i, i, firstDimArrLength
+		Code.putFalseJump(Code.lt, 0); // colCnt, i
+		int destinationToFixup = Code.pc - 2;
+		
+		Code.put(Code.dup2); // colCnt, i, colCnt, i
+		Code.put(Code.pop); // colCnt, i, colCnt
 		
 		Code.put(Code.newarray);
-		
 		if (exprManager.isCharMatrix(factorMatrix)) {
 			Code.put(0);
 		} else {
 			Code.put(1);
-		}
+		} // colCnt, i, secondDimArr
+		Code.put(Code.dup2); // colCnt, i, secondDimArr, i, secondDimArr
+		Code.load(firstDimension); // colCnt, i, secondDimArr, i, secondDimArr, firstDimArr
+		Code.put(Code.dup_x2); // colCnt, i, secondDimArr, firstDimArr, i, secondDimArr, firstDimArr
+		Code.put(Code.pop); // colCnt, i, secondDimArr, firstDimArr, i, secondDimArr
+		if (exprManager.isCharMatrix(factorMatrix)) {
+			Code.put(Code.bastore);
+		} else {
+			Code.put(Code.astore);
+		} // colCnt, i, secondDimArr
+		Code.put(Code.pop); // colCnt, i
+		
+		Code.putJump(loopBegin);
+		
+		Code.fixup(destinationToFixup);
+		
+		Code.put(Code.pop);
+		Code.put(Code.pop);
+		Code.load(firstDimension);
 	}
 	
 	public void visit(FactorMethodCall factorMethodCall) {

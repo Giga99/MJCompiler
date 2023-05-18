@@ -1,5 +1,5 @@
 program Program3
-	int a[];
+	int a[][];
 	int a2[];
 {
 	int fun(int b) {
@@ -8,15 +8,6 @@ program Program3
 	}
 
 	void main() int temp; {
-		a = new int[3];
-		a[0] = 1;
-		a[1] = 2;
-		a[2] = 3;
-		a2 = a.map(temp => fun(temp));
-		temp = 0;
-		while (temp < len(a2)) {
-			print(a2[temp]);
-			temp++;
-		}
+		a = new int[3][3];
 	}
 }

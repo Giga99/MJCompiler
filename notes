@@ -19,6 +19,6 @@ To Check:
 - Break and continue semantic check bug, call method inside while
 
 
-Map:
-Go through the array and every time assign value to the variable -> assign the whole array to the new array
+Matrix:
+Finished matrix creation
 
