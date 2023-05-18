@@ -517,7 +517,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		controlFlowManager.decreaseNumberOfNestedLoops();
 		Designator assignMapDesignator = statementMap.getStatementMapHead().getDesignator();
 		Designator mappedDesignator = statementMap.getStatementMapHead().getDesignator1();
-		StatementMapIdent mapVariable = statementMap.getStatementMapIdent();
+		StatementMapIdent mapVariable = statementMap.getStatementMapHead().getStatementMapIdent();
 		String mapVariableName = mapVariable.getMapVariableName();
 		if (!controlFlowManager.isDesignatorTypeCompatibleWithMap(assignMapDesignator)) {
 			reportError("Designator " + assignMapDesignator.obj.getName() + " must be array when calling assigning map result into it", statementMap);

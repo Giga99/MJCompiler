@@ -1,17 +1,19 @@
 program Program3
-	int a;
-	int i;
+	int a[];
+	int a2[];
 {
-	int fun(int b) { return b * 2; }
+	int fun(int b) {
+		print(b);
+		return b + 2;
+	}
 
-	void main() {
-		a = 5;
-		i = 0;
-		while (i < a) {
-			print(i);
-			i++;
-			if (i == 1 || i == 4) continue;
-			i++;
+	void main() int temp; {
+		a = new int[3];
+		a2 = a.map(temp => fun(temp));
+		temp = 0;
+		while (temp < len(a2)) {
+			print(a2[temp]);
+			temp++;
 		}
 	}
 }

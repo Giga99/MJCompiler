@@ -12,57 +12,60 @@ import rs.etf.pp1.symboltable.concepts.*;
 
 public class ControlFlowCodeGenerationManager {
 	
-	private Stack<List<Integer>> destinationFromAndBlocksToFix = new Stack<List<Integer>>();
-	private Stack<List<Integer>> destinationFromOrBlocksToFix = new Stack<List<Integer>>();
+	private Stack<List<Integer>> destinationsFromAndBlocksToFix = new Stack<List<Integer>>();
+	private Stack<List<Integer>> destinationsFromOrBlocksToFix = new Stack<List<Integer>>();
 	
-	private Stack<List<Integer>> destinationFromIfBlockToFix = new Stack<List<Integer>>();
+	private Stack<List<Integer>> destinationsFromIfBlockToFix = new Stack<List<Integer>>();
 	
 	private Stack<Integer> beginingDestinationOfWhile = new Stack<Integer>();
 	private Stack<List<Integer>> destinationsFromBreakBlockToFix = new Stack<List<Integer>>();
+
+	private Stack<Integer> beginingDestinationOfMap = new Stack<Integer>();
+	private Stack<Integer> destinationFromMapBlockToFix = new Stack<Integer>();
 	
 	public void startIf() {
-		destinationFromAndBlocksToFix.push(new ArrayList<Integer>());
-		destinationFromOrBlocksToFix.push(new ArrayList<Integer>());
-		destinationFromIfBlockToFix.push(new ArrayList<Integer>());
+		destinationsFromAndBlocksToFix.push(new ArrayList<Integer>());
+		destinationsFromOrBlocksToFix.push(new ArrayList<Integer>());
+		destinationsFromIfBlockToFix.push(new ArrayList<Integer>());
 	}
 	
 	public void finishIf() {
-		destinationFromAndBlocksToFix.pop();
-		destinationFromOrBlocksToFix.pop();
-		destinationFromIfBlockToFix.pop();
+		destinationsFromAndBlocksToFix.pop();
+		destinationsFromOrBlocksToFix.pop();
+		destinationsFromIfBlockToFix.pop();
 	}
 	
 	public void fixupDestinationsFromAndBlock() {
-		for (int destination : destinationFromAndBlocksToFix.peek()) {
+		for (int destination : destinationsFromAndBlocksToFix.peek()) {
 			Code.fixup(destination);
 		}
-		destinationFromAndBlocksToFix.peek().clear();
+		destinationsFromAndBlocksToFix.peek().clear();
 	}
 	
 	public void addAndBlockDestinationToFix(int destination) {
-		destinationFromAndBlocksToFix.peek().add(destination);
+		destinationsFromAndBlocksToFix.peek().add(destination);
 	}
 	
 	public void fixupDestinationsFromOrBlock() {
-		for (int destination : destinationFromOrBlocksToFix.peek()) {
+		for (int destination : destinationsFromOrBlocksToFix.peek()) {
 			Code.fixup(destination);
 		}
-		destinationFromOrBlocksToFix.peek().clear();
+		destinationsFromOrBlocksToFix.peek().clear();
 	}
 	
 	public void addOrBlockDestinationToFix(int destination) {
-		destinationFromOrBlocksToFix.peek().add(destination);
+		destinationsFromOrBlocksToFix.peek().add(destination);
 	}
 	
 	public void fixupDestinationsFromIfBlock() {
-		for (int destination : destinationFromIfBlockToFix.peek()) {
+		for (int destination : destinationsFromIfBlockToFix.peek()) {
 			Code.fixup(destination);
 		}
-		destinationFromIfBlockToFix.peek().clear();
+		destinationsFromIfBlockToFix.peek().clear();
 	}
 	
 	public void addIfBlockDestinationToFix(int destination) {
-		destinationFromIfBlockToFix.peek().add(destination);
+		destinationsFromIfBlockToFix.peek().add(destination);
 	}
 	
 	public int getOperationCodeForRelop(Relop relop) {
@@ -90,15 +93,15 @@ public class ControlFlowCodeGenerationManager {
 	}
 	
 	public void startWhile(int destinationOfBeginingOfWhile) {
-		destinationFromAndBlocksToFix.push(new ArrayList<Integer>());
-		destinationFromOrBlocksToFix.push(new ArrayList<Integer>());
+		destinationsFromAndBlocksToFix.push(new ArrayList<Integer>());
+		destinationsFromOrBlocksToFix.push(new ArrayList<Integer>());
 		destinationsFromBreakBlockToFix.push(new ArrayList<Integer>());
 		beginingDestinationOfWhile.push(destinationOfBeginingOfWhile);
 	}
 	
 	public void finishWhile() {
-		destinationFromAndBlocksToFix.pop();
-		destinationFromOrBlocksToFix.pop();
+		destinationsFromAndBlocksToFix.pop();
+		destinationsFromOrBlocksToFix.pop();
 		destinationsFromBreakBlockToFix.pop();
 	}
 	
@@ -106,7 +109,7 @@ public class ControlFlowCodeGenerationManager {
 		for (int destination : destinationsFromBreakBlockToFix.peek()) {
 			Code.fixup(destination);
 		}
-		destinationFromOrBlocksToFix.peek().clear();
+		destinationsFromOrBlocksToFix.peek().clear();
 	}
 	
 	public void addBreakBlockDestinationToFix(int destination) {
@@ -119,5 +122,21 @@ public class ControlFlowCodeGenerationManager {
 	
 	public void continueToBeginingOfWhile() {
 		Code.putJump(beginingDestinationOfWhile.peek());
+	}
+	
+	public void addDestinationOfBeginingOfMap(int destination) {
+		beginingDestinationOfMap.push(destination);
+	}
+	
+	public void jumpToBeginingOfMap() {
+		Code.putJump(beginingDestinationOfMap.pop());
+	}
+	
+	public void fixupDestinationFromMapBlock() {
+		Code.fixup(destinationFromMapBlockToFix.pop());
+	}
+	
+	public void addMapBlockDestinationToFix(int destination) {
+		destinationFromMapBlockToFix.push(destination);
 	}
 }

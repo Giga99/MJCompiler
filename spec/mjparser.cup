@@ -251,7 +251,7 @@ Statement ::= (StatementRead) READ LPAREN Designator RPAREN SEMI /* Rule for the
 				|
 				(StatementWhile) StatementWhileHead Statement /* Rule for the while */
 				|
-				(StatementMap) StatementMapHead LPAREN StatementMapIdent ARROW Expr RPAREN SEMI /* Rule for the map */
+				(StatementMap) StatementMapHead ARROW Expr RPAREN SEMI /* Rule for the map */
 				;
 				
 PrintNumOptional ::= (PrintNumConst) COMMA NUMBER
@@ -269,7 +269,7 @@ StatementWhileHead ::= (StatementWhileHead) StatementWhileStart LPAREN Condition
 
 StatementWhileStart ::= (StatementWhileStart) WHILE;
 
-StatementMapHead ::= (StatementMapHead) Designator Assignop Designator DOT MAP;
+StatementMapHead ::= (StatementMapHead) Designator Assignop Designator DOT MAP LPAREN StatementMapIdent;
 
 StatementMapIdent ::= (StatementMapIdent) IDENT:mapVariableName;
 					
@@ -381,7 +381,7 @@ Designator ::= (DesignatorIdent) IDENT:designatorName
 			(DesignatorArray) IDENT:designatorName LSQUARE Expr RSQUARE
 			|
 			(DesignatorMatrix) IDENT:designatorName LSQUARE Expr RSQUARE LSQUARE Expr RSQUARE
-			;		
+			;
 
 		
 		

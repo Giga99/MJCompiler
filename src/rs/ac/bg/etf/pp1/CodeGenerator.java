@@ -9,6 +9,7 @@ import rs.ac.bg.etf.pp1.ast.ConstValueBool;
 import rs.ac.bg.etf.pp1.ast.ConstValueChar;
 import rs.ac.bg.etf.pp1.ast.ConstValueNumber;
 import rs.ac.bg.etf.pp1.ast.Designator;
+import rs.ac.bg.etf.pp1.ast.DesignatorArray;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementAssignExprSuccess;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementDec;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
@@ -44,6 +45,8 @@ import rs.ac.bg.etf.pp1.ast.StatementIfConditionEnd;
 import rs.ac.bg.etf.pp1.ast.StatementIfElse;
 import rs.ac.bg.etf.pp1.ast.StatementIfEnd;
 import rs.ac.bg.etf.pp1.ast.StatementIfStart;
+import rs.ac.bg.etf.pp1.ast.StatementMap;
+import rs.ac.bg.etf.pp1.ast.StatementMapHead;
 import rs.ac.bg.etf.pp1.ast.StatementPrint;
 import rs.ac.bg.etf.pp1.ast.StatementRead;
 import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
@@ -253,6 +256,65 @@ public class CodeGenerator extends VisitorAdaptor {
 		controlFlowManager.addBreakBlockDestinationToFix(Code.pc - 2);
 	}
 	
+	public void visit(StatementMap statementMap) {
+		Obj variableInMap = statementMap.getStatementMapHead().getStatementMapIdent().obj;
+		Code.store(variableInMap);
+		
+		Obj index = new Obj(Obj.Var, "index", Tab.intType);
+		Code.put(Code.dup);
+		Code.store(index);
+		
+		Code.load(statementMap.getStatementMapHead().getDesignator().obj);
+		Code.load(index);
+		Code.load(variableInMap);
+		if (exprManager.isCharVariable(variableInMap.getType())) Code.put(Code.bastore);
+        else Code.put(Code.astore); 
+		
+		controlFlowManager.jumpToBeginingOfMap();
+		controlFlowManager.fixupDestinationFromMapBlock();
+		Code.put(Code.pop);
+		Code.put(Code.pop);
+		Code.put(Code.pop);
+	}
+	
+	public void visit(StatementMapHead statementMapHead) {
+		Obj arrayToAssignTo = statementMapHead.getDesignator().obj;
+		Obj arrayToBeMapped = statementMapHead.getDesignator1().obj;
+		Obj variableInsideMap = statementMapHead.getStatementMapIdent().obj;
+		
+		Code.load(arrayToBeMapped);
+		Code.put(Code.arraylength);
+		Code.put(Code.newarray);
+		if (exprManager.isCharArray(arrayToAssignTo.getType())) {
+			Code.put(0);
+		} else {
+			Code.put(1);
+		}
+		Code.store(arrayToAssignTo);
+		
+		Code.load(arrayToBeMapped);
+		Code.loadConst(-1);
+
+		controlFlowManager.addDestinationOfBeginingOfMap(Code.pc);
+		
+		Code.loadConst(1);
+		Code.put(Code.add);
+		
+		Code.put(Code.dup2);
+		Code.put(Code.dup2);
+		
+		Code.put(Code.pop);
+		Code.put(Code.arraylength);
+		
+		Code.putFalseJump(Code.lt, 0);
+		controlFlowManager.addMapBlockDestinationToFix(Code.pc - 2);
+		
+		Code.put(Code.dup2);
+		Code.put(Code.pop);
+		Code.put(Code.aload);
+		Code.store(variableInsideMap);
+	}
+	
 	public void visit(DesignatorStatementAssignExprSuccess designatorStatementAssignExprSuccess) {
 		Code.store(designatorStatementAssignExprSuccess.getDesignator().obj);
 	}
@@ -340,7 +402,7 @@ public class CodeGenerator extends VisitorAdaptor {
 	public void visit(FactorArray factorArray) {
 		Code.put(Code.newarray);
 		
-		if (exprManager.isCharArray(factorArray)) {
+		if (exprManager.isCharArray(factorArray.struct)) {
 			Code.put(0);
 		} else {
 			Code.put(1);
@@ -373,6 +435,10 @@ public class CodeGenerator extends VisitorAdaptor {
 	public void visit(FactorMethodCallWithActParams factorMethodCallWithActParams) {
 		Obj methodDesignatorObj = factorMethodCallWithActParams.getMethodNameCall().getDesignator().obj;
 		processMethodCall(methodDesignatorObj, false);
+	}
+	
+	public void visit(DesignatorArray designatorArray) {
+		Code.load(designatorArray.obj);
 	}
 
 	private void reportError(String message, SyntaxNode info) {
