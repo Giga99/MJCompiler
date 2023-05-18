@@ -13,6 +13,12 @@ In progress:
 To Check:
 
 - What is better LIST COMMA ITEM or ITEM COMMA LIST?
-- FactorMatrix Code Generation
+- FactorMatrix Code Generation - not good
 - Refactor control flows, jumps and stacks used
-- Runtime greske (Code.trap) proveriti
+- Runtime errors (Code.trap) check
+- First finish map then add support for continue and break
+
+
+Map:
+Go through the array and every time assign value to the variable -> assign the whole array to the new array
+
