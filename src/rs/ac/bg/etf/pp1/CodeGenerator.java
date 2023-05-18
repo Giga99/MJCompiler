@@ -267,8 +267,11 @@ public class CodeGenerator extends VisitorAdaptor {
 		Code.load(statementMap.getStatementMapHead().getDesignator().obj);
 		Code.load(index);
 		Code.load(variableInMap);
-		if (exprManager.isCharVariable(variableInMap.getType())) Code.put(Code.bastore);
-        else Code.put(Code.astore); 
+		if (exprManager.isCharVariable(variableInMap.getType())) {
+			Code.put(Code.bastore);
+		} else {
+			Code.put(Code.astore); 
+		}
 		
 		controlFlowManager.jumpToBeginingOfMap();
 		controlFlowManager.fixupDestinationFromMapBlock();
