@@ -10,6 +10,8 @@ import rs.ac.bg.etf.pp1.ast.ConstValueChar;
 import rs.ac.bg.etf.pp1.ast.ConstValueNumber;
 import rs.ac.bg.etf.pp1.ast.Designator;
 import rs.ac.bg.etf.pp1.ast.DesignatorArray;
+import rs.ac.bg.etf.pp1.ast.DesignatorArrayStart;
+import rs.ac.bg.etf.pp1.ast.DesignatorIdent;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementAssignExprSuccess;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementDec;
 import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
@@ -440,8 +442,8 @@ public class CodeGenerator extends VisitorAdaptor {
 		processMethodCall(methodDesignatorObj, false);
 	}
 	
-	public void visit(DesignatorArray designatorArray) {
-		Code.load(designatorArray.obj);
+	public void visit(DesignatorArrayStart designatorArrayStart) {
+		Code.load(designatorArrayStart.getDesignator().obj);
 	}
 
 	private void reportError(String message, SyntaxNode info) {

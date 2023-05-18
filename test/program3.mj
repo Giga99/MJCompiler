@@ -9,6 +9,9 @@ program Program3
 
 	void main() int temp; {
 		a = new int[3];
+		a[0] = 1;
+		a[1] = 2;
+		a[2] = 3;
 		a2 = a.map(temp => fun(temp));
 		temp = 0;
 		while (temp < len(a2)) {

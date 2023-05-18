@@ -94,7 +94,7 @@ nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormPars, FormParmsLis
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars;
 nonterminal StatementIfStart, StatementIfConditionEnd, StatementIfEnd, StatementWhileHead, StatementWhileStart, StatementMapHead, ConditionOrBlock;
-nonterminal DesignatorStatement, DesignatorStatementAssignExpr;
+nonterminal DesignatorStatement, DesignatorStatementAssignExpr, DesignatorArrayStart;
 nonterminal Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementMapIdent, MethodName;
@@ -378,10 +378,10 @@ ActPars ::= (ActParamsMultiple) ActPars COMMA Expr
 
 Designator ::= (DesignatorIdent) IDENT:designatorName
 			|
-			(DesignatorArray) IDENT:designatorName LSQUARE Expr RSQUARE
-			|
-			(DesignatorMatrix) IDENT:designatorName LSQUARE Expr RSQUARE LSQUARE Expr RSQUARE
+			(DesignatorArray) DesignatorArrayStart LSQUARE Expr RSQUARE
 			;
+			
+DesignatorArrayStart ::= (DesignatorArrayStart) Designator;
 
 		
 		
