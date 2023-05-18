@@ -36,6 +36,8 @@ import rs.ac.bg.etf.pp1.ast.Mulop;
 import rs.ac.bg.etf.pp1.ast.NotEquals;
 import rs.ac.bg.etf.pp1.ast.PrintNumConst;
 import rs.ac.bg.etf.pp1.ast.Program;
+import rs.ac.bg.etf.pp1.ast.StatementBreak;
+import rs.ac.bg.etf.pp1.ast.StatementContinue;
 import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
 import rs.ac.bg.etf.pp1.ast.StatementIf;
 import rs.ac.bg.etf.pp1.ast.StatementIfConditionEnd;
@@ -45,6 +47,9 @@ import rs.ac.bg.etf.pp1.ast.StatementIfStart;
 import rs.ac.bg.etf.pp1.ast.StatementPrint;
 import rs.ac.bg.etf.pp1.ast.StatementRead;
 import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
+import rs.ac.bg.etf.pp1.ast.StatementWhile;
+import rs.ac.bg.etf.pp1.ast.StatementWhileHead;
+import rs.ac.bg.etf.pp1.ast.StatementWhileStart;
 import rs.ac.bg.etf.pp1.ast.SyntaxNode;
 import rs.ac.bg.etf.pp1.ast.TermListMultiple;
 import rs.ac.bg.etf.pp1.ast.TermMultipleFactor;
@@ -222,6 +227,30 @@ public class CodeGenerator extends VisitorAdaptor {
 		int operationCode = controlFlowManager.getOperationCodeForRelop(condFactDoubleExpr.getRelop());
 		Code.putFalseJump(operationCode, 0);
 		controlFlowManager.addAndBlockDestinationToFix(Code.pc - 2);
+	}
+	
+	public void visit(StatementWhile statementWhile) {
+		controlFlowManager.jumpToBeginingOfWhile();
+		controlFlowManager.fixupDestinationsFromAndBlock();
+		controlFlowManager.fixupDestinationsFromBreakBlock();
+		controlFlowManager.finishWhile();
+	}
+	
+	public void visit(StatementWhileHead statementWhileHead) {
+		controlFlowManager.fixupDestinationsFromOrBlock();
+	}
+	
+	public void visit(StatementWhileStart statementWhileStart) {
+		controlFlowManager.startWhile(Code.pc);
+	}
+	
+	public void visit(StatementContinue statementContinue) {
+		controlFlowManager.continueToBeginingOfWhile();
+	}
+	
+	public void visit(StatementBreak statementBreak) {
+		Code.putJump(0);
+		controlFlowManager.addBreakBlockDestinationToFix(Code.pc - 2);
 	}
 	
 	public void visit(DesignatorStatementAssignExprSuccess designatorStatementAssignExprSuccess) {

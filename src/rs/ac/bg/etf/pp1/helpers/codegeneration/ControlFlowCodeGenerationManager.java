@@ -14,7 +14,11 @@ public class ControlFlowCodeGenerationManager {
 	
 	private Stack<List<Integer>> destinationFromAndBlocksToFix = new Stack<List<Integer>>();
 	private Stack<List<Integer>> destinationFromOrBlocksToFix = new Stack<List<Integer>>();
+	
 	private Stack<List<Integer>> destinationFromIfBlockToFix = new Stack<List<Integer>>();
+	
+	private Stack<Integer> beginingDestinationOfWhile = new Stack<Integer>();
+	private Stack<List<Integer>> destinationsFromBreakBlockToFix = new Stack<List<Integer>>();
 	
 	public void startIf() {
 		destinationFromAndBlocksToFix.push(new ArrayList<Integer>());
@@ -83,5 +87,37 @@ public class ControlFlowCodeGenerationManager {
 	
 	public boolean isInsideIfElse(StatementIfEnd statementIfEnd) {
 		return statementIfEnd.getParent() instanceof StatementIfElse;
+	}
+	
+	public void startWhile(int destinationOfBeginingOfWhile) {
+		destinationFromAndBlocksToFix.push(new ArrayList<Integer>());
+		destinationFromOrBlocksToFix.push(new ArrayList<Integer>());
+		destinationsFromBreakBlockToFix.push(new ArrayList<Integer>());
+		beginingDestinationOfWhile.push(destinationOfBeginingOfWhile);
+	}
+	
+	public void finishWhile() {
+		destinationFromAndBlocksToFix.pop();
+		destinationFromOrBlocksToFix.pop();
+		destinationsFromBreakBlockToFix.pop();
+	}
+	
+	public void fixupDestinationsFromBreakBlock() {
+		for (int destination : destinationsFromBreakBlockToFix.peek()) {
+			Code.fixup(destination);
+		}
+		destinationFromOrBlocksToFix.peek().clear();
+	}
+	
+	public void addBreakBlockDestinationToFix(int destination) {
+		destinationsFromBreakBlockToFix.peek().add(destination);
+	}
+	
+	public void jumpToBeginingOfWhile() {
+		Code.putJump(beginingDestinationOfWhile.pop());
+	}
+	
+	public void continueToBeginingOfWhile() {
+		Code.putJump(beginingDestinationOfWhile.peek());
 	}
 }

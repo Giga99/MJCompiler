@@ -93,7 +93,7 @@ nonterminal ProgramDeclList, ConstDecl, ConstDeclList, ConstDeclListItem;
 nonterminal MethodDeclList, MethodDecl, MethodReturnType, FormPars, FormParmsList, FormParam, FormParamDeclaration;
 nonterminal VarDeclList, VarDecl, VarDeclIdentList, VarDeclaration;
 nonterminal StatementList, Statement, PrintNumOptional, MethodNameCall, ActPars;
-nonterminal StatementIfStart, StatementIfConditionEnd, StatementIfEnd, StatementWhileHead, StatementMapHead, ConditionOrBlock;
+nonterminal StatementIfStart, StatementIfConditionEnd, StatementIfEnd, StatementWhileHead, StatementWhileStart, StatementMapHead, ConditionOrBlock;
 nonterminal DesignatorStatement, DesignatorStatementAssignExpr;
 nonterminal Assignop, Relop, Addop, Mulop;
 
@@ -265,7 +265,9 @@ StatementIfConditionEnd ::= (StatementIfConditionEnd) RPAREN;
 
 StatementIfEnd ::= (StatementIfEnd) /* epsilon */;
 						
-StatementWhileHead ::= (StatementWhileHead) WHILE LPAREN Condition RPAREN;
+StatementWhileHead ::= (StatementWhileHead) StatementWhileStart LPAREN Condition RPAREN;
+
+StatementWhileStart ::= (StatementWhileStart) WHILE;
 
 StatementMapHead ::= (StatementMapHead) Designator Assignop Designator DOT MAP;
 
