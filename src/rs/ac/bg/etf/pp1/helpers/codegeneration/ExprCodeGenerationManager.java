@@ -19,11 +19,15 @@ public class ExprCodeGenerationManager {
 		return mulop instanceof Div;
 	}
 	
-	public boolean isCharArray(FactorArray factorArray) {
-		return factorArray.struct.getElemType() == Tab.charType;
+	public boolean isCharArray(Struct factorArrayStruct) {
+		return factorArrayStruct.getElemType() == Tab.charType;
 	}
 	
 	public boolean isCharMatrix(FactorMatrix factorMatrix) {
 		return factorMatrix.struct.getElemType() == Tab.charType;
+	}
+	
+	public boolean isCharVariable(Struct variableStruct) {
+		return variableStruct == Tab.charType;
 	}
 }
