@@ -10,7 +10,7 @@ program Program3
 		while (i < a) {
 			print(i);
 			i++;
-			if (i == 1) continue;
+			if (i == 1 || i == 4) continue;
 			i++;
 		}
 	}

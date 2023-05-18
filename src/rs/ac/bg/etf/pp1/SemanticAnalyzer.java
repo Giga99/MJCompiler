@@ -553,7 +553,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementContinue statementContinue) {
-		if (!controlFlowManager.isBreakAllowed()) {
+		if (!controlFlowManager.isContinueAllowed()) {
 			reportError("Continue is not allowed outside of the loops", statementContinue);
 		} else {
 			reportInfo("StatementContinue", statementContinue);
