@@ -38,4 +38,8 @@ public class ExprSyntaxParsingManager {
 	public boolean isDesignatorMatrix(Obj designator) {
 		return designator.getType().getKind() == Struct.Array && designator.getType().getElemType().getKind() == Struct.Array;
 	}
+	
+	public boolean isSecondDimensionAccessInMatrix(DesignatorArray designatorArray) {
+		return designatorArray.getDesignatorArrayStart().getDesignator() instanceof DesignatorArray;
+	}
 }

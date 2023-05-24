@@ -287,6 +287,10 @@ public class CodeGenerator extends VisitorAdaptor {
 		Obj arrayToBeMapped = statementMapHead.getDesignator1().obj;
 		Obj variableInsideMap = statementMapHead.getStatementMapIdent().obj;
 		
+		if (designatorStatementManager.isDesignatorElementInArrayOrMatrix(statementMapHead.getDesignator1())) {
+			Code.put(Code.dup2);
+		}
+		
 		Code.load(arrayToBeMapped);
 		Code.put(Code.arraylength);
 		Code.put(Code.newarray);

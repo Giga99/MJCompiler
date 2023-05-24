@@ -2,12 +2,44 @@ program Program3
 	int a[][];
 	int a2[];
 {
-	int fun(int b) {
-		print(b);
-		return b + 2;
+	int fun(int b, int addition) {
+		return b + addition;
 	}
 
-	void main() int temp; {
+	void main() int i; int j; {
 		a = new int[3][3];
+		a[0][0] = 1;
+		a[1][1] = 1;
+		a[2][2] = 1;
+		i = 0;
+		while (i < 3) {
+			j = 0;
+			while (j < 3) {
+				print(a[i][j]);
+				j++;
+			}
+			i++;
+		}
+		
+		a2 = a[0].map(i => fun(i, 1));
+		i = 0;
+		while (i < 3) {
+			print(a2[i]);
+			i++;
+		}
+		
+		a2 = a[1].map(i => fun(i, 2));
+		i = 0;
+		while (i < 3) {
+			print(a2[i]);
+			i++;
+		}
+		
+		a2 = a[2].map(i => fun(i, 3));
+		i = 0;
+		while (i < 3) {
+			print(a2[i]);
+			i++;
+		}
 	}
 }

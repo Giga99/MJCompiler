@@ -397,32 +397,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else if (!exprManager.isDesignatorArray(designatorObj)) {
 			reportError("Type of the designator must be array", designatorArray);
 			designatorArray.obj = Tab.noObj;
+		} else if (exprManager.isDesignatorMatrix(designatorObj) && exprManager.isSecondDimensionAccessInMatrix(designatorArray)) {
+			Obj newDesignatorObj = new Obj(Obj.Elem, designatorName, designatorObj.getType().getElemType().getElemType());
+			designatorArray.obj = newDesignatorObj;
+			reportInfo("DesignatorArray", designatorArray);
 		} else {
 			Obj newDesignatorObj = new Obj(Obj.Elem, designatorName, designatorObj.getType().getElemType());
 			designatorArray.obj = newDesignatorObj;
 			reportInfo("DesignatorArray", designatorArray);
 		}
 	}
-
-//	public void visit(DesignatorMatrix designatorMatrix) {
-//		String designatorName = designatorMatrix.getDesignatorName();
-//		Obj designatorObj = Tab.find(designatorName);
-//		Expr firstDimensionExpr = designatorMatrix.getExpr();
-//		Expr secondDimensionExpr = designatorMatrix.getExpr1();
-//		if (designatorObj == Tab.noObj) {
-//			reportError("Designator " + designatorName + " was not found", designatorMatrix);
-//		} else if (!exprManager.isCorrectTypeForIndexOfArray(firstDimensionExpr) || !exprManager.isCorrectTypeForIndexOfArray(secondDimensionExpr)) {
-//			reportError("Type in expression for the index of the matrix must be int", designatorMatrix);
-//			designatorMatrix.obj = Tab.noObj;
-//		} else if (!exprManager.isDesignatorMatrix(designatorObj)) {
-//			reportError("Type of the designator must be matrix", designatorMatrix);
-//			designatorMatrix.obj = Tab.noObj;
-//		} else {
-//			Obj newDesignatorObj = new Obj(Obj.Elem, designatorName, designatorObj.getType().getElemType().getElemType());
-//			designatorMatrix.obj = newDesignatorObj;
-//			reportInfo("DesignatorMatrix", designatorMatrix);
-//		}
-//	}
 
 	/* Rules for the actual parameters */
 	
@@ -522,7 +506,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		if (!controlFlowManager.isDesignatorTypeCompatibleWithMap(assignMapDesignator)) {
 			reportError("Designator " + assignMapDesignator.obj.getName() + " must be array when calling assigning map result into it", statementMap);
 		} else if (!controlFlowManager.isDesignatorTypeCompatibleWithMap(mappedDesignator)) {
-			reportError("Designator " + mappedDesignator.obj.getName() + " must be array when calling map on it", statementMap);
+			reportError("Designator " + mappedDesignator.obj.getName() + " must be array when calling map on it, currently " + Utils.getFriendlyNameForType(mappedDesignator.obj.getType()), statementMap);
 		} else if (!controlFlowManager.isMapVariableDefined(mapVariableName)) {
 			reportError("Symbol " + mapVariableName + " is not declared in this scope", statementMap);
 		} else {
