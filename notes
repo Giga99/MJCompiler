@@ -13,12 +13,6 @@ In progress:
 To Check:
 
 - What is better LIST COMMA ITEM or ITEM COMMA LIST?
-- FactorMatrix Code Generation - not good
 - Refactor control flows, jumps and stacks used
 - Runtime errors (Code.trap) check
 - Break and continue semantic check bug, call method inside while
-
-
-Matrix:
-Finished matrix creation
-
