@@ -3,13 +3,8 @@ package rs.ac.bg.etf.pp1;
 import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.*;
-import rs.ac.bg.etf.pp1.helpers.*;
-import rs.ac.bg.etf.pp1.helpers.syntax.ControlFlowSyntaxParsingManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.DeclarationSyntaxParserManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.DesignatorStatementSyntaxParsingManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.ExprSyntaxParsingManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.MethodSyntaxParsingManager;
-import rs.ac.bg.etf.pp1.helpers.syntax.StatementSyntaxParsingManager;
+import rs.ac.bg.etf.pp1.helpers.Utils;
+import rs.ac.bg.etf.pp1.helpers.syntax.*;
 import rs.ac.bg.etf.pp1.tabextended.*;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.*;
@@ -245,36 +240,31 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 	/* Rules for the expressions */
 
-	public void visit(ExprPositiveFirstTerm exprPositiveFirstTerm) {
-		exprPositiveFirstTerm.struct = exprPositiveFirstTerm.getTermList().struct;
-		reportInfo("ExprPositiveFirstTerm", exprPositiveFirstTerm);
+	public void visit(ExprPositiveTerm exprPositiveTerm) {
+		exprPositiveTerm.struct = exprPositiveTerm.getTerm().struct;
+		reportInfo("ExprPositiveTerm", exprPositiveTerm);
 	}
 
-	public void visit(ExprNegativeFirstTerm exprNegativeFirstTerm) {
-		Struct termType = exprNegativeFirstTerm.getTermList().struct;
+	public void visit(ExprNegativeTerm exprNegativeTerm) {
+		Struct termType = exprNegativeTerm.getTerm().struct;
 		if (exprManager.isTermTypeInt(termType)) {
-			exprNegativeFirstTerm.struct = termType;
-			reportInfo("ExprNegativeFirstTerm", exprNegativeFirstTerm);
+			exprNegativeTerm.struct = termType;
+			reportInfo("ExprNegativeTerm", exprNegativeTerm);
 		} else {
-			reportError("Type in expression starting with negative term must be int", exprNegativeFirstTerm);
-			exprNegativeFirstTerm.struct = Tab.noType;
+			reportError("Type in expression starting with negative term must be int", exprNegativeTerm);
+			exprNegativeTerm.struct = Tab.noType;
 		}
 	}
 
-	public void visit(TermListSingle termListSingle) {
-		termListSingle.struct = termListSingle.getTerm().struct;
-		reportInfo("TermListSingle", termListSingle);
-	}
-
-	public void visit(TermListMultiple termListMultiple) {
-		Term term = termListMultiple.getTerm();
-		TermList termList = termListMultiple.getTermList();
-		if (exprManager.areCompatibleTypesInAddopExpr(term, termList)) {
-			termListMultiple.struct = term.struct;
-			reportInfo("TermListMultiple", termListMultiple);
+	public void visit(ExprTermList exprTermList) {
+		Term term = exprTermList.getTerm();
+		Expr expr = exprTermList.getExpr();
+		if (exprManager.areCompatibleTypesInAddopExpr(term, expr)) {
+			exprTermList.struct = term.struct;
+			reportInfo("ExprTermList", exprTermList);
 		} else {
-			reportError("Type in expression with multiple terms must be int", termListMultiple);
-			termListMultiple.struct = Tab.noType;
+			reportError("Type in expression with multiple terms must be int", exprTermList);
+			exprTermList.struct = Tab.noType;
 		}
 	}
 

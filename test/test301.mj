@@ -6,7 +6,7 @@ program test301
 	const int jedan = 1;
 	const int pet = 5;
 
-	int niz[], niz2[], a, b;
+	int niz[];
 	char nizch[];
 	
 {
@@ -30,23 +30,6 @@ program test301
 		print(bodovi);
 		print(niz[2]);
 		
-		
-		// [a,b] = niz;
-		print(a);	// niz[0] -> 1
-		print(b);	// niz[1] -> 2
-		
-		
-		// [,a,] = niz;
-		print(a);	// niz[1] -> 2
-
-		niz2 = new int[2];
-		// [niz2[0],,niz2[niz[nula]]] = niz;
-
-		print(niz2[0]);	// niz[0] -> 1
-		print(niz2[1]); // niz[2] -> 6 
-		
-		// [niz2[0],,,niz2[niz[nula]]] = niz; // runtime error!
-		
 		nizch = new char[3];
 		nizch[0] = 'a';
 		nizch[jedan] = 'b';
@@ -56,7 +39,7 @@ program test301
 			
 		
 		read(bodovi);
-		bodovi = -bodovi + (pet * a / 2 - jedan) * bodovi - (3 % 2 + 3 * 2 - 3); 
+		bodovi = -bodovi + (pet / 2 - jedan) * bodovi - (3 % 2 + 3 * 2 - 3); 
 		print(bodovi);
 			
 	}

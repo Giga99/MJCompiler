@@ -18,7 +18,11 @@ int rows, columns;
  			arr[i] = i;         
  			i++; 
  		}   
- 		arr.foreach(x => print(x);); 
+ 		i = 0;
+ 		while (i < 3) {
+ 			print(arr[i]);
+ 			i++;
+ 		}
  		read(x);  
  		
  		while (i<size) {       

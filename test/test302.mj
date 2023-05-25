@@ -88,15 +88,6 @@ int a, curr;
 			niz[i] = niz[i] * 2 * a;
 			i++;
 		}
-		
-		niz.foreach(curr => print(curr););
-		print(eol);
-		
-		niz2 = 0;
-		niz.foreach(curr => {
-			niz2 = niz2 + curr * curr;
-		});
-		print(niz2);
 	
 	}
 }

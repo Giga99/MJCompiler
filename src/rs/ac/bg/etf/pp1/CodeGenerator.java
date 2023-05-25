@@ -2,69 +2,9 @@ package rs.ac.bg.etf.pp1;
 
 import org.apache.log4j.Logger;
 
-import rs.ac.bg.etf.pp1.ast.CondFactDoubleExpr;
-import rs.ac.bg.etf.pp1.ast.CondFactSingleExpr;
-import rs.ac.bg.etf.pp1.ast.ConditionOrBlock;
-import rs.ac.bg.etf.pp1.ast.ConstValueBool;
-import rs.ac.bg.etf.pp1.ast.ConstValueChar;
-import rs.ac.bg.etf.pp1.ast.ConstValueNumber;
-import rs.ac.bg.etf.pp1.ast.Designator;
-import rs.ac.bg.etf.pp1.ast.DesignatorArray;
-import rs.ac.bg.etf.pp1.ast.DesignatorArrayStart;
-import rs.ac.bg.etf.pp1.ast.DesignatorIdent;
-import rs.ac.bg.etf.pp1.ast.DesignatorStatementAssignExprSuccess;
-import rs.ac.bg.etf.pp1.ast.DesignatorStatementDec;
-import rs.ac.bg.etf.pp1.ast.DesignatorStatementInc;
-import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCall;
-import rs.ac.bg.etf.pp1.ast.DesignatorStatementMethodCallWithActParams;
-import rs.ac.bg.etf.pp1.ast.Equals;
-import rs.ac.bg.etf.pp1.ast.ExprNegativeFirstTerm;
-import rs.ac.bg.etf.pp1.ast.FactorArray;
-import rs.ac.bg.etf.pp1.ast.FactorBool;
-import rs.ac.bg.etf.pp1.ast.FactorChar;
-import rs.ac.bg.etf.pp1.ast.FactorDesignator;
-import rs.ac.bg.etf.pp1.ast.FactorMatrix;
-import rs.ac.bg.etf.pp1.ast.FactorMethodCall;
-import rs.ac.bg.etf.pp1.ast.FactorMethodCallWithActParams;
-import rs.ac.bg.etf.pp1.ast.FactorNumber;
-import rs.ac.bg.etf.pp1.ast.Greater;
-import rs.ac.bg.etf.pp1.ast.GreaterEquals;
-import rs.ac.bg.etf.pp1.ast.Less;
-import rs.ac.bg.etf.pp1.ast.LessEquals;
-import rs.ac.bg.etf.pp1.ast.MethodAnyReturnType;
-import rs.ac.bg.etf.pp1.ast.MethodDecl;
-import rs.ac.bg.etf.pp1.ast.MethodName;
-import rs.ac.bg.etf.pp1.ast.MethodVoidReturnType;
-import rs.ac.bg.etf.pp1.ast.Mulop;
-import rs.ac.bg.etf.pp1.ast.NotEquals;
-import rs.ac.bg.etf.pp1.ast.PrintNumConst;
-import rs.ac.bg.etf.pp1.ast.Program;
-import rs.ac.bg.etf.pp1.ast.StatementBreak;
-import rs.ac.bg.etf.pp1.ast.StatementContinue;
-import rs.ac.bg.etf.pp1.ast.StatementEmptyReturn;
-import rs.ac.bg.etf.pp1.ast.StatementIf;
-import rs.ac.bg.etf.pp1.ast.StatementIfConditionEnd;
-import rs.ac.bg.etf.pp1.ast.StatementIfElse;
-import rs.ac.bg.etf.pp1.ast.StatementIfEnd;
-import rs.ac.bg.etf.pp1.ast.StatementIfStart;
-import rs.ac.bg.etf.pp1.ast.StatementMap;
-import rs.ac.bg.etf.pp1.ast.StatementMapHead;
-import rs.ac.bg.etf.pp1.ast.StatementPrint;
-import rs.ac.bg.etf.pp1.ast.StatementRead;
-import rs.ac.bg.etf.pp1.ast.StatementValueReturn;
-import rs.ac.bg.etf.pp1.ast.StatementWhile;
-import rs.ac.bg.etf.pp1.ast.StatementWhileHead;
-import rs.ac.bg.etf.pp1.ast.StatementWhileStart;
-import rs.ac.bg.etf.pp1.ast.SyntaxNode;
-import rs.ac.bg.etf.pp1.ast.TermListMultiple;
-import rs.ac.bg.etf.pp1.ast.TermMultipleFactor;
-import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
+import rs.ac.bg.etf.pp1.ast.*;
 import rs.ac.bg.etf.pp1.helpers.Utils;
-import rs.ac.bg.etf.pp1.helpers.codegeneration.ControlFlowCodeGenerationManager;
-import rs.ac.bg.etf.pp1.helpers.codegeneration.DesignatorStatementCodeGenerationManager;
-import rs.ac.bg.etf.pp1.helpers.codegeneration.ExprCodeGenerationManager;
-import rs.ac.bg.etf.pp1.helpers.codegeneration.MethodCodeGenerationManager;
-import rs.ac.bg.etf.pp1.helpers.codegeneration.StatementCodeGenerationManager;
+import rs.ac.bg.etf.pp1.helpers.codegeneration.*;
 import rs.ac.bg.etf.pp1.tabextended.TabExtended;
 import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.Tab;
@@ -360,12 +300,12 @@ public class CodeGenerator extends VisitorAdaptor {
 		processMethodCall(methodDesignatorObj, true);
 	}
 	
-	public void visit(ExprNegativeFirstTerm exprNegativeFirstTerm) {
+	public void visit(ExprNegativeTerm exprNegativeTerm) {
 		Code.put(Code.neg);
 	}
 	
-	public void visit(TermListMultiple termListMultiple) {
-		if (exprManager.isAddopAddition(termListMultiple.getAddop())) {
+	public void visit(ExprTermList exprTermList) {
+		if (exprManager.isAddopAddition(exprTermList.getAddop())) {
 			Code.put(Code.add);
 		} else {
 			Code.put(Code.sub);

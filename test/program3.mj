@@ -18,8 +18,11 @@ program Program3
 				print(a[i][j]);
 				j++;
 			}
+			print(eol);
 			i++;
 		}
+		print(eol);
+		print(eol);
 		
 		a2 = a[0].map(i => fun(i, 1));
 		i = 0;
@@ -27,6 +30,7 @@ program Program3
 			print(a2[i]);
 			i++;
 		}
+		print(eol);
 		
 		a2 = a[1].map(i => fun(i, 2));
 		i = 0;
@@ -34,6 +38,7 @@ program Program3
 			print(a2[i]);
 			i++;
 		}
+		print(eol);
 		
 		a2 = a[2].map(i => fun(i, 3));
 		i = 0;
@@ -41,5 +46,6 @@ program Program3
 			print(a2[i]);
 			i++;
 		}
+		print(eol);
 	}
 }

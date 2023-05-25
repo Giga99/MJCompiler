@@ -11,9 +11,9 @@ public class ExprSyntaxParsingManager {
 		return termType == Tab.intType;
 	}
 	
-	public boolean areCompatibleTypesInAddopExpr(Term term, TermList termList) {
+	public boolean areCompatibleTypesInAddopExpr(Term term, Expr expr) {
 		Struct termType = term.struct.getKind() == Struct.Array ? term.struct.getElemType() : term.struct;
-		Struct termListType = termList.struct.getKind() == Struct.Array ? termList.struct.getElemType() : termList.struct;
+		Struct termListType = expr.struct.getKind() == Struct.Array ? expr.struct.getElemType() : expr.struct;
 		return termType == Tab.intType && termListType == Tab.intType;
 	}
 	

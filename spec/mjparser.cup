@@ -98,7 +98,7 @@ nonterminal DesignatorStatement, DesignatorStatementAssignExpr, DesignatorArrayS
 nonterminal Assignop, Relop, Addop, Mulop;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, ConstValue, Designator, StatementMapIdent, MethodName;
-nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, TermList, Term, Factor, IfCondition, Condition, CondTerm, CondFact;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Expr, Term, Factor, IfCondition, Condition, CondTerm, CondFact;
 
 
 
@@ -323,15 +323,12 @@ DesignatorStatementAssignExpr ::= (DesignatorStatementAssignExprSuccess) Designa
 				
 /* Rules for the expressions */
 				
-Expr ::= (ExprPositiveFirstTerm) TermList
+Expr ::= (ExprPositiveTerm) Term
 		|
-		(ExprNegativeFirstTerm) MINUS TermList
+		(ExprNegativeTerm) MINUS Term
+		|
+		(ExprTermList) Expr Addop Term /* Rule for the additions and subtractions */
 		;
-
-TermList ::= (TermListSingle) Term
-			|
-			(TermListMultiple) Term Addop TermList /* Rule for the additions and subtractions */
-			;
 
 Term ::= (TermSingleFactor) Factor
 		|
