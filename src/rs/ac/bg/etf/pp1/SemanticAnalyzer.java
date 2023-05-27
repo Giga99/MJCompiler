@@ -488,7 +488,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementMap statementMap) {
-		controlFlowManager.decreaseNumberOfNestedLoops();
 		Designator assignMapDesignator = statementMap.getStatementMapHead().getDesignator();
 		Designator mappedDesignator = statementMap.getStatementMapHead().getDesignator1();
 		StatementMapIdent mapVariable = statementMap.getStatementMapHead().getStatementMapIdent();
@@ -540,7 +539,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementMapHead statementMapHead) {
-		controlFlowManager.increaseNumberOfNestedLoops();
 		reportInfo("StatementMapHead", statementMapHead);
 	}
 	
