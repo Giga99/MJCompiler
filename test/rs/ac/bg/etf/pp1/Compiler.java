@@ -33,7 +33,7 @@ public class Compiler {
 		Logger log = Logger.getLogger(Compiler.class);
 		Reader br = null;
 		try {
-			String programName = "SemanticErrorTest";
+			String programName = args[0];
 			File sourceCode = new File("test/" + programName + ".mj");	
 			log.info("Compiling source file: " + sourceCode.getAbsolutePath());
 			
