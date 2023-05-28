@@ -1,0 +1,17 @@
+program AssignmentTest
+	const int jedan = 1;
+	int x;
+	int niz[];
+{
+	void main()
+		int a,b;
+	{
+		niz = new int[3];
+		x = jedan;
+		niz[0] = x;
+		a = niz[0];
+		a++;
+		a--;
+		print(a);
+	}
+}

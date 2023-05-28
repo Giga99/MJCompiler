@@ -1,0 +1,10 @@
+program SemanticErrorTest
+	int x;
+	char y;
+{
+	void main()	
+	{
+		x = 'a';
+		y = 2;
+	}
+}

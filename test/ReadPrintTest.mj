@@ -1,0 +1,15 @@
+program ReadPrintTest
+	int c;
+	int niz[];
+{
+	void main()	
+	{
+		niz = new int[1];
+		read(c);
+		print(c);
+		
+		read(niz[0]);
+		print(niz[0]);
+		
+	}
+}
