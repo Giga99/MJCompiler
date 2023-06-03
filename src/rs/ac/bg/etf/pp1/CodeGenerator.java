@@ -260,7 +260,11 @@ public class CodeGenerator extends VisitorAdaptor {
 		
 		Code.put(Code.dup2);
 		Code.put(Code.pop);
-		Code.put(Code.aload);
+		if (exprManager.isCharArray(arrayToBeMapped.getType())) {
+			Code.put(Code.baload);
+		} else {
+			Code.put(Code.aload);
+		}
 		Code.store(variableInsideMap);
 	}
 	

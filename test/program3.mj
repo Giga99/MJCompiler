@@ -1,16 +1,22 @@
 program Program3
-	int a[][];
-	int a2[];
+	char a[][];
+	char a2[];
 {
-	int fun(int b, int addition) {
-		return b + addition;
+	char fun(char b, int addition) {
+		if (b == 'a') return 'c'; else return 'd';
 	}
 
-	void main() int i; int j; {
-		a = new int[3][3];
-		a[0][0] = 1;
-		a[1][1] = 1;
-		a[2][2] = 1;
+	void main() int i; int j; char temp; {
+		a = new char[3][3];
+		a[0][0] = 'b';
+		a[0][1] = 'a';
+		a[0][2] = 'a';
+		a[1][1] = 'b';
+		a[1][0] = 'a';
+		a[1][2] = 'a';
+		a[2][2] = 'b';
+		a[2][0] = 'a';
+		a[2][1] = 'a';
 		i = 0;
 		while (i < 3) {
 			j = 0;
@@ -22,9 +28,8 @@ program Program3
 			i++;
 		}
 		print(eol);
-		print(eol);
 		
-		a2 = a[0].map(i => fun(i, 1));
+		a2 = a[0].map(temp => fun(temp, 1));
 		i = 0;
 		while (i < 3) {
 			print(a2[i]);
@@ -32,7 +37,7 @@ program Program3
 		}
 		print(eol);
 		
-		a2 = a[1].map(i => fun(i, 2));
+		a2 = a[1].map(temp => fun(temp, 2));
 		i = 0;
 		while (i < 3) {
 			print(a2[i]);
@@ -40,7 +45,7 @@ program Program3
 		}
 		print(eol);
 		
-		a2 = a[2].map(i => fun(i, 3));
+		a2 = a[2].map(temp => fun(temp, 3));
 		i = 0;
 		while (i < 3) {
 			print(a2[i]);
