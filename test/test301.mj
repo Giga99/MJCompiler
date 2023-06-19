@@ -6,8 +6,9 @@ program test301
 	const int jedan = 1;
 	const int pet = 5;
 
-	int niz[];
+	int niz[], niz2[], a, b;
 	char nizch[];
+	int mat[][];
 	
 {
 	void main()	
@@ -30,6 +31,14 @@ program test301
 		print(bodovi);
 		print(niz[2]);
 		
+		mat = new int[2][2];
+		mat[0][0] = niz[nula];
+		mat[0][mat[0][0]] = 2;
+		mat[1][jedan - niz[0]] = 5;
+		mat[1][1] = mat[0][0] * mat[0][1];
+		print(mat[1][0]); // 5
+		print(mat[1][1]); // 2
+		
 		nizch = new char[3];
 		nizch[0] = 'a';
 		nizch[jedan] = 'b';
@@ -39,7 +48,7 @@ program test301
 			
 		
 		read(bodovi);
-		bodovi = -bodovi + (pet / 2 - jedan) * bodovi - (3 % 2 + 3 * 2 - 3); 
+		bodovi = -bodovi + (pet * a / 2 - jedan) * bodovi - (3 % 2 + 3 * 2 - 3); 
 		print(bodovi);
 			
 	}
