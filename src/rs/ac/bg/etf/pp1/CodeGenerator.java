@@ -199,21 +199,17 @@ public class CodeGenerator extends VisitorAdaptor {
 	}
 	
 	public void visit(StatementMap statementMap) {
-		Obj variableInMap = statementMap.getStatementMapHead().getStatementMapIdent().obj;
-		Code.store(variableInMap);
-		
-		Obj index = new Obj(Obj.Var, "index", Tab.intType);
-		Code.put(Code.dup);
-		Code.store(index);
-		
+		Code.put(Code.dup2);
 		Code.load(statementMap.getStatementMapHead().getDesignator().obj);
-		Code.load(index);
-		Code.load(variableInMap);
-		if (exprManager.isCharVariable(variableInMap.getType())) {
+		Code.put(Code.dup_x2);
+		Code.put(Code.pop);
+		
+		if (exprManager.isCharVariable(statementMap.getStatementMapHead().getDesignator().obj.getType().getElemType())) {
 			Code.put(Code.bastore);
 		} else {
 			Code.put(Code.astore); 
 		}
+		Code.put(Code.pop);
 		
 		controlFlowManager.jumpToBeginingOfMap();
 		controlFlowManager.fixupDestinationFromMapBlock();
